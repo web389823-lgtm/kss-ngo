@@ -12,16 +12,19 @@ function Stat({ label, value, icon: Icon }: any) {
 }
 
 function Dashboard() {
+  const { role } = useAuth();
   const { data } = useQuery({
     queryKey: ["admin", "counts"],
     queryFn: async () => {
-      const [d, v, p, b] = await Promise.all([
+      const [d, dp, v, p, pr, b] = await Promise.all([
         supabase.from("donations").select("*", { count: "exact", head: true }),
+        supabase.from("donations").select("*", { count: "exact", head: true }).eq("status", "pending"),
         supabase.from("volunteers").select("*", { count: "exact", head: true }),
         supabase.from("programs").select("*", { count: "exact", head: true }),
+        supabase.from("projects").select("*", { count: "exact", head: true }),
         supabase.from("blog_posts").select("*", { count: "exact", head: true }),
       ]);
-      return { donations: d.count, volunteers: v.count, programs: p.count, posts: b.count };
+      return { donations: d.count, pending: dp.count, volunteers: v.count, programs: p.count, projects: pr.count, posts: b.count };
     },
   });
   const { data: pendingD } = useQuery({
@@ -32,12 +35,14 @@ function Dashboard() {
     <div className="space-y-6">
       <div>
         <h1 className="font-serif text-3xl font-semibold">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">Overview of your KSS platform.</p>
+        <p className="text-sm text-muted-foreground mt-1">Signed in as <span className="font-medium capitalize text-foreground">{role}</span> · Overview of your KSS platform.</p>
       </div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         <Stat label="Donations" value={data?.donations} icon={Heart} />
+        <Stat label="Pending" value={data?.pending} icon={Clock} />
         <Stat label="Volunteers" value={data?.volunteers} icon={HandHeart} />
         <Stat label="Programs" value={data?.programs} icon={BookOpen} />
+        <Stat label="Projects" value={data?.projects} icon={FolderKanban} />
         <Stat label="Blog Posts" value={data?.posts} icon={Newspaper} />
       </div>
       <Card className="p-6">
