@@ -13,7 +13,7 @@ export function SubmissionsTable({ table, statuses, title }: { table: "donations
   });
 
   async function setStatus(id: string, status: string) {
-    const { error } = await supabase.from(table).update({ status }).eq("id", id);
+    const { error } = await supabase.from(table).update({ status: status as any }).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Updated");
     qc.invalidateQueries({ queryKey: ["admin", table] });
