@@ -17,6 +17,7 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
   table: string; title: string; fields: Field[]; primaryField: string; orderBy?: string; ascending?: boolean;
 }) {
   const qc = useQueryClient();
+  const { isAdmin } = useAuth();
   const [editing, setEditing] = useState<any | null>(null);
   const [open, setOpen] = useState(false);
 
