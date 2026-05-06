@@ -33,6 +33,7 @@ import { Route as AdminImpactRouteImport } from './routes/admin.impact'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminDonationsRouteImport } from './routes/admin.donations'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
+import { Route as TeamTypeIdRouteImport } from './routes/team.$type.$id'
 
 const TestimonialsRoute = TestimonialsRouteImport.update({
   id: '/testimonials',
@@ -154,6 +155,11 @@ const AdminBlogRoute = AdminBlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => AdminRoute,
 } as any)
+const TeamTypeIdRoute = TeamTypeIdRouteImport.update({
+  id: '/$type/$id',
+  path: '/$type/$id',
+  getParentRoute: () => TeamRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -166,7 +172,7 @@ export interface FileRoutesByFullPath {
   '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
-  '/team': typeof TeamRoute
+  '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/donations': typeof AdminDonationsRoute
@@ -180,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/admin/': typeof AdminIndexRoute
+  '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -191,7 +198,7 @@ export interface FileRoutesByTo {
   '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
-  '/team': typeof TeamRoute
+  '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/donations': typeof AdminDonationsRoute
@@ -205,6 +212,7 @@ export interface FileRoutesByTo {
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/admin': typeof AdminIndexRoute
+  '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -218,7 +226,7 @@ export interface FileRoutesById {
   '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
-  '/team': typeof TeamRoute
+  '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/donations': typeof AdminDonationsRoute
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/admin/': typeof AdminIndexRoute
+  '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
     | '/admin/testimonials'
     | '/admin/volunteers'
     | '/admin/'
+    | '/team/$type/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -285,6 +295,7 @@ export interface FileRouteTypes {
     | '/admin/testimonials'
     | '/admin/volunteers'
     | '/admin'
+    | '/team/$type/$id'
   id:
     | '__root__'
     | '/'
@@ -311,6 +322,7 @@ export interface FileRouteTypes {
     | '/admin/testimonials'
     | '/admin/volunteers'
     | '/admin/'
+    | '/team/$type/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -324,7 +336,7 @@ export interface RootRouteChildren {
   ImpactRoute: typeof ImpactRoute
   ProgramsRoute: typeof ProgramsRoute
   ProjectsRoute: typeof ProjectsRoute
-  TeamRoute: typeof TeamRoute
+  TeamRoute: typeof TeamRouteWithChildren
   TestimonialsRoute: typeof TestimonialsRoute
 }
 
@@ -498,6 +510,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBlogRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/team/$type/$id': {
+      id: '/team/$type/$id'
+      path: '/$type/$id'
+      fullPath: '/team/$type/$id'
+      preLoaderRoute: typeof TeamTypeIdRouteImport
+      parentRoute: typeof TeamRoute
+    }
   }
 }
 
@@ -533,6 +552,16 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface TeamRouteChildren {
+  TeamTypeIdRoute: typeof TeamTypeIdRoute
+}
+
+const TeamRouteChildren: TeamRouteChildren = {
+  TeamTypeIdRoute: TeamTypeIdRoute,
+}
+
+const TeamRouteWithChildren = TeamRoute._addFileChildren(TeamRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -544,7 +573,7 @@ const rootRouteChildren: RootRouteChildren = {
   ImpactRoute: ImpactRoute,
   ProgramsRoute: ProgramsRoute,
   ProjectsRoute: ProjectsRoute,
-  TeamRoute: TeamRoute,
+  TeamRoute: TeamRouteWithChildren,
   TestimonialsRoute: TestimonialsRoute,
 }
 export const routeTree = rootRouteImport
