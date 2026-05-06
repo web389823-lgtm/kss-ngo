@@ -52,15 +52,13 @@ function HomePage() {
     queryKey: ["blog", "home"],
     queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(3)).data ?? [],
   });
-  const { data: team } = useQuery({
-    queryKey: ["team", "home"],
-    queryFn: async () => {
-      const [adv, tru] = await Promise.all([
-        supabase.from("advisory_team").select("*").order("sort_order").limit(3),
-        supabase.from("trusted_members").select("*").order("sort_order").limit(3),
-      ]);
-      return [...(adv.data ?? []), ...(tru.data ?? [])].slice(0, 4);
-    },
+  const { data: advisory } = useQuery({
+    queryKey: ["advisory_team", "home"],
+    queryFn: async () => (await supabase.from("advisory_team").select("*").order("sort_order")).data ?? [],
+  });
+  const { data: trustees } = useQuery({
+    queryKey: ["trusted_members", "home"],
+    queryFn: async () => (await supabase.from("trusted_members").select("*").order("sort_order")).data ?? [],
   });
   const { data: settings } = useQuery({
     queryKey: ["site_settings_home"],
