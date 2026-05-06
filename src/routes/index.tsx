@@ -136,7 +136,7 @@ function HomePage() {
               return (
                 <Card key={s.id} className="p-6 text-center shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
                   <Icon className="h-6 w-6 text-primary mx-auto mb-3" />
-                  <div className="font-serif text-2xl md:text-3xl font-semibold">
+                  <div className="font-serif text-xl md:text-2xl lg:text-[1.6rem] font-semibold tracking-tight tabular-nums break-words">
                     <Counter to={s.value} suffix={s.suffix ?? ""} />
                   </div>
                   <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
