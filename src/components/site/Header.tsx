@@ -26,7 +26,6 @@ export function Header() {
           <div className="grid h-9 w-9 place-items-center rounded-full gradient-saffron text-primary-foreground font-serif text-lg font-bold shadow-soft">K</div>
           <div className="leading-tight">
             <div className="font-serif text-base font-semibold">Keshava Seva Samiti</div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Service · Sacred · Sustained</div>
           </div>
         </Link>
 

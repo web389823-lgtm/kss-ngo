@@ -10,7 +10,7 @@ export function Footer() {
             <div className="grid h-9 w-9 place-items-center rounded-full gradient-saffron text-primary-foreground font-serif font-bold">K</div>
             <span className="font-serif text-lg font-semibold">Keshava Seva Samiti</span>
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">A non-profit serving communities across India through education, healthcare and empowerment since 2007.</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">A non-profit serving communities across India through education, healthcare and empowerment since 1999.</p>
           <div className="mt-4 flex gap-3 text-muted-foreground">
             <a href="#" aria-label="Facebook" className="hover:text-primary transition-colors"><Facebook className="h-4 w-4" /></a>
             <a href="#" aria-label="Instagram" className="hover:text-primary transition-colors"><Instagram className="h-4 w-4" /></a>
