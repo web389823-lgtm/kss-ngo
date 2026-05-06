@@ -41,9 +41,20 @@ function AuthPage() {
     const { error } = await supabase.auth.signInWithPassword({
       email: String(fd.get("email")), password: String(fd.get("password")),
     });
-    setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { setBusy(false); return toast.error("Invalid email or password"); }
+
+    // If user signed up before role claim, finalize it now
+    const pending = sessionStorage.getItem("pending_role_claim");
+    if (pending) {
+      try {
+        const { role: r, code } = JSON.parse(pending);
+        await supabase.rpc("claim_role", { _role: r, _access_code: code });
+      } catch { /* ignore */ }
+      sessionStorage.removeItem("pending_role_claim");
+    }
+
     await refreshRole();
+    setBusy(false);
     toast.success("Welcome back");
     nav({ to: "/admin" });
   }
