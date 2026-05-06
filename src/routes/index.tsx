@@ -1,9 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Heart, HandHeart, Sparkles, GraduationCap, Home as HomeIcon, Stethoscope, Users, Award, Quote } from "lucide-react";
+import {
+  ArrowRight, Heart, HandHeart, Sparkles, GraduationCap, Home as HomeIcon,
+  Stethoscope, Users, Award, Quote, BookOpen, Drama, Baby, Flower2,
+  Phone, Mail, MapPin, Target, Eye, Handshake,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Counter } from "@/components/site/Counter";
 import hero from "@/assets/hero-children.jpg";
 import healthCamp from "@/assets/health-camp.jpg";
 import womenWorkshop from "@/assets/women-workshop.jpg";
@@ -13,13 +18,22 @@ export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "Keshava Seva Samiti — Service to Humanity" },
-      { name: "description", content: "Serving India's most vulnerable through education, healthcare, women empowerment and welfare. Donate or volunteer with KSS today." },
+      { title: "Keshava Seva Samiti — Transforming lives since 1999" },
+      { name: "description", content: "Bengaluru-based NGO serving marginalized communities through education, healthcare, women empowerment, culture and welfare. Donate or volunteer with KSS today." },
     ],
   }),
 });
 
 const ICONS: Record<string, any> = { GraduationCap, Home: HomeIcon, Stethoscope, Sparkles, Users, Award };
+
+const PROGRAM_HIGHLIGHTS = [
+  { icon: GraduationCap, title: "Education", body: "Education forms the core of KSS's work — academic support, access to essentials, guidance and encouragement for children to continue their learning journey with confidence. Equal emphasis on cultural grounding, discipline and character building." },
+  { icon: Flower2, title: "Women Empowerment", body: "KSS supports women through skill development, livelihood opportunities and community-based initiatives. Programs also promote health awareness, hygiene, environmental responsibility and civic participation." },
+  { icon: Drama, title: "Culture & Values", body: "KSS integrates Bharatiya values into its initiatives through camps, activities and events that promote teamwork, leadership and social harmony." },
+  { icon: Baby, title: "BalaSangam", body: "Our flagship annual children's event, bringing together thousands of children to celebrate sports, creativity and learning while building confidence and discipline." },
+  { icon: Sparkles, title: "Yoga Day", body: "KSS celebrates International Yoga Day through large-scale community participation — promoting physical health, mental well-being and awareness of yoga as a way of life." },
+  { icon: BookOpen, title: "Seva Bastis", body: "Nearly 100 community centres across 65+ locations and 12 constituencies bring education, healthcare and care to where it is needed most." },
+];
 
 function HomePage() {
   const { data: stats } = useQuery({
@@ -38,30 +52,50 @@ function HomePage() {
     queryKey: ["blog", "home"],
     queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(3)).data ?? [],
   });
+  const { data: team } = useQuery({
+    queryKey: ["team", "home"],
+    queryFn: async () => {
+      const [adv, tru] = await Promise.all([
+        supabase.from("advisory_team").select("*").order("sort_order").limit(3),
+        supabase.from("trusted_members").select("*").order("sort_order").limit(3),
+      ]);
+      return [...(adv.data ?? []), ...(tru.data ?? [])].slice(0, 4);
+    },
+  });
+  const { data: settings } = useQuery({
+    queryKey: ["site_settings_home"],
+    queryFn: async () => {
+      const { data } = await supabase.from("site_settings").select("*").in("key", ["home_hero", "home_about", "home_mission_vision", "home_contact"]);
+      const map: Record<string, any> = {};
+      (data ?? []).forEach((r: any) => (map[r.key] = r.value));
+      return map;
+    },
+  });
+
+  const heroCfg = settings?.home_hero ?? {};
+  const about = settings?.home_about ?? {};
+  const mv = settings?.home_mission_vision ?? {};
+  const contact = settings?.home_contact ?? {};
 
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden gradient-hero">
-        <div className="container-page grid lg:grid-cols-2 gap-12 items-center py-16 md:py-24">
+        <div className="container-page grid lg:grid-cols-2 gap-12 items-center py-16 md:py-24 animate-fade-in">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-4">Non-profit · Since 2007</p>
-            <h1 className="font-serif text-4xl md:text-6xl font-semibold leading-[1.05] text-balance">
-              Service is the rent <br />we pay for living.
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-4">{heroCfg.eyebrow ?? "Non-profit · Since 1999"}</p>
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.05] text-balance">
+              {heroCfg.headline ?? "Keshava Seva Samiti has been transforming lives since 1999"}
             </h1>
             <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
-              Keshava Seva Samiti has been serving communities across India for over 18 years — in education, healthcare, women empowerment and welfare.
+              {heroCfg.subtext ?? "Serving marginalized communities with dedication, compassion, and purpose."}
+            </p>
+            <p className="mt-4 max-w-xl text-base font-medium bg-gradient-to-r from-primary to-amber-500 bg-clip-text text-transparent">
+              {heroCfg.tagline ?? "Seva for lasting change, sustainable impact, and empowered communities"}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg"><Link to="/donate"><Heart className="mr-2 h-4 w-4" />Donate Now</Link></Button>
               <Button asChild size="lg" variant="outline"><Link to="/get-involved"><HandHeart className="mr-2 h-4 w-4" />Become a Volunteer</Link></Button>
-            </div>
-            <div className="mt-10 flex items-center gap-6 text-sm text-muted-foreground">
-              <div><span className="font-serif text-2xl text-foreground font-semibold">12K+</span><br />Students helped</div>
-              <div className="h-10 w-px bg-border" />
-              <div><span className="font-serif text-2xl text-foreground font-semibold">8.5K+</span><br />Families supported</div>
-              <div className="h-10 w-px bg-border" />
-              <div><span className="font-serif text-2xl text-foreground font-semibold">650+</span><br />Volunteers</div>
             </div>
           </div>
           <div className="relative">
@@ -72,33 +106,92 @@ function HomePage() {
         </div>
       </section>
 
-      {/* IMPACT */}
+      {/* ABOUT PREVIEW */}
       <section className="container-page py-20">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Impact</p>
-          <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Numbers that tell our story</h2>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {(stats ?? []).map((s: any) => {
-            const Icon = ICONS[s.icon] ?? Sparkles;
-            return (
-              <Card key={s.id} className="p-6 text-center shadow-soft hover:shadow-elevated transition-shadow">
-                <Icon className="h-6 w-6 text-primary mx-auto mb-3" />
-                <div className="font-serif text-3xl font-semibold">{s.value.toLocaleString()}{s.suffix}</div>
-                <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
-              </Card>
-            );
-          })}
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="relative order-2 lg:order-1">
+            <img src={womenWorkshop} alt="KSS women's workshop" className="rounded-2xl shadow-elevated object-cover aspect-[4/3] w-full" loading="lazy" />
+          </div>
+          <div className="order-1 lg:order-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">About Us</p>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">{about.title ?? "About Keshava Seva Samiti"}</h2>
+            <p className="mt-5 text-muted-foreground leading-relaxed">{about.p1}</p>
+            <p className="mt-4 text-muted-foreground leading-relaxed">{about.p2}</p>
+            <p className="mt-4 text-muted-foreground leading-relaxed">{about.p3}</p>
+            <Button asChild variant="outline" className="mt-6"><Link to="/about">Learn more <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+          </div>
         </div>
       </section>
 
-      {/* PROGRAMS */}
+      {/* IMPACT — animated counters */}
       <section className="bg-muted/30 py-20">
         <div className="container-page">
+          <div className="text-center mb-12">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Impact</p>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Numbers that tell our story</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {(stats ?? []).map((s: any) => {
+              const Icon = ICONS[s.icon] ?? Sparkles;
+              return (
+                <Card key={s.id} className="p-6 text-center shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
+                  <Icon className="h-6 w-6 text-primary mx-auto mb-3" />
+                  <div className="font-serif text-2xl md:text-3xl font-semibold">
+                    <Counter to={s.value} suffix={s.suffix ?? ""} />
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* MISSION & VISION */}
+      <section className="container-page py-20 grid md:grid-cols-2 gap-6">
+        <Card className="p-8 shadow-soft border-l-4 border-primary">
+          <Target className="h-8 w-8 text-primary mb-4" />
+          <h3 className="font-serif text-2xl font-semibold">Our Mission</h3>
+          <p className="mt-3 text-muted-foreground leading-relaxed">{mv.mission}</p>
+        </Card>
+        <Card className="p-8 shadow-soft border-l-4 border-amber-500">
+          <Eye className="h-8 w-8 text-amber-600 mb-4" />
+          <h3 className="font-serif text-2xl font-semibold">Our Vision</h3>
+          <p className="mt-3 text-muted-foreground leading-relaxed">{mv.vision}</p>
+        </Card>
+      </section>
+
+      {/* PROGRAM HIGHLIGHTS */}
+      <section className="bg-muted/30 py-20">
+        <div className="container-page">
+          <div className="text-center mb-12">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">What We Do</p>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Program highlights</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {PROGRAM_HIGHLIGHTS.map((p) => (
+              <Card key={p.title} className="p-7 shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
+                <div className="grid h-12 w-12 place-items-center rounded-full gradient-saffron text-primary-foreground mb-4">
+                  <p.icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-serif text-xl font-semibold">{p.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.body}</p>
+              </Card>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <Button asChild variant="outline"><Link to="/programs">View all programs <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+          </div>
+        </div>
+      </section>
+
+      {/* PROGRAMS FROM DB */}
+      {(programs ?? []).length > 0 && (
+        <section className="container-page py-20">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">What we do</p>
-              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Programs that transform lives</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Programs</p>
+              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Active initiatives</h2>
             </div>
             <Button asChild variant="ghost"><Link to="/programs">View all <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
           </div>
@@ -106,7 +199,7 @@ function HomePage() {
             {(programs ?? []).map((p: any, i: number) => (
               <Card key={p.id} className="overflow-hidden p-0 shadow-soft hover:shadow-elevated transition-all hover:-translate-y-0.5">
                 <div className="aspect-[16/9] gradient-saffron relative overflow-hidden">
-                  <img src={[healthCamp, womenWorkshop, groceryDrive][i % 3]} alt={p.title} loading="lazy"
+                  <img src={p.banner_url || [healthCamp, womenWorkshop, groceryDrive][i % 3]} alt={p.title} loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover opacity-90" />
                 </div>
                 <div className="p-6">
@@ -117,28 +210,93 @@ function HomePage() {
               </Card>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* WHY DONATE */}
+      <section className="bg-muted/30 py-20">
+        <div className="container-page grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Why Donate</p>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Every contribution creates ripples</h2>
+            <p className="mt-5 text-muted-foreground">Your support directly funds the work that transforms lives across Bengaluru and beyond.</p>
+            <ul className="mt-6 space-y-3">
+              {[
+                { icon: GraduationCap, label: "Education for children" },
+                { icon: Stethoscope, label: "Healthcare for communities" },
+                { icon: HomeIcon, label: "Food and essential supplies" },
+                { icon: Flower2, label: "Women empowerment programs" },
+              ].map((i) => (
+                <li key={i.label} className="flex items-center gap-3">
+                  <div className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary">
+                    <i.icon className="h-4 w-4" />
+                  </div>
+                  <span className="font-medium">{i.label}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-sm text-muted-foreground">Your support helps build a stronger, self-reliant society.</p>
+            <Button asChild size="lg" className="mt-6"><Link to="/donate"><Heart className="mr-2 h-4 w-4" />Donate Now</Link></Button>
+          </div>
+          <div className="relative">
+            <div className="absolute -inset-4 rounded-3xl gradient-saffron opacity-20 blur-2xl" />
+            <img src={groceryDrive} alt="Ration kit distribution" className="relative rounded-2xl shadow-elevated object-cover aspect-[4/3] w-full" loading="lazy" />
+          </div>
         </div>
       </section>
 
-      {/* DONATE / VOLUNTEER CTAS */}
-      <section className="container-page py-20 grid md:grid-cols-2 gap-6">
-        <Card className="p-10 gradient-saffron text-primary-foreground border-0 shadow-elevated">
-          <Heart className="h-8 w-8 mb-4" />
-          <h3 className="font-serif text-2xl md:text-3xl font-semibold">Your donation creates ripples</h3>
-          <p className="mt-3 opacity-95">Every rupee directly funds education, healthcare and welfare. 80G eligible.</p>
-          <Button asChild variant="secondary" className="mt-6"><Link to="/donate">Donate now <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-        </Card>
-        <Card className="p-10 shadow-soft border-2">
-          <HandHeart className="h-8 w-8 mb-4 text-primary" />
-          <h3 className="font-serif text-2xl md:text-3xl font-semibold">Give your time</h3>
-          <p className="mt-3 text-muted-foreground">Join 650+ volunteers serving communities across India.</p>
-          <Button asChild className="mt-6"><Link to="/get-involved">Get involved <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-        </Card>
+      {/* GET INVOLVED */}
+      <section className="container-page py-20">
+        <div className="text-center mb-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Get Involved</p>
+          <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Be a part of meaningful change</h2>
+        </div>
+        <div className="grid md:grid-cols-3 gap-5">
+          {[
+            { icon: HandHeart, title: "Volunteer with us", body: "Give your time and skills to communities that need them most.", to: "/get-involved", cta: "Join now" },
+            { icon: Heart, title: "Support a program", body: "Fund a Seva Basti, a child's education, or a health camp.", to: "/donate", cta: "Donate" },
+            { icon: Handshake, title: "Partner with us", body: "Collaborate on long-term impact through CSR or institutional partnerships.", to: "/get-involved", cta: "Partner" },
+          ].map((x) => (
+            <Card key={x.title} className="p-7 shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
+              <div className="grid h-12 w-12 place-items-center rounded-full gradient-saffron text-primary-foreground mb-4">
+                <x.icon className="h-5 w-5" />
+              </div>
+              <h3 className="font-serif text-xl font-semibold">{x.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{x.body}</p>
+              <Button asChild variant="ghost" className="mt-3 px-0"><Link to={x.to}>{x.cta} <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
+            </Card>
+          ))}
+        </div>
       </section>
 
+      {/* NEWS */}
+      {(posts ?? []).length > 0 && (
+        <section className="bg-muted/30 py-20">
+          <div className="container-page">
+            <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Latest</p>
+                <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">News & updates</h2>
+              </div>
+              <Button asChild variant="ghost"><Link to="/blog">All news <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
+            </div>
+            <div className="grid md:grid-cols-3 gap-5">
+              {(posts ?? []).map((p: any) => (
+                <Card key={p.id} className="p-6 shadow-soft hover:shadow-elevated transition-shadow">
+                  <p className="text-xs uppercase tracking-wider text-primary">{p.category}</p>
+                  <h3 className="mt-2 font-serif text-xl font-semibold">{p.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{p.excerpt}</p>
+                  <p className="mt-4 text-xs text-muted-foreground">{p.published_at && new Date(p.published_at).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* TESTIMONIALS */}
-      <section className="bg-muted/30 py-20">
-        <div className="container-page">
+      {(testimonials ?? []).length > 0 && (
+        <section className="container-page py-20">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Voices</p>
             <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Stories from those we serve</h2>
@@ -155,28 +313,62 @@ function HomePage() {
               </Card>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* LATEST NEWS */}
-      <section className="container-page py-20">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Latest</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">News & updates</h2>
+      {/* TEAM PREVIEW */}
+      {(team ?? []).length > 0 && (
+        <section className="bg-muted/30 py-20">
+          <div className="container-page">
+            <div className="text-center mb-12">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Leadership</p>
+              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Our team</h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+              {(team ?? []).map((m: any) => (
+                <Card key={m.id} className="p-5 text-center shadow-soft hover:shadow-elevated transition-all">
+                  <div className="mx-auto mb-3 h-20 w-20 rounded-full gradient-saffron overflow-hidden">
+                    {m.photo_url && <img src={m.photo_url} alt={m.name} className="h-full w-full object-cover" />}
+                  </div>
+                  <div className="font-semibold">{m.name}</div>
+                  <div className="text-xs text-muted-foreground">{m.position ?? m.role}</div>
+                </Card>
+              ))}
+            </div>
+            <div className="text-center mt-8">
+              <Button asChild variant="outline"><Link to="/team">Meet the team <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+            </div>
           </div>
-          <Button asChild variant="ghost"><Link to="/blog">All news <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
-        </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {(posts ?? []).map((p: any) => (
-            <Card key={p.id} className="p-6 shadow-soft hover:shadow-elevated transition-shadow">
-              <p className="text-xs uppercase tracking-wider text-primary">{p.category}</p>
-              <h3 className="mt-2 font-serif text-xl font-semibold">{p.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{p.excerpt}</p>
-              <p className="mt-4 text-xs text-muted-foreground">{p.published_at && new Date(p.published_at).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
-            </Card>
-          ))}
-        </div>
+        </section>
+      )}
+
+      {/* CONTACT CTA */}
+      <section className="container-page py-20">
+        <Card className="overflow-hidden p-0 shadow-elevated border-0">
+          <div className="grid md:grid-cols-2">
+            <div className="p-10 md:p-12 gradient-saffron text-primary-foreground">
+              <h3 className="font-serif text-3xl font-semibold">Have questions or want to collaborate?</h3>
+              <p className="mt-3 opacity-95">We'd love to hear from you. Reach out for partnerships, volunteering, or general queries.</p>
+              <Button asChild variant="secondary" size="lg" className="mt-6"><Link to="/get-involved">Contact Us <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+            </div>
+            <div className="p-10 md:p-12 bg-card">
+              <ul className="space-y-5">
+                <li className="flex items-start gap-3">
+                  <Phone className="h-5 w-5 text-primary mt-0.5" />
+                  <div><div className="text-xs uppercase tracking-wider text-muted-foreground">Phone</div><div className="font-medium">{contact.phone}</div></div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Mail className="h-5 w-5 text-primary mt-0.5" />
+                  <div><div className="text-xs uppercase tracking-wider text-muted-foreground">Email</div><div className="font-medium">{contact.email}</div></div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <MapPin className="h-5 w-5 text-primary mt-0.5" />
+                  <div><div className="text-xs uppercase tracking-wider text-muted-foreground">Address</div><div className="font-medium">{contact.address}</div></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </Card>
       </section>
     </div>
   );
