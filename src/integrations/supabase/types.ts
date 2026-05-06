@@ -206,6 +206,7 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          phone: string | null
           updated_at: string
         }
         Insert: {
@@ -213,6 +214,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id: string
+          phone?: string | null
           updated_at?: string
         }
         Update: {
@@ -220,6 +222,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          phone?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -466,6 +469,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_role: {
+        Args: { _access_code: string; _role: string }
+        Returns: Json
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -474,9 +481,10 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "editor" | "user"
+      app_role: "admin" | "editor" | "user" | "staff"
       content_status: "draft" | "active" | "inactive" | "published" | "archived"
       donation_status: "pending" | "approved" | "rejected" | "paid"
       media_ratio: "16:9" | "9:16" | "1:1" | "4:3"
@@ -609,7 +617,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "editor", "user"],
+      app_role: ["admin", "editor", "user", "staff"],
       content_status: ["draft", "active", "inactive", "published", "archived"],
       donation_status: ["pending", "approved", "rejected", "paid"],
       media_ratio: ["16:9", "9:16", "1:1", "4:3"],

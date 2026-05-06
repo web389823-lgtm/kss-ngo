@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 export type Field = { name: string; label: string; type?: "text" | "textarea" | "number" | "date"; required?: boolean };
 
@@ -16,6 +17,7 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
   table: string; title: string; fields: Field[]; primaryField: string; orderBy?: string; ascending?: boolean;
 }) {
   const qc = useQueryClient();
+  const { isAdmin } = useAuth();
   const [editing, setEditing] = useState<any | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -86,7 +88,7 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
               </div>
               <div className="flex gap-1">
                 <Button size="sm" variant="ghost" onClick={() => { setEditing(row); setOpen(true); }}><Pencil className="h-4 w-4" /></Button>
-                <Button size="sm" variant="ghost" onClick={() => remove(row.id)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>
+                {isAdmin && <Button size="sm" variant="ghost" onClick={() => remove(row.id)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>}
               </div>
             </div>
           ))}
