@@ -9,38 +9,404 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TestimonialsRouteImport } from './routes/testimonials'
+import { Route as TeamRouteImport } from './routes/team'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as ImpactRouteImport } from './routes/impact'
+import { Route as GetInvolvedRouteImport } from './routes/get-involved'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as DonateRouteImport } from './routes/donate'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminVolunteersRouteImport } from './routes/admin.volunteers'
+import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
+import { Route as AdminTeamRouteImport } from './routes/admin.team'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
+import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminImpactRouteImport } from './routes/admin.impact'
+import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
+import { Route as AdminDonationsRouteImport } from './routes/admin.donations'
+import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 
+const TestimonialsRoute = TestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgramsRoute = ProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpactRoute = ImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetInvolvedRoute = GetInvolvedRouteImport.update({
+  id: '/get-involved',
+  path: '/get-involved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminVolunteersRoute = AdminVolunteersRouteImport.update({
+  id: '/volunteers',
+  path: '/volunteers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTeamRoute = AdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProjectsRoute = AdminProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProgramsRoute = AdminProgramsRouteImport.update({
+  id: '/programs',
+  path: '/programs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminImpactRoute = AdminImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminGalleryRoute = AdminGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDonationsRoute = AdminDonationsRouteImport.update({
+  id: '/donations',
+  path: '/donations',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBlogRoute = AdminBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/blog': typeof BlogRoute
+  '/donate': typeof DonateRoute
+  '/gallery': typeof GalleryRoute
+  '/get-involved': typeof GetInvolvedRoute
+  '/impact': typeof ImpactRoute
+  '/programs': typeof ProgramsRoute
+  '/projects': typeof ProjectsRoute
+  '/team': typeof TeamRoute
+  '/testimonials': typeof TestimonialsRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/donations': typeof AdminDonationsRoute
+  '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/impact': typeof AdminImpactRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/programs': typeof AdminProgramsRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/volunteers': typeof AdminVolunteersRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/blog': typeof BlogRoute
+  '/donate': typeof DonateRoute
+  '/gallery': typeof GalleryRoute
+  '/get-involved': typeof GetInvolvedRoute
+  '/impact': typeof ImpactRoute
+  '/programs': typeof ProgramsRoute
+  '/projects': typeof ProjectsRoute
+  '/team': typeof TeamRoute
+  '/testimonials': typeof TestimonialsRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/donations': typeof AdminDonationsRoute
+  '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/impact': typeof AdminImpactRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/programs': typeof AdminProgramsRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/volunteers': typeof AdminVolunteersRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/blog': typeof BlogRoute
+  '/donate': typeof DonateRoute
+  '/gallery': typeof GalleryRoute
+  '/get-involved': typeof GetInvolvedRoute
+  '/impact': typeof ImpactRoute
+  '/programs': typeof ProgramsRoute
+  '/projects': typeof ProjectsRoute
+  '/team': typeof TeamRoute
+  '/testimonials': typeof TestimonialsRoute
+  '/admin/blog': typeof AdminBlogRoute
+  '/admin/donations': typeof AdminDonationsRoute
+  '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/impact': typeof AdminImpactRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/programs': typeof AdminProgramsRoute
+  '/admin/projects': typeof AdminProjectsRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/volunteers': typeof AdminVolunteersRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/blog'
+    | '/donate'
+    | '/gallery'
+    | '/get-involved'
+    | '/impact'
+    | '/programs'
+    | '/projects'
+    | '/team'
+    | '/testimonials'
+    | '/admin/blog'
+    | '/admin/donations'
+    | '/admin/gallery'
+    | '/admin/impact'
+    | '/admin/login'
+    | '/admin/programs'
+    | '/admin/projects'
+    | '/admin/settings'
+    | '/admin/team'
+    | '/admin/testimonials'
+    | '/admin/volunteers'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/blog'
+    | '/donate'
+    | '/gallery'
+    | '/get-involved'
+    | '/impact'
+    | '/programs'
+    | '/projects'
+    | '/team'
+    | '/testimonials'
+    | '/admin/blog'
+    | '/admin/donations'
+    | '/admin/gallery'
+    | '/admin/impact'
+    | '/admin/login'
+    | '/admin/programs'
+    | '/admin/projects'
+    | '/admin/settings'
+    | '/admin/team'
+    | '/admin/testimonials'
+    | '/admin/volunteers'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/blog'
+    | '/donate'
+    | '/gallery'
+    | '/get-involved'
+    | '/impact'
+    | '/programs'
+    | '/projects'
+    | '/team'
+    | '/testimonials'
+    | '/admin/blog'
+    | '/admin/donations'
+    | '/admin/gallery'
+    | '/admin/impact'
+    | '/admin/login'
+    | '/admin/programs'
+    | '/admin/projects'
+    | '/admin/settings'
+    | '/admin/team'
+    | '/admin/testimonials'
+    | '/admin/volunteers'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  BlogRoute: typeof BlogRoute
+  DonateRoute: typeof DonateRoute
+  GalleryRoute: typeof GalleryRoute
+  GetInvolvedRoute: typeof GetInvolvedRoute
+  ImpactRoute: typeof ImpactRoute
+  ProgramsRoute: typeof ProgramsRoute
+  ProjectsRoute: typeof ProjectsRoute
+  TeamRoute: typeof TeamRoute
+  TestimonialsRoute: typeof TestimonialsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/testimonials': {
+      id: '/testimonials'
+      path: '/testimonials'
+      fullPath: '/testimonials'
+      preLoaderRoute: typeof TestimonialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/programs': {
+      id: '/programs'
+      path: '/programs'
+      fullPath: '/programs'
+      preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impact': {
+      id: '/impact'
+      path: '/impact'
+      fullPath: '/impact'
+      preLoaderRoute: typeof ImpactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-involved': {
+      id: '/get-involved'
+      path: '/get-involved'
+      fullPath: '/get-involved'
+      preLoaderRoute: typeof GetInvolvedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +414,139 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/volunteers': {
+      id: '/admin/volunteers'
+      path: '/volunteers'
+      fullPath: '/admin/volunteers'
+      preLoaderRoute: typeof AdminVolunteersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/testimonials': {
+      id: '/admin/testimonials'
+      path: '/testimonials'
+      fullPath: '/admin/testimonials'
+      preLoaderRoute: typeof AdminTestimonialsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/team': {
+      id: '/admin/team'
+      path: '/team'
+      fullPath: '/admin/team'
+      preLoaderRoute: typeof AdminTeamRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/projects': {
+      id: '/admin/projects'
+      path: '/projects'
+      fullPath: '/admin/projects'
+      preLoaderRoute: typeof AdminProjectsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/programs': {
+      id: '/admin/programs'
+      path: '/programs'
+      fullPath: '/admin/programs'
+      preLoaderRoute: typeof AdminProgramsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/impact': {
+      id: '/admin/impact'
+      path: '/impact'
+      fullPath: '/admin/impact'
+      preLoaderRoute: typeof AdminImpactRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/gallery': {
+      id: '/admin/gallery'
+      path: '/gallery'
+      fullPath: '/admin/gallery'
+      preLoaderRoute: typeof AdminGalleryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/donations': {
+      id: '/admin/donations'
+      path: '/donations'
+      fullPath: '/admin/donations'
+      preLoaderRoute: typeof AdminDonationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/blog': {
+      id: '/admin/blog'
+      path: '/blog'
+      fullPath: '/admin/blog'
+      preLoaderRoute: typeof AdminBlogRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminBlogRoute: typeof AdminBlogRoute
+  AdminDonationsRoute: typeof AdminDonationsRoute
+  AdminGalleryRoute: typeof AdminGalleryRoute
+  AdminImpactRoute: typeof AdminImpactRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminProgramsRoute: typeof AdminProgramsRoute
+  AdminProjectsRoute: typeof AdminProjectsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminTeamRoute: typeof AdminTeamRoute
+  AdminTestimonialsRoute: typeof AdminTestimonialsRoute
+  AdminVolunteersRoute: typeof AdminVolunteersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminBlogRoute: AdminBlogRoute,
+  AdminDonationsRoute: AdminDonationsRoute,
+  AdminGalleryRoute: AdminGalleryRoute,
+  AdminImpactRoute: AdminImpactRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminProgramsRoute: AdminProgramsRoute,
+  AdminProjectsRoute: AdminProjectsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminTeamRoute: AdminTeamRoute,
+  AdminTestimonialsRoute: AdminTestimonialsRoute,
+  AdminVolunteersRoute: AdminVolunteersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
+  BlogRoute: BlogRoute,
+  DonateRoute: DonateRoute,
+  GalleryRoute: GalleryRoute,
+  GetInvolvedRoute: GetInvolvedRoute,
+  ImpactRoute: ImpactRoute,
+  ProgramsRoute: ProgramsRoute,
+  ProjectsRoute: ProjectsRoute,
+  TeamRoute: TeamRoute,
+  TestimonialsRoute: TestimonialsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
