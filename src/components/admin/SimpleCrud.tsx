@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Pencil, Trash2 } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 export type Field = { name: string; label: string; type?: "text" | "textarea" | "number" | "date"; required?: boolean };
 
