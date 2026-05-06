@@ -7,7 +7,8 @@ import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
 
-const NAV = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/donations", label: "Donations", icon: Heart },
   { to: "/admin/volunteers", label: "Volunteers", icon: HandHeart },
@@ -19,7 +20,7 @@ const NAV = [
   { to: "/admin/impact", label: "Impact Stats", icon: BarChart3 },
   { to: "/admin/team", label: "Team", icon: Users },
   { to: "/admin/settings", label: "Settings", icon: Settings },
-] as const;
+];
 
 function AdminLayout() {
   const { user, isAdmin, loading, signOut } = useAuth();
