@@ -314,27 +314,57 @@ function HomePage() {
         </section>
       )}
 
-      {/* TEAM PREVIEW */}
-      {(team ?? []).length > 0 && (
+      {/* ADVISORY BOARD */}
+      {(advisory ?? []).length > 0 && (
         <section className="bg-muted/30 py-20">
           <div className="container-page">
             <div className="text-center mb-12">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Leadership</p>
-              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Our team</h2>
+              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Advisory Board</h2>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-              {(team ?? []).map((m: any) => (
-                <Card key={m.id} className="p-5 text-center shadow-soft hover:shadow-elevated transition-all">
-                  <div className="mx-auto mb-3 h-20 w-20 rounded-full gradient-saffron overflow-hidden">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {(advisory ?? []).map((m: any) => (
+                <Link
+                  key={m.id}
+                  to="/team/$type/$id"
+                  params={{ type: "advisory", id: m.id }}
+                  className="group text-center"
+                >
+                  <div className="mx-auto mb-4 h-40 w-40 md:h-44 md:w-44 rounded-full gradient-saffron overflow-hidden ring-4 ring-background shadow-elevated transition-transform group-hover:scale-105">
                     {m.photo_url && <img src={m.photo_url} alt={m.name} className="h-full w-full object-cover" />}
                   </div>
-                  <div className="font-semibold">{m.name}</div>
-                  <div className="text-xs text-muted-foreground">{m.position ?? m.role}</div>
-                </Card>
+                  <div className="font-semibold group-hover:text-primary transition-colors">{m.name}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{m.position}</div>
+                </Link>
               ))}
             </div>
-            <div className="text-center mt-8">
-              <Button asChild variant="outline"><Link to="/team">Meet the team <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+          </div>
+        </section>
+      )}
+
+      {/* TRUSTEE BOARD */}
+      {(trustees ?? []).length > 0 && (
+        <section className="py-20">
+          <div className="container-page">
+            <div className="text-center mb-12">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Governance</p>
+              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Trustee Board</h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {(trustees ?? []).map((m: any) => (
+                <Link
+                  key={m.id}
+                  to="/team/$type/$id"
+                  params={{ type: "trustee", id: m.id }}
+                  className="group text-center"
+                >
+                  <div className="mx-auto mb-4 h-40 w-40 md:h-44 md:w-44 rounded-full gradient-saffron overflow-hidden ring-4 ring-background shadow-elevated transition-transform group-hover:scale-105">
+                    {m.photo_url && <img src={m.photo_url} alt={m.name} className="h-full w-full object-cover" />}
+                  </div>
+                  <div className="font-semibold group-hover:text-primary transition-colors">{m.name}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{m.role}</div>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
