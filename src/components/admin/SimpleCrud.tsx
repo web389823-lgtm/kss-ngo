@@ -5,13 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 
-export type Field = { name: string; label: string; type?: "text" | "textarea" | "number" | "date"; required?: boolean };
+export type Field = {
+  name: string;
+  label: string;
+  type?: "text" | "textarea" | "number" | "date" | "select" | "file";
+  required?: boolean;
+  options?: { value: string; label: string }[];
+  accept?: string; // for file
+  bucket?: string; // for file (default kss-media)
+  folder?: string; // for file
+};
 
 export function SimpleCrud({ table, title, fields, primaryField, orderBy = "created_at", ascending = false }: {
   table: string; title: string; fields: Field[]; primaryField: string; orderBy?: string; ascending?: boolean;
@@ -20,20 +30,43 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
   const { isAdmin } = useAuth();
   const [editing, setEditing] = useState<any | null>(null);
   const [open, setOpen] = useState(false);
+  const [values, setValues] = useState<Record<string, any>>({});
+  const [uploading, setUploading] = useState<string | null>(null);
 
   const { data } = useQuery({
     queryKey: ["admin", table],
     queryFn: async () => (await (supabase.from(table as any).select("*").order(orderBy, { ascending }))).data ?? [],
   });
 
+  function openDialog(row: any | null) {
+    setEditing(row);
+    const init: Record<string, any> = {};
+    for (const f of fields) init[f.name] = row?.[f.name] ?? "";
+    setValues(init);
+    setOpen(true);
+  }
+
+  async function handleFile(field: Field, file: File) {
+    const bucket = field.bucket ?? "kss-media";
+    const folder = field.folder ?? table;
+    const ext = file.name.split(".").pop();
+    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    setUploading(field.name);
+    const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: file.type });
+    setUploading(null);
+    if (error) { toast.error(error.message); return; }
+    const { data: pub } = supabase.storage.from(bucket).getPublicUrl(path);
+    setValues((v) => ({ ...v, [field.name]: pub.publicUrl }));
+    toast.success("Uploaded");
+  }
+
   async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
     const obj: any = {};
     for (const f of fields) {
-      const v = fd.get(f.name);
-      if (v === null || v === "") continue;
-      obj[f.name] = f.type === "number" ? Number(v) : String(v);
+      const v = values[f.name];
+      if (v === null || v === undefined || v === "") continue;
+      obj[f.name] = f.type === "number" ? Number(v) : v;
     }
     if (editing?.id) {
       const { error } = await supabase.from(table as any).update(obj).eq("id", editing.id);
@@ -46,6 +79,7 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
     setOpen(false); setEditing(null);
     qc.invalidateQueries({ queryKey: ["admin", table] });
   }
+
   async function remove(id: string) {
     if (!confirm("Delete this item?")) return;
     const { error } = await supabase.from(table as any).delete().eq("id", id);
@@ -58,22 +92,17 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="font-serif text-3xl font-semibold">{title}</h1>
-        <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setEditing(null); }}>
+        <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) { setEditing(null); setValues({}); } }}>
           <DialogTrigger asChild>
-            <Button onClick={() => setEditing(null)}><Plus className="mr-1 h-4 w-4" />New</Button>
+            <Button onClick={() => openDialog(null)}><Plus className="mr-1 h-4 w-4" />New</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{editing ? "Edit" : "New"} {title}</DialogTitle></DialogHeader>
             <form onSubmit={save} className="space-y-4">
               {fields.map((f) => (
-                <div key={f.name}>
-                  <Label htmlFor={f.name}>{f.label}{f.required && " *"}</Label>
-                  {f.type === "textarea"
-                    ? <Textarea id={f.name} name={f.name} rows={4} required={f.required} defaultValue={editing?.[f.name] ?? ""} />
-                    : <Input id={f.name} name={f.name} type={f.type ?? "text"} required={f.required} defaultValue={editing?.[f.name] ?? ""} />}
-                </div>
+                <FieldInput key={f.name} field={f} value={values[f.name] ?? ""} onChange={(v) => setValues((s) => ({ ...s, [f.name]: v }))} onFile={(file) => handleFile(f, file)} uploading={uploading === f.name} />
               ))}
-              <Button type="submit" className="w-full">Save</Button>
+              <Button type="submit" className="w-full" disabled={!!uploading}>Save</Button>
             </form>
           </DialogContent>
         </Dialog>
@@ -82,12 +111,16 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
         <div className="divide-y">
           {(data ?? []).map((row: any) => (
             <div key={row.id} className="p-4 flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <div className="font-medium truncate">{row[primaryField]}</div>
-                <div className="text-xs text-muted-foreground">{new Date(row.created_at).toLocaleDateString()}</div>
+              <div className="min-w-0 flex items-center gap-3">
+                {row.photo_url && <img src={row.photo_url} alt="" className="h-10 w-10 rounded-full object-cover" />}
+                {!row.photo_url && row.media_url && row.media_type !== "video" && <img src={row.media_url} alt="" className="h-10 w-10 rounded object-cover" />}
+                <div className="min-w-0">
+                  <div className="font-medium truncate">{row[primaryField] || row.title || row.name || "(untitled)"}</div>
+                  <div className="text-xs text-muted-foreground">{new Date(row.created_at).toLocaleDateString()}</div>
+                </div>
               </div>
               <div className="flex gap-1">
-                <Button size="sm" variant="ghost" onClick={() => { setEditing(row); setOpen(true); }}><Pencil className="h-4 w-4" /></Button>
+                <Button size="sm" variant="ghost" onClick={() => openDialog(row)}><Pencil className="h-4 w-4" /></Button>
                 {isAdmin && <Button size="sm" variant="ghost" onClick={() => remove(row.id)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>}
               </div>
             </div>
@@ -95,6 +128,54 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
           {(data ?? []).length === 0 && <div className="p-8 text-center text-muted-foreground text-sm">No items yet.</div>}
         </div>
       </Card>
+    </div>
+  );
+}
+
+function FieldInput({ field: f, value, onChange, onFile, uploading }: {
+  field: Field; value: any; onChange: (v: any) => void; onFile: (file: File) => void; uploading: boolean;
+}) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  if (f.type === "textarea") {
+    return (
+      <div>
+        <Label htmlFor={f.name}>{f.label}{f.required && " *"}</Label>
+        <Textarea id={f.name} rows={4} required={f.required} value={value} onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  if (f.type === "select") {
+    return (
+      <div>
+        <Label htmlFor={f.name}>{f.label}{f.required && " *"}</Label>
+        <Select value={value || undefined} onValueChange={onChange}>
+          <SelectTrigger id={f.name}><SelectValue placeholder="Select" /></SelectTrigger>
+          <SelectContent>
+            {(f.options ?? []).map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+    );
+  }
+  if (f.type === "file") {
+    return (
+      <div className="space-y-2">
+        <Label>{f.label}{f.required && " *"}</Label>
+        <div className="flex gap-2">
+          <Input placeholder="Paste URL or upload below" value={value} onChange={(e) => onChange(e.target.value)} />
+          <Button type="button" variant="outline" onClick={() => fileRef.current?.click()} disabled={uploading}>
+            {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+          </Button>
+          <input ref={fileRef} type="file" accept={f.accept} className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) onFile(file); e.target.value = ""; }} />
+        </div>
+        {value && (f.accept?.includes("video") ? <video src={value} className="mt-2 max-h-40 rounded" controls /> : <img src={value} alt="preview" className="mt-2 max-h-40 rounded object-cover" />)}
+      </div>
+    );
+  }
+  return (
+    <div>
+      <Label htmlFor={f.name}>{f.label}{f.required && " *"}</Label>
+      <Input id={f.name} type={f.type ?? "text"} required={f.required} value={value} onChange={(e) => onChange(e.target.value)} />
     </div>
   );
 }
