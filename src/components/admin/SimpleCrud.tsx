@@ -9,18 +9,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, Upload, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Upload, Loader2, ImageIcon } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { logActivity } from "@/lib/activity-log";
 
 export type Field = {
   name: string;
   label: string;
-  type?: "text" | "textarea" | "number" | "date" | "select" | "file";
+  // image = upload only (no URL); file = upload OR paste URL (good for videos)
+  type?: "text" | "textarea" | "number" | "date" | "select" | "file" | "image";
   required?: boolean;
   options?: { value: string; label: string }[];
-  accept?: string; // for file
-  bucket?: string; // for file (default kss-media)
-  folder?: string; // for file
+  accept?: string;
+  bucket?: string;
+  folder?: string;
 };
 
 export function SimpleCrud({ table, title, fields, primaryField, orderBy = "created_at", ascending = false }: {
@@ -71,19 +73,22 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
     if (editing?.id) {
       const { error } = await supabase.from(table as any).update(obj).eq("id", editing.id);
       if (error) return toast.error(error.message);
+      await logActivity({ action: "updated", entity_type: table, entity_id: editing.id, entity_label: obj[primaryField] || obj.title || obj.name });
     } else {
-      const { error } = await supabase.from(table as any).insert(obj);
+      const { data: ins, error } = await supabase.from(table as any).insert(obj).select().single();
       if (error) return toast.error(error.message);
+      await logActivity({ action: "created", entity_type: table, entity_id: (ins as any)?.id, entity_label: obj[primaryField] || obj.title || obj.name });
     }
     toast.success("Saved");
     setOpen(false); setEditing(null);
     qc.invalidateQueries({ queryKey: ["admin", table] });
   }
 
-  async function remove(id: string) {
+  async function remove(row: any) {
     if (!confirm("Delete this item?")) return;
-    const { error } = await supabase.from(table as any).delete().eq("id", id);
+    const { error } = await supabase.from(table as any).delete().eq("id", row.id);
     if (error) return toast.error(error.message);
+    await logActivity({ action: "deleted", entity_type: table, entity_id: row.id, entity_label: row[primaryField] || row.title || row.name });
     toast.success("Deleted");
     qc.invalidateQueries({ queryKey: ["admin", table] });
   }
@@ -113,7 +118,8 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
             <div key={row.id} className="p-4 flex items-center justify-between gap-3">
               <div className="min-w-0 flex items-center gap-3">
                 {row.photo_url && <img src={row.photo_url} alt="" className="h-10 w-10 rounded-full object-cover" />}
-                {!row.photo_url && row.media_url && row.media_type !== "video" && <img src={row.media_url} alt="" className="h-10 w-10 rounded object-cover" />}
+                {!row.photo_url && row.featured_image && <img src={row.featured_image} alt="" className="h-10 w-16 rounded object-cover" />}
+                {!row.photo_url && !row.featured_image && row.media_url && row.media_type !== "video" && <img src={row.media_url} alt="" className="h-10 w-10 rounded object-cover" />}
                 <div className="min-w-0">
                   <div className="font-medium truncate">{row[primaryField] || row.title || row.name || "(untitled)"}</div>
                   <div className="text-xs text-muted-foreground">{new Date(row.created_at).toLocaleDateString()}</div>
@@ -121,7 +127,7 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
               </div>
               <div className="flex gap-1">
                 <Button size="sm" variant="ghost" onClick={() => openDialog(row)}><Pencil className="h-4 w-4" /></Button>
-                {isAdmin && <Button size="sm" variant="ghost" onClick={() => remove(row.id)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>}
+                {isAdmin && <Button size="sm" variant="ghost" onClick={() => remove(row)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>}
               </div>
             </div>
           ))}
@@ -157,6 +163,34 @@ function FieldInput({ field: f, value, onChange, onFile, uploading }: {
       </div>
     );
   }
+  // image: upload-only (no URL input)
+  if (f.type === "image") {
+    return (
+      <div className="space-y-2">
+        <Label>{f.label}{f.required && " *"}</Label>
+        <div
+          onClick={() => fileRef.current?.click()}
+          className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-accent/50 transition-colors"
+        >
+          {value ? (
+            <img src={value} alt="preview" className="mx-auto max-h-48 rounded object-cover" />
+          ) : (
+            <div className="text-muted-foreground">
+              <ImageIcon className="h-8 w-8 mx-auto mb-2" />
+              <p className="text-sm">Click to upload an image from your device</p>
+            </div>
+          )}
+          {uploading && <Loader2 className="mt-2 h-4 w-4 animate-spin mx-auto" />}
+        </div>
+        <input ref={fileRef} type="file" accept={f.accept ?? "image/*"} className="hidden"
+          onChange={(e) => { const file = e.target.files?.[0]; if (file) onFile(file); e.target.value = ""; }} />
+        {value && (
+          <Button type="button" variant="ghost" size="sm" onClick={() => onChange("")}>Remove image</Button>
+        )}
+      </div>
+    );
+  }
+  // file: upload OR paste URL (videos can use either)
   if (f.type === "file") {
     return (
       <div className="space-y-2">
