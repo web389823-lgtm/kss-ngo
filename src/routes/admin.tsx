@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Heart, HandHeart, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog } from "lucide-react";
+import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 
@@ -13,7 +13,8 @@ type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?
 const NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/donations", label: "Donations", icon: Heart },
-  { to: "/admin/volunteers", label: "Volunteers", icon: HandHeart },
+  { to: "/admin/volunteers", label: "Volunteer Applications", icon: HandHeart },
+  { to: "/admin/csr", label: "CSR Applications", icon: Building2 },
   { to: "/admin/programs", label: "Programs", icon: BookOpen },
   { to: "/admin/projects", label: "Projects", icon: FolderKanban },
   { to: "/admin/gallery", label: "Gallery", icon: Image },
@@ -21,6 +22,8 @@ const NAV: NavItem[] = [
   { to: "/admin/testimonials", label: "Testimonials", icon: Quote, adminOnly: true },
   { to: "/admin/impact", label: "Impact Stats", icon: BarChart3, adminOnly: true },
   { to: "/admin/team", label: "Team", icon: Users, adminOnly: true },
+  { to: "/admin/users", label: "Admins & Staff", icon: UsersRound, adminOnly: true },
+  { to: "/admin/activity", label: "Activity Log", icon: Activity, adminOnly: true },
   { to: "/admin/settings", label: "Settings", icon: Settings, adminOnly: true },
 ];
 
