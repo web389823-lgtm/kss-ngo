@@ -1,0 +1,1 @@
+ALTER TABLE public.gallery_items ADD COLUMN IF NOT EXISTS description text;

@@ -144,6 +144,7 @@ export type Database = {
         Row: {
           category: string | null
           created_at: string
+          description: string | null
           id: string
           media_type: Database["public"]["Enums"]["media_type"]
           media_url: string
@@ -153,6 +154,7 @@ export type Database = {
         Insert: {
           category?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           media_type?: Database["public"]["Enums"]["media_type"]
           media_url: string
@@ -162,6 +164,7 @@ export type Database = {
         Update: {
           category?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           media_type?: Database["public"]["Enums"]["media_type"]
           media_url?: string

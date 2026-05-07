@@ -22,6 +22,8 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as GetInvolvedVolunteerRouteImport } from './routes/get-involved.volunteer'
+import { Route as GetInvolvedCsrRouteImport } from './routes/get-involved.csr'
 import { Route as AdminVolunteersRouteImport } from './routes/admin.volunteers'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AdminTeamRouteImport } from './routes/admin.team'
@@ -100,6 +102,16 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const GetInvolvedVolunteerRoute = GetInvolvedVolunteerRouteImport.update({
+  id: '/volunteer',
+  path: '/volunteer',
+  getParentRoute: () => GetInvolvedRoute,
+} as any)
+const GetInvolvedCsrRoute = GetInvolvedCsrRouteImport.update({
+  id: '/csr',
+  path: '/csr',
+  getParentRoute: () => GetInvolvedRoute,
+} as any)
 const AdminVolunteersRoute = AdminVolunteersRouteImport.update({
   id: '/volunteers',
   path: '/volunteers',
@@ -168,7 +180,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
-  '/get-involved': typeof GetInvolvedRoute
+  '/get-involved': typeof GetInvolvedRouteWithChildren
   '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
@@ -185,6 +197,8 @@ export interface FileRoutesByFullPath {
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
   '/admin/': typeof AdminIndexRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
@@ -194,7 +208,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
-  '/get-involved': typeof GetInvolvedRoute
+  '/get-involved': typeof GetInvolvedRouteWithChildren
   '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
@@ -211,6 +225,8 @@ export interface FileRoutesByTo {
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
   '/admin': typeof AdminIndexRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
@@ -222,7 +238,7 @@ export interface FileRoutesById {
   '/blog': typeof BlogRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
-  '/get-involved': typeof GetInvolvedRoute
+  '/get-involved': typeof GetInvolvedRouteWithChildren
   '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
@@ -239,6 +255,8 @@ export interface FileRoutesById {
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
   '/admin/': typeof AdminIndexRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
@@ -268,6 +286,8 @@ export interface FileRouteTypes {
     | '/admin/team'
     | '/admin/testimonials'
     | '/admin/volunteers'
+    | '/get-involved/csr'
+    | '/get-involved/volunteer'
     | '/admin/'
     | '/team/$type/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -294,6 +314,8 @@ export interface FileRouteTypes {
     | '/admin/team'
     | '/admin/testimonials'
     | '/admin/volunteers'
+    | '/get-involved/csr'
+    | '/get-involved/volunteer'
     | '/admin'
     | '/team/$type/$id'
   id:
@@ -321,6 +343,8 @@ export interface FileRouteTypes {
     | '/admin/team'
     | '/admin/testimonials'
     | '/admin/volunteers'
+    | '/get-involved/csr'
+    | '/get-involved/volunteer'
     | '/admin/'
     | '/team/$type/$id'
   fileRoutesById: FileRoutesById
@@ -332,7 +356,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRoute
   DonateRoute: typeof DonateRoute
   GalleryRoute: typeof GalleryRoute
-  GetInvolvedRoute: typeof GetInvolvedRoute
+  GetInvolvedRoute: typeof GetInvolvedRouteWithChildren
   ImpactRoute: typeof ImpactRoute
   ProgramsRoute: typeof ProgramsRoute
   ProjectsRoute: typeof ProjectsRoute
@@ -432,6 +456,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/get-involved/volunteer': {
+      id: '/get-involved/volunteer'
+      path: '/volunteer'
+      fullPath: '/get-involved/volunteer'
+      preLoaderRoute: typeof GetInvolvedVolunteerRouteImport
+      parentRoute: typeof GetInvolvedRoute
+    }
+    '/get-involved/csr': {
+      id: '/get-involved/csr'
+      path: '/csr'
+      fullPath: '/get-involved/csr'
+      preLoaderRoute: typeof GetInvolvedCsrRouteImport
+      parentRoute: typeof GetInvolvedRoute
     }
     '/admin/volunteers': {
       id: '/admin/volunteers'
@@ -552,6 +590,20 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface GetInvolvedRouteChildren {
+  GetInvolvedCsrRoute: typeof GetInvolvedCsrRoute
+  GetInvolvedVolunteerRoute: typeof GetInvolvedVolunteerRoute
+}
+
+const GetInvolvedRouteChildren: GetInvolvedRouteChildren = {
+  GetInvolvedCsrRoute: GetInvolvedCsrRoute,
+  GetInvolvedVolunteerRoute: GetInvolvedVolunteerRoute,
+}
+
+const GetInvolvedRouteWithChildren = GetInvolvedRoute._addFileChildren(
+  GetInvolvedRouteChildren,
+)
+
 interface TeamRouteChildren {
   TeamTypeIdRoute: typeof TeamTypeIdRoute
 }
@@ -569,7 +621,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRoute,
   DonateRoute: DonateRoute,
   GalleryRoute: GalleryRoute,
-  GetInvolvedRoute: GetInvolvedRoute,
+  GetInvolvedRoute: GetInvolvedRouteWithChildren,
   ImpactRoute: ImpactRoute,
   ProgramsRoute: ProgramsRoute,
   ProjectsRoute: ProjectsRoute,

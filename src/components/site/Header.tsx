@@ -14,7 +14,7 @@ const NAV = [
   { to: "/gallery", label: "Gallery" },
   { to: "/blog", label: "News" },
   { to: "/impact", label: "Impact" },
-  { to: "/get-involved", label: "Volunteer" },
+  { to: "/get-involved", label: "Get Involved" },
 ] as const;
 
 export function Header() {
