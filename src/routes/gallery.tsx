@@ -13,6 +13,15 @@ export const Route = createFileRoute("/gallery")({
   ]}),
 });
 
+function ratioClass(r?: string) {
+  switch (r) {
+    case "9:16": return "aspect-[9/16]";
+    case "1:1": return "aspect-square";
+    case "4:3": return "aspect-[4/3]";
+    default: return "aspect-video";
+  }
+}
+
 function GalleryPage() {
   const { data } = useQuery({
     queryKey: ["gallery"],
@@ -29,14 +38,21 @@ function GalleryPage() {
             <p>Our gallery is being curated. Check back soon.</p>
           </Card>
         ) : (
-          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {items.map((g: any) => (
-              <div key={g.id} className="break-inside-avoid rounded-xl overflow-hidden shadow-soft">
-                {g.media_type === "video"
-                  ? <video src={g.media_url} controls className="w-full" />
-                  : <img src={g.media_url} alt={g.title ?? "Gallery"} loading="lazy" className="w-full" />}
-                {g.title && <div className="p-3 text-xs text-muted-foreground bg-card">{g.title}</div>}
-              </div>
+              <Card key={g.id} className="overflow-hidden group hover:shadow-elegant transition-all animate-fade-in">
+                <div className={`${ratioClass(g.ratio)} bg-muted overflow-hidden`}>
+                  {g.media_type === "video"
+                    ? <video src={g.media_url} controls className="w-full h-full object-cover" />
+                    : <img src={g.media_url} alt={g.title ?? "Gallery"} loading="lazy" className="w-full h-full object-cover transition-transform group-hover:scale-105" />}
+                </div>
+                {(g.title || g.description) && (
+                  <div className="p-3">
+                    {g.title && <div className="font-medium text-sm truncate">{g.title}</div>}
+                    {g.description && <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{g.description}</div>}
+                  </div>
+                )}
+              </Card>
             ))}
           </div>
         )}
