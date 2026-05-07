@@ -5,16 +5,16 @@ export const Route = createFileRoute("/admin/gallery")({
   component: () => (
     <SimpleCrud
       table="gallery_items"
-      title="Gallery"
+      title="Gallery (Photos & Videos)"
       primaryField="title"
       fields={[
         { name: "title", label: "Title" },
         { name: "description", label: "Description", type: "textarea" },
         { name: "media_type", label: "Media Type", type: "select", required: true, options: [
-          { value: "image", label: "Image" },
+          { value: "image", label: "Photo" },
           { value: "video", label: "Video" },
         ]},
-        { name: "media_url", label: "Image / Video (upload or paste URL)", type: "file", required: true, accept: "image/*,video/*" },
+        { name: "media_url", label: "Photo upload, or Video URL / upload", type: "file", required: true, accept: "image/*,video/*" },
         { name: "ratio", label: "Aspect Ratio", type: "select", options: [
           { value: "16:9", label: "16:9 (landscape)" },
           { value: "9:16", label: "9:16 (portrait / reel)" },

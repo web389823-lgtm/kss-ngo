@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          entity_id: string | null
+          entity_label: string | null
+          entity_type: string
+          id: string
+          user_email: string | null
+          user_id: string | null
+          user_role: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_label?: string | null
+          entity_type: string
+          id?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_label?: string | null
+          entity_type?: string
+          id?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Relationships: []
+      }
       advisory_team: {
         Row: {
           bio: string | null
@@ -82,6 +121,69 @@ export type Database = {
           slug?: string
           status?: Database["public"]["Enums"]["content_status"]
           title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      csr_applications: {
+        Row: {
+          aadhaar: string | null
+          address: string | null
+          admin_notes: string | null
+          age: number | null
+          budget_range: string | null
+          company: string | null
+          created_at: string
+          designation: string | null
+          email: string
+          full_name: string
+          gender: string | null
+          id: string
+          message: string | null
+          pan: string | null
+          phone: string
+          purpose: string | null
+          status: Database["public"]["Enums"]["volunteer_status"]
+          updated_at: string
+        }
+        Insert: {
+          aadhaar?: string | null
+          address?: string | null
+          admin_notes?: string | null
+          age?: number | null
+          budget_range?: string | null
+          company?: string | null
+          created_at?: string
+          designation?: string | null
+          email: string
+          full_name: string
+          gender?: string | null
+          id?: string
+          message?: string | null
+          pan?: string | null
+          phone: string
+          purpose?: string | null
+          status?: Database["public"]["Enums"]["volunteer_status"]
+          updated_at?: string
+        }
+        Update: {
+          aadhaar?: string | null
+          address?: string | null
+          admin_notes?: string | null
+          age?: number | null
+          budget_range?: string | null
+          company?: string | null
+          created_at?: string
+          designation?: string | null
+          email?: string
+          full_name?: string
+          gender?: string | null
+          id?: string
+          message?: string | null
+          pan?: string | null
+          phone?: string
+          purpose?: string | null
+          status?: Database["public"]["Enums"]["volunteer_status"]
           updated_at?: string
         }
         Relationships: []
@@ -418,6 +520,7 @@ export type Database = {
       }
       volunteers: {
         Row: {
+          aadhaar: string | null
           address: string | null
           admin_notes: string | null
           age: number | null
@@ -429,11 +532,14 @@ export type Database = {
           gender: string | null
           id: string
           message: string | null
+          pan: string | null
           phone: string
+          purpose: string | null
           status: Database["public"]["Enums"]["volunteer_status"]
           updated_at: string
         }
         Insert: {
+          aadhaar?: string | null
           address?: string | null
           admin_notes?: string | null
           age?: number | null
@@ -445,11 +551,14 @@ export type Database = {
           gender?: string | null
           id?: string
           message?: string | null
+          pan?: string | null
           phone: string
+          purpose?: string | null
           status?: Database["public"]["Enums"]["volunteer_status"]
           updated_at?: string
         }
         Update: {
+          aadhaar?: string | null
           address?: string | null
           admin_notes?: string | null
           age?: number | null
@@ -461,7 +570,9 @@ export type Database = {
           gender?: string | null
           id?: string
           message?: string | null
+          pan?: string | null
           phone?: string
+          purpose?: string | null
           status?: Database["public"]["Enums"]["volunteer_status"]
           updated_at?: string
         }
@@ -485,6 +596,16 @@ export type Database = {
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      list_staff_users: {
+        Args: never
+        Returns: {
+          email: string
+          full_name: string
+          joined_at: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "editor" | "user" | "staff"
