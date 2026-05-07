@@ -21,8 +21,9 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as GetInvolvedIndexRouteImport } from './routes/get-involved.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as GetInvolvedVolunteerRouteImport } from './routes/get-involved.volunteer'
+import { Route as GetInvolvedCsrRouteImport } from './routes/get-involved.csr'
 import { Route as AdminVolunteersRouteImport } from './routes/admin.volunteers'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AdminTeamRouteImport } from './routes/admin.team'
@@ -96,15 +97,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GetInvolvedIndexRoute = GetInvolvedIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => GetInvolvedRoute,
-} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const GetInvolvedVolunteerRoute = GetInvolvedVolunteerRouteImport.update({
+  id: '/volunteer',
+  path: '/volunteer',
+  getParentRoute: () => GetInvolvedRoute,
+} as any)
+const GetInvolvedCsrRoute = GetInvolvedCsrRouteImport.update({
+  id: '/csr',
+  path: '/csr',
+  getParentRoute: () => GetInvolvedRoute,
 } as any)
 const AdminVolunteersRoute = AdminVolunteersRouteImport.update({
   id: '/volunteers',
@@ -191,8 +197,9 @@ export interface FileRoutesByFullPath {
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
   '/admin/': typeof AdminIndexRoute
-  '/get-involved/': typeof GetInvolvedIndexRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRoutesByTo {
@@ -201,6 +208,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
+  '/get-involved': typeof GetInvolvedRouteWithChildren
   '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
@@ -217,8 +225,9 @@ export interface FileRoutesByTo {
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
   '/admin': typeof AdminIndexRoute
-  '/get-involved': typeof GetInvolvedIndexRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRoutesById {
@@ -246,8 +255,9 @@ export interface FileRoutesById {
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
   '/admin/': typeof AdminIndexRoute
-  '/get-involved/': typeof GetInvolvedIndexRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRouteTypes {
@@ -276,8 +286,9 @@ export interface FileRouteTypes {
     | '/admin/team'
     | '/admin/testimonials'
     | '/admin/volunteers'
+    | '/get-involved/csr'
+    | '/get-involved/volunteer'
     | '/admin/'
-    | '/get-involved/'
     | '/team/$type/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/donate'
     | '/gallery'
+    | '/get-involved'
     | '/impact'
     | '/programs'
     | '/projects'
@@ -302,8 +314,9 @@ export interface FileRouteTypes {
     | '/admin/team'
     | '/admin/testimonials'
     | '/admin/volunteers'
+    | '/get-involved/csr'
+    | '/get-involved/volunteer'
     | '/admin'
-    | '/get-involved'
     | '/team/$type/$id'
   id:
     | '__root__'
@@ -330,8 +343,9 @@ export interface FileRouteTypes {
     | '/admin/team'
     | '/admin/testimonials'
     | '/admin/volunteers'
+    | '/get-involved/csr'
+    | '/get-involved/volunteer'
     | '/admin/'
-    | '/get-involved/'
     | '/team/$type/$id'
   fileRoutesById: FileRoutesById
 }
@@ -436,19 +450,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/get-involved/': {
-      id: '/get-involved/'
-      path: '/'
-      fullPath: '/get-involved/'
-      preLoaderRoute: typeof GetInvolvedIndexRouteImport
-      parentRoute: typeof GetInvolvedRoute
-    }
     '/admin/': {
       id: '/admin/'
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/get-involved/volunteer': {
+      id: '/get-involved/volunteer'
+      path: '/volunteer'
+      fullPath: '/get-involved/volunteer'
+      preLoaderRoute: typeof GetInvolvedVolunteerRouteImport
+      parentRoute: typeof GetInvolvedRoute
+    }
+    '/get-involved/csr': {
+      id: '/get-involved/csr'
+      path: '/csr'
+      fullPath: '/get-involved/csr'
+      preLoaderRoute: typeof GetInvolvedCsrRouteImport
+      parentRoute: typeof GetInvolvedRoute
     }
     '/admin/volunteers': {
       id: '/admin/volunteers'
@@ -570,11 +591,13 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface GetInvolvedRouteChildren {
-  GetInvolvedIndexRoute: typeof GetInvolvedIndexRoute
+  GetInvolvedCsrRoute: typeof GetInvolvedCsrRoute
+  GetInvolvedVolunteerRoute: typeof GetInvolvedVolunteerRoute
 }
 
 const GetInvolvedRouteChildren: GetInvolvedRouteChildren = {
-  GetInvolvedIndexRoute: GetInvolvedIndexRoute,
+  GetInvolvedCsrRoute: GetInvolvedCsrRoute,
+  GetInvolvedVolunteerRoute: GetInvolvedVolunteerRoute,
 }
 
 const GetInvolvedRouteWithChildren = GetInvolvedRoute._addFileChildren(
