@@ -25,6 +25,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as GetInvolvedVolunteerRouteImport } from './routes/get-involved.volunteer'
 import { Route as GetInvolvedCsrRouteImport } from './routes/get-involved.csr'
 import { Route as AdminVolunteersRouteImport } from './routes/admin.volunteers'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AdminTeamRouteImport } from './routes/admin.team'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
@@ -34,7 +35,9 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminImpactRouteImport } from './routes/admin.impact'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminDonationsRouteImport } from './routes/admin.donations'
+import { Route as AdminCsrRouteImport } from './routes/admin.csr'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
+import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as TeamTypeIdRouteImport } from './routes/team.$type.$id'
 
 const TestimonialsRoute = TestimonialsRouteImport.update({
@@ -117,6 +120,11 @@ const AdminVolunteersRoute = AdminVolunteersRouteImport.update({
   path: '/volunteers',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
   id: '/testimonials',
   path: '/testimonials',
@@ -162,9 +170,19 @@ const AdminDonationsRoute = AdminDonationsRouteImport.update({
   path: '/donations',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCsrRoute = AdminCsrRouteImport.update({
+  id: '/csr',
+  path: '/csr',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBlogRoute = AdminBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminActivityRoute = AdminActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => AdminRoute,
 } as any)
 const TeamTypeIdRoute = TeamTypeIdRouteImport.update({
@@ -186,7 +204,9 @@ export interface FileRoutesByFullPath {
   '/projects': typeof ProjectsRoute
   '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/impact': typeof AdminImpactRoute
@@ -196,6 +216,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
   '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
@@ -214,7 +235,9 @@ export interface FileRoutesByTo {
   '/projects': typeof ProjectsRoute
   '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/impact': typeof AdminImpactRoute
@@ -224,6 +247,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
   '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
@@ -244,7 +268,9 @@ export interface FileRoutesById {
   '/projects': typeof ProjectsRoute
   '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/impact': typeof AdminImpactRoute
@@ -254,6 +280,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
   '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
@@ -275,7 +302,9 @@ export interface FileRouteTypes {
     | '/projects'
     | '/team'
     | '/testimonials'
+    | '/admin/activity'
     | '/admin/blog'
+    | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
     | '/admin/impact'
@@ -285,6 +314,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/team'
     | '/admin/testimonials'
+    | '/admin/users'
     | '/admin/volunteers'
     | '/get-involved/csr'
     | '/get-involved/volunteer'
@@ -303,7 +333,9 @@ export interface FileRouteTypes {
     | '/projects'
     | '/team'
     | '/testimonials'
+    | '/admin/activity'
     | '/admin/blog'
+    | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
     | '/admin/impact'
@@ -313,6 +345,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/team'
     | '/admin/testimonials'
+    | '/admin/users'
     | '/admin/volunteers'
     | '/get-involved/csr'
     | '/get-involved/volunteer'
@@ -332,7 +365,9 @@ export interface FileRouteTypes {
     | '/projects'
     | '/team'
     | '/testimonials'
+    | '/admin/activity'
     | '/admin/blog'
+    | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
     | '/admin/impact'
@@ -342,6 +377,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/team'
     | '/admin/testimonials'
+    | '/admin/users'
     | '/admin/volunteers'
     | '/get-involved/csr'
     | '/get-involved/volunteer'
@@ -478,6 +514,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminVolunteersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/testimonials': {
       id: '/admin/testimonials'
       path: '/testimonials'
@@ -541,11 +584,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDonationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/csr': {
+      id: '/admin/csr'
+      path: '/csr'
+      fullPath: '/admin/csr'
+      preLoaderRoute: typeof AdminCsrRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/blog': {
       id: '/admin/blog'
       path: '/blog'
       fullPath: '/admin/blog'
       preLoaderRoute: typeof AdminBlogRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/activity': {
+      id: '/admin/activity'
+      path: '/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AdminActivityRouteImport
       parentRoute: typeof AdminRoute
     }
     '/team/$type/$id': {
@@ -559,7 +616,9 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminActivityRoute: typeof AdminActivityRoute
   AdminBlogRoute: typeof AdminBlogRoute
+  AdminCsrRoute: typeof AdminCsrRoute
   AdminDonationsRoute: typeof AdminDonationsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminImpactRoute: typeof AdminImpactRoute
@@ -569,12 +628,15 @@ interface AdminRouteChildren {
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTeamRoute: typeof AdminTeamRoute
   AdminTestimonialsRoute: typeof AdminTestimonialsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AdminVolunteersRoute: typeof AdminVolunteersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminActivityRoute: AdminActivityRoute,
   AdminBlogRoute: AdminBlogRoute,
+  AdminCsrRoute: AdminCsrRoute,
   AdminDonationsRoute: AdminDonationsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminImpactRoute: AdminImpactRoute,
@@ -584,6 +646,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTeamRoute: AdminTeamRoute,
   AdminTestimonialsRoute: AdminTestimonialsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AdminVolunteersRoute: AdminVolunteersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -631,3 +694,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

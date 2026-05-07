@@ -15,8 +15,8 @@ import { CheckCircle2, HandHeart } from "lucide-react";
 export const Route = createFileRoute("/get-involved/volunteer")({
   component: VolunteerPage,
   head: () => ({ meta: [
-    { title: "Volunteer — Keshava Seva Samiti" },
-    { name: "description", content: "Join 650+ KSS volunteers serving communities across India in education, healthcare and welfare." },
+    { title: "Volunteer Registration — Keshava Seva Samiti" },
+    { name: "description", content: "Register as a KSS volunteer. Share your details and join 650+ changemakers." },
   ]}),
 });
 
@@ -27,6 +27,9 @@ const schema = z.object({
   address: z.string().trim().max(500).optional().or(z.literal("")),
   gender: z.string().optional().or(z.literal("")),
   age: z.coerce.number().int().min(0).max(120).optional().or(z.nan()),
+  pan: z.string().trim().max(20).optional().or(z.literal("")),
+  aadhaar: z.string().trim().max(20).optional().or(z.literal("")),
+  purpose: z.string().trim().min(1).max(500),
   area_of_interest: z.string().min(1).max(100),
   availability: z.string().min(1).max(100),
   message: z.string().trim().max(1000).optional().or(z.literal("")),
@@ -49,18 +52,21 @@ function VolunteerPage() {
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
     setSubmitted(true);
-    toast.success("Thank you! We'll be in touch.");
+    toast.success("Application submitted!");
   }
 
   if (submitted) {
     return (
       <>
-        <PageHeader eyebrow="Welcome" title="You're one of us now" />
+        <PageHeader eyebrow="Thank you" title="Application received" />
         <section className="container-page py-16 max-w-2xl">
-          <Card className="p-10 text-center shadow-soft">
-            <CheckCircle2 className="h-12 w-12 text-primary mx-auto mb-4" />
-            <h2 className="font-serif text-2xl font-semibold">Application received</h2>
-            <p className="mt-3 text-muted-foreground">A coordinator will reach out within 3–5 days to onboard you and match you with a program.</p>
+          <Card className="p-10 text-center shadow-soft animate-fade-in">
+            <CheckCircle2 className="h-14 w-14 text-primary mx-auto mb-4" />
+            <h2 className="font-serif text-2xl font-semibold">We've received your details</h2>
+            <p className="mt-3 text-muted-foreground">
+              Our team will review your registration and get back to you within
+              <strong className="text-foreground"> 2–5 working days</strong> to confirm your onboarding.
+            </p>
           </Card>
         </section>
       </>
@@ -69,9 +75,9 @@ function VolunteerPage() {
 
   return (
     <>
-      <PageHeader eyebrow="Volunteer" title="Give your time, change a life" description="Tell us about yourself and where you'd like to serve." />
+      <PageHeader eyebrow="Volunteer" title="Volunteer Registration" description="Fill in your details — our team will reach out to onboard you." />
       <section className="container-page py-16 max-w-3xl">
-        <Card className="p-8 shadow-soft">
+        <Card className="p-8 shadow-soft animate-fade-in">
           <form onSubmit={onSubmit} className="space-y-5">
             <div className="grid md:grid-cols-2 gap-4">
               <div><Label htmlFor="full_name">Full Name *</Label><Input id="full_name" name="full_name" required /></div>
@@ -88,6 +94,9 @@ function VolunteerPage() {
                 </Select>
               </div>
               <div><Label htmlFor="age">Age</Label><Input id="age" name="age" type="number" min={0} max={120} /></div>
+              <div><Label htmlFor="pan">PAN</Label><Input id="pan" name="pan" placeholder="ABCDE1234F" /></div>
+              <div><Label htmlFor="aadhaar">Aadhaar</Label><Input id="aadhaar" name="aadhaar" placeholder="XXXX XXXX XXXX" /></div>
+              <div className="md:col-span-2"><Label htmlFor="purpose">Purpose / Why do you want to volunteer? *</Label><Textarea id="purpose" name="purpose" rows={3} required /></div>
               <div>
                 <Label htmlFor="area_of_interest">Area of Interest *</Label>
                 <Select name="area_of_interest" required>
@@ -109,7 +118,7 @@ function VolunteerPage() {
               <div className="md:col-span-2"><Label htmlFor="message">Anything else?</Label><Textarea id="message" name="message" rows={3} /></div>
             </div>
             <Button type="submit" size="lg" disabled={submitting} className="w-full">
-              <HandHeart className="mr-2 h-4 w-4" />{submitting ? "Submitting…" : "Submit Application"}
+              <HandHeart className="mr-2 h-4 w-4" />{submitting ? "Submitting…" : "Submit Registration"}
             </Button>
           </form>
         </Card>
