@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -13,7 +13,6 @@ const NAV = [
   { to: "/projects", label: "Projects" },
   { to: "/gallery", label: "Gallery" },
   { to: "/blog", label: "News" },
-  { to: "/impact", label: "Impact" },
   { to: "/get-involved", label: "Get Involved" },
 ] as const;
 
@@ -21,19 +20,30 @@ export function Header() {
   const { theme, toggle } = useTheme();
   const { user, isStaff, signOut } = useAuth();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md animate-fade-in">
-      <div className="container-page flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="flex items-center gap-2.5 group transition-transform hover:scale-[1.02]">
-          <div className="grid h-9 w-9 place-items-center rounded-full gradient-saffron text-primary-foreground font-serif text-lg font-bold shadow-soft">K</div>
+    <header className={`sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md animate-fade-in transition-shadow duration-300 ${scrolled ? "shadow-md" : ""}`}>
+      <div className="container-page flex h-20 items-center justify-between gap-6 pl-2 md:pl-4">
+        <Link to="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02] mr-4">
+          <div className="grid h-11 w-11 place-items-center rounded-full gradient-saffron text-primary-foreground font-serif text-xl font-bold shadow-soft">K</div>
           <div className="leading-tight">
-            <div className="font-serif text-base font-semibold">Keshava Seva Samiti</div>
+            <div className="font-serif text-lg font-semibold">Keshava Seva Samiti</div>
+            <div className="text-[11px] text-muted-foreground tracking-wider uppercase">Since 1999</div>
           </div>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
           {NAV.map((n) => (
-            <Link key={n.to} to={n.to} className="px-3 py-2 text-sm font-medium text-foreground/80 rounded-md hover:bg-accent hover:text-foreground transition-colors"
+            <Link key={n.to} to={n.to}
+              className="px-4 py-2.5 text-[15px] font-medium text-foreground/80 rounded-md hover:bg-accent hover:text-foreground transition-all duration-200"
               activeProps={{ className: "text-primary" }} activeOptions={{ exact: n.to === "/" }}>
               {n.label}
             </Link>
@@ -60,7 +70,7 @@ export function Header() {
             </Button>
           )}
 
-          <Button asChild className="hidden sm:inline-flex transition-transform hover:scale-[1.03]">
+          <Button asChild className="hidden sm:inline-flex transition-transform hover:scale-[1.04]">
             <Link to="/donate"><Heart className="mr-2 h-4 w-4" /> Donate</Link>
           </Button>
           <Sheet open={open} onOpenChange={setOpen}>

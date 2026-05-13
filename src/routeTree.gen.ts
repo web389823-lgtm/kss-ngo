@@ -13,7 +13,6 @@ import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProgramsRouteImport } from './routes/programs'
-import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as GetInvolvedRouteImport } from './routes/get-involved'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as DonateRouteImport } from './routes/donate'
@@ -32,7 +31,6 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
-import { Route as AdminImpactRouteImport } from './routes/admin.impact'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminDonationsRouteImport } from './routes/admin.donations'
 import { Route as AdminCsrRouteImport } from './routes/admin.csr'
@@ -58,11 +56,6 @@ const ProjectsRoute = ProjectsRouteImport.update({
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImpactRoute = ImpactRouteImport.update({
-  id: '/impact',
-  path: '/impact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GetInvolvedRoute = GetInvolvedRouteImport.update({
@@ -155,11 +148,6 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminImpactRoute = AdminImpactRouteImport.update({
-  id: '/impact',
-  path: '/impact',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminGalleryRoute = AdminGalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -199,7 +187,6 @@ export interface FileRoutesByFullPath {
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/get-involved': typeof GetInvolvedRouteWithChildren
-  '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
   '/team': typeof TeamRouteWithChildren
@@ -209,7 +196,6 @@ export interface FileRoutesByFullPath {
   '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
-  '/admin/impact': typeof AdminImpactRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -230,7 +216,6 @@ export interface FileRoutesByTo {
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/get-involved': typeof GetInvolvedRouteWithChildren
-  '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
   '/team': typeof TeamRouteWithChildren
@@ -240,7 +225,6 @@ export interface FileRoutesByTo {
   '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
-  '/admin/impact': typeof AdminImpactRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -263,7 +247,6 @@ export interface FileRoutesById {
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/get-involved': typeof GetInvolvedRouteWithChildren
-  '/impact': typeof ImpactRoute
   '/programs': typeof ProgramsRoute
   '/projects': typeof ProjectsRoute
   '/team': typeof TeamRouteWithChildren
@@ -273,7 +256,6 @@ export interface FileRoutesById {
   '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
-  '/admin/impact': typeof AdminImpactRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -297,7 +279,6 @@ export interface FileRouteTypes {
     | '/donate'
     | '/gallery'
     | '/get-involved'
-    | '/impact'
     | '/programs'
     | '/projects'
     | '/team'
@@ -307,7 +288,6 @@ export interface FileRouteTypes {
     | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
-    | '/admin/impact'
     | '/admin/login'
     | '/admin/programs'
     | '/admin/projects'
@@ -328,7 +308,6 @@ export interface FileRouteTypes {
     | '/donate'
     | '/gallery'
     | '/get-involved'
-    | '/impact'
     | '/programs'
     | '/projects'
     | '/team'
@@ -338,7 +317,6 @@ export interface FileRouteTypes {
     | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
-    | '/admin/impact'
     | '/admin/login'
     | '/admin/programs'
     | '/admin/projects'
@@ -360,7 +338,6 @@ export interface FileRouteTypes {
     | '/donate'
     | '/gallery'
     | '/get-involved'
-    | '/impact'
     | '/programs'
     | '/projects'
     | '/team'
@@ -370,7 +347,6 @@ export interface FileRouteTypes {
     | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
-    | '/admin/impact'
     | '/admin/login'
     | '/admin/programs'
     | '/admin/projects'
@@ -393,7 +369,6 @@ export interface RootRouteChildren {
   DonateRoute: typeof DonateRoute
   GalleryRoute: typeof GalleryRoute
   GetInvolvedRoute: typeof GetInvolvedRouteWithChildren
-  ImpactRoute: typeof ImpactRoute
   ProgramsRoute: typeof ProgramsRoute
   ProjectsRoute: typeof ProjectsRoute
   TeamRoute: typeof TeamRouteWithChildren
@@ -428,13 +403,6 @@ declare module '@tanstack/react-router' {
       path: '/programs'
       fullPath: '/programs'
       preLoaderRoute: typeof ProgramsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/impact': {
-      id: '/impact'
-      path: '/impact'
-      fullPath: '/impact'
-      preLoaderRoute: typeof ImpactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/get-involved': {
@@ -563,13 +531,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/impact': {
-      id: '/admin/impact'
-      path: '/impact'
-      fullPath: '/admin/impact'
-      preLoaderRoute: typeof AdminImpactRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/gallery': {
       id: '/admin/gallery'
       path: '/gallery'
@@ -621,7 +582,6 @@ interface AdminRouteChildren {
   AdminCsrRoute: typeof AdminCsrRoute
   AdminDonationsRoute: typeof AdminDonationsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
-  AdminImpactRoute: typeof AdminImpactRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminProgramsRoute: typeof AdminProgramsRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
@@ -639,7 +599,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCsrRoute: AdminCsrRoute,
   AdminDonationsRoute: AdminDonationsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
-  AdminImpactRoute: AdminImpactRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminProgramsRoute: AdminProgramsRoute,
   AdminProjectsRoute: AdminProjectsRoute,
@@ -685,7 +644,6 @@ const rootRouteChildren: RootRouteChildren = {
   DonateRoute: DonateRoute,
   GalleryRoute: GalleryRoute,
   GetInvolvedRoute: GetInvolvedRouteWithChildren,
-  ImpactRoute: ImpactRoute,
   ProgramsRoute: ProgramsRoute,
   ProjectsRoute: ProjectsRoute,
   TeamRoute: TeamRouteWithChildren,
@@ -694,3 +652,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
