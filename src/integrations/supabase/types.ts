@@ -132,10 +132,14 @@ export type Database = {
           admin_notes: string | null
           age: number | null
           budget_range: string | null
+          city: string | null
           company: string | null
+          company_pan: string | null
+          company_tan: string | null
           created_at: string
           designation: string | null
           email: string
+          focus_areas: string | null
           full_name: string
           gender: string | null
           id: string
@@ -143,6 +147,7 @@ export type Database = {
           pan: string | null
           phone: string
           purpose: string | null
+          state: string | null
           status: Database["public"]["Enums"]["volunteer_status"]
           updated_at: string
         }
@@ -152,10 +157,14 @@ export type Database = {
           admin_notes?: string | null
           age?: number | null
           budget_range?: string | null
+          city?: string | null
           company?: string | null
+          company_pan?: string | null
+          company_tan?: string | null
           created_at?: string
           designation?: string | null
           email: string
+          focus_areas?: string | null
           full_name: string
           gender?: string | null
           id?: string
@@ -163,6 +172,7 @@ export type Database = {
           pan?: string | null
           phone: string
           purpose?: string | null
+          state?: string | null
           status?: Database["public"]["Enums"]["volunteer_status"]
           updated_at?: string
         }
@@ -172,10 +182,14 @@ export type Database = {
           admin_notes?: string | null
           age?: number | null
           budget_range?: string | null
+          city?: string | null
           company?: string | null
+          company_pan?: string | null
+          company_tan?: string | null
           created_at?: string
           designation?: string | null
           email?: string
+          focus_areas?: string | null
           full_name?: string
           gender?: string | null
           id?: string
@@ -183,6 +197,7 @@ export type Database = {
           pan?: string | null
           phone?: string
           purpose?: string | null
+          state?: string | null
           status?: Database["public"]["Enums"]["volunteer_status"]
           updated_at?: string
         }
@@ -343,8 +358,10 @@ export type Database = {
           sort_order: number
           status: Database["public"]["Enums"]["content_status"]
           summary: string | null
+          thumbnail_url: string | null
           title: string
           updated_at: string
+          video_url: string | null
         }
         Insert: {
           banner_url?: string | null
@@ -356,8 +373,10 @@ export type Database = {
           sort_order?: number
           status?: Database["public"]["Enums"]["content_status"]
           summary?: string | null
+          thumbnail_url?: string | null
           title: string
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
           banner_url?: string | null
@@ -369,8 +388,10 @@ export type Database = {
           sort_order?: number
           status?: Database["public"]["Enums"]["content_status"]
           summary?: string | null
+          thumbnail_url?: string | null
           title?: string
           updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -385,8 +406,10 @@ export type Database = {
           project_date: string | null
           slug: string
           status: Database["public"]["Enums"]["content_status"]
+          thumbnail_url: string | null
           title: string
           updated_at: string
+          video_url: string | null
         }
         Insert: {
           banner_url?: string | null
@@ -398,8 +421,10 @@ export type Database = {
           project_date?: string | null
           slug: string
           status?: Database["public"]["Enums"]["content_status"]
+          thumbnail_url?: string | null
           title: string
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
           banner_url?: string | null
@@ -411,8 +436,10 @@ export type Database = {
           project_date?: string | null
           slug?: string
           status?: Database["public"]["Enums"]["content_status"]
+          thumbnail_url?: string | null
           title?: string
           updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }
@@ -526,7 +553,9 @@ export type Database = {
           age: number | null
           area_of_interest: string | null
           availability: string | null
+          city: string | null
           created_at: string
+          education: string | null
           email: string
           full_name: string
           gender: string | null
@@ -535,6 +564,7 @@ export type Database = {
           pan: string | null
           phone: string
           purpose: string | null
+          state: string | null
           status: Database["public"]["Enums"]["volunteer_status"]
           updated_at: string
         }
@@ -545,7 +575,9 @@ export type Database = {
           age?: number | null
           area_of_interest?: string | null
           availability?: string | null
+          city?: string | null
           created_at?: string
+          education?: string | null
           email: string
           full_name: string
           gender?: string | null
@@ -554,6 +586,7 @@ export type Database = {
           pan?: string | null
           phone: string
           purpose?: string | null
+          state?: string | null
           status?: Database["public"]["Enums"]["volunteer_status"]
           updated_at?: string
         }
@@ -564,7 +597,9 @@ export type Database = {
           age?: number | null
           area_of_interest?: string | null
           availability?: string | null
+          city?: string | null
           created_at?: string
+          education?: string | null
           email?: string
           full_name?: string
           gender?: string | null
@@ -573,6 +608,7 @@ export type Database = {
           pan?: string | null
           phone?: string
           purpose?: string | null
+          state?: string | null
           status?: Database["public"]["Enums"]["volunteer_status"]
           updated_at?: string
         }

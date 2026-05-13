@@ -20,7 +20,7 @@ const NAV: NavItem[] = [
   { to: "/admin/gallery", label: "Gallery", icon: Image },
   { to: "/admin/blog", label: "Blog", icon: Newspaper },
   { to: "/admin/testimonials", label: "Testimonials", icon: Quote, adminOnly: true },
-  { to: "/admin/impact", label: "Impact Stats", icon: BarChart3, adminOnly: true },
+  
   { to: "/admin/team", label: "Team", icon: Users, adminOnly: true },
   { to: "/admin/users", label: "Admins & Staff", icon: UsersRound, adminOnly: true },
   { to: "/admin/activity", label: "Activity Log", icon: Activity, adminOnly: true },

@@ -32,9 +32,9 @@ export function Footer() {
           <h4 className="text-sm font-semibold mb-4">Get Involved</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><Link to="/donate" className="hover:text-primary">Donate</Link></li>
-            <li><Link to="/get-involved" className="hover:text-primary">Volunteer</Link></li>
+            <li><Link to="/get-involved/volunteer" className="hover:text-primary">Volunteer</Link></li>
+            <li><Link to="/get-involved/csr" className="hover:text-primary">CSR Partnership</Link></li>
             <li><Link to="/testimonials" className="hover:text-primary">Testimonials</Link></li>
-            <li><Link to="/impact" className="hover:text-primary">Our Impact</Link></li>
             <li><Link to="/team" className="hover:text-primary">Our Team</Link></li>
           </ul>
         </div>

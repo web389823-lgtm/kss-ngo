@@ -1,0 +1,20 @@
+
+ALTER TABLE public.volunteers
+  ADD COLUMN IF NOT EXISTS state TEXT,
+  ADD COLUMN IF NOT EXISTS city TEXT,
+  ADD COLUMN IF NOT EXISTS education TEXT;
+
+ALTER TABLE public.csr_applications
+  ADD COLUMN IF NOT EXISTS state TEXT,
+  ADD COLUMN IF NOT EXISTS city TEXT,
+  ADD COLUMN IF NOT EXISTS company_pan TEXT,
+  ADD COLUMN IF NOT EXISTS company_tan TEXT,
+  ADD COLUMN IF NOT EXISTS focus_areas TEXT;
+
+ALTER TABLE public.programs
+  ADD COLUMN IF NOT EXISTS video_url TEXT,
+  ADD COLUMN IF NOT EXISTS thumbnail_url TEXT;
+
+ALTER TABLE public.projects
+  ADD COLUMN IF NOT EXISTS video_url TEXT,
+  ADD COLUMN IF NOT EXISTS thumbnail_url TEXT;
