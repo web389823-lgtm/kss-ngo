@@ -37,7 +37,7 @@ function ProgramDetail() {
       {(p.banner_url || p.thumbnail_url) && (
         <div className="container-page">
           <div className="overflow-hidden rounded-2xl shadow-elevated">
-            <img src={p.banner_url || p.thumbnail_url} alt={p.title}
+            <img src={(p.banner_url || p.thumbnail_url) as string} alt={p.title}
               className="w-full max-h-[520px] object-cover animate-scale-in" />
           </div>
         </div>
