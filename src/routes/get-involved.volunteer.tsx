@@ -90,6 +90,7 @@ function VolunteerPage() {
 
   return (
     <>
+      <BackBtn />
       <PageHeader eyebrow="Volunteer" title="Volunteer Registration" description="Fill in your details — our team will reach out to onboard you." />
       <section className="container-page py-16 max-w-3xl">
         <Card className="p-8 shadow-soft animate-fade-in">
