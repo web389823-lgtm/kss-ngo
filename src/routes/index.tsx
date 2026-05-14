@@ -147,36 +147,9 @@ function HomePage() {
 
   return (
     <div>
-      {/* HERO — image focused */}
-      <section className="relative h-[78vh] min-h-[520px] w-full overflow-hidden">
-        <img
-          src={heroCfg.image_url || hero}
-          alt={heroCfg.headline ?? "Keshava Seva Samiti"}
-          className="absolute inset-0 h-full w-full object-cover scale-105 animate-fade-in"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />
-        <div className="absolute inset-0 flex items-end">
-          <div className="container-page pb-16 md:pb-24 text-white animate-fade-in">
-            <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.25em] text-amber-300 mb-4">
-              {heroCfg.eyebrow ?? "Non-profit · Since 1999"}
-            </p>
-            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] max-w-4xl text-balance drop-shadow-lg">
-              {heroCfg.headline ?? "Keshava Seva Samiti"}
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg md:text-xl text-white/90 leading-relaxed">
-              {heroCfg.tagline ?? heroCfg.subtext ?? "Seva for lasting change, sustainable impact, and empowered communities."}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="transition-transform hover:scale-[1.04]">
-                <Link to="/donate"><Heart className="mr-2 h-4 w-4" />Donate Now</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="bg-white/10 border-white/40 text-white hover:bg-white hover:text-foreground transition-all">
-                <Link to="/get-involved"><HandHeart className="mr-2 h-4 w-4" />Get Involved</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* HERO — fullscreen image slideshow */}
+      <HeroSlideshow slides={Array.isArray(heroCfg.slides) && heroCfg.slides.length > 0 ? heroCfg.slides : DEFAULT_HERO_SLIDES} />
+
 
       {/* ABOUT PREVIEW */}
       <section className="container-page py-20">
