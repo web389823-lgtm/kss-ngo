@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +10,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { CheckCircle2, Building2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Building2 } from "lucide-react";
+
+function BackBtn() {
+  return (
+    <div className="container-page pt-6">
+      <Button asChild variant="ghost" size="sm">
+        <Link to="/get-involved"><ArrowLeft className="mr-1 h-4 w-4" />Back to Get Involved</Link>
+      </Button>
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/get-involved/csr")({
   component: CsrPage,
@@ -62,6 +72,7 @@ function CsrPage() {
   if (submitted) {
     return (
       <>
+        <BackBtn />
         <PageHeader eyebrow="Thank you" title="Inquiry received" />
         <section className="container-page py-16 max-w-2xl">
           <Card className="p-10 text-center shadow-soft animate-fade-in">
@@ -78,6 +89,7 @@ function CsrPage() {
 
   return (
     <>
+      <BackBtn />
       <PageHeader eyebrow="CSR Partnership" title="Partner with KSS" description="Share your organisation's details — our partnerships team will be in touch." />
       <section className="container-page py-16 max-w-3xl">
         <Card className="p-8 shadow-soft animate-fade-in">

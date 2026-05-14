@@ -1,15 +1,85 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowRight, Heart, HandHeart, Sparkles, GraduationCap, Home as HomeIcon,
   Stethoscope, Users, Award, Quote, BookOpen, Drama, Baby, Flower2,
-  Phone, Mail, MapPin, Target, Eye, Handshake,
+  Phone, Mail, MapPin, Target, Eye, Handshake, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Counter } from "@/components/site/Counter";
-import hero from "@/assets/hero-children.jpg";
+
+const DEFAULT_HERO_SLIDES = [
+  "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
+  "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1600",
+  "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1600",
+  "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=1600",
+  "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=1600",
+  "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1600",
+  "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=1600",
+  "https://images.unsplash.com/photo-1607748862156-7c548e7e98f4?w=1600",
+  "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=1600",
+  "https://images.unsplash.com/photo-1578496479932-143f47d35c09?w=1600",
+];
+
+function HeroSlideshow({ slides }: { slides: string[] }) {
+  const [i, setI] = useState(0);
+  const n = slides.length;
+  useEffect(() => {
+    if (n <= 1) return;
+    const t = setInterval(() => setI((x) => (x + 1) % n), 4000);
+    return () => clearInterval(t);
+  }, [n]);
+  if (n === 0) return null;
+  return (
+    <section className="relative w-screen left-1/2 -translate-x-1/2 h-screen overflow-hidden bg-black">
+      {slides.map((src, idx) => (
+        <img
+          key={src + idx}
+          src={src}
+          alt=""
+          aria-hidden={idx !== i}
+          loading={idx === 0 ? "eager" : "lazy"}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-out ${idx === i ? "opacity-100" : "opacity-0"}`}
+        />
+      ))}
+      {n > 1 && (
+        <>
+          <button
+            type="button"
+            aria-label="Previous slide"
+            onClick={() => setI((x) => (x - 1 + n) % n)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button
+            type="button"
+            aria-label="Next slide"
+            onClick={() => setI((x) => (x + 1) % n)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+            {slides.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                aria-label={`Go to slide ${idx + 1}`}
+                onClick={() => setI(idx)}
+                className={`h-2.5 rounded-full transition-all ${idx === i ? "w-8 bg-white" : "w-2.5 bg-white/50 hover:bg-white/80"}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 import healthCamp from "@/assets/health-camp.jpg";
 import womenWorkshop from "@/assets/women-workshop.jpg";
 import groceryDrive from "@/assets/grocery-drive.jpg";
@@ -77,36 +147,9 @@ function HomePage() {
 
   return (
     <div>
-      {/* HERO — image focused */}
-      <section className="relative h-[78vh] min-h-[520px] w-full overflow-hidden">
-        <img
-          src={heroCfg.image_url || hero}
-          alt={heroCfg.headline ?? "Keshava Seva Samiti"}
-          className="absolute inset-0 h-full w-full object-cover scale-105 animate-fade-in"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />
-        <div className="absolute inset-0 flex items-end">
-          <div className="container-page pb-16 md:pb-24 text-white animate-fade-in">
-            <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.25em] text-amber-300 mb-4">
-              {heroCfg.eyebrow ?? "Non-profit · Since 1999"}
-            </p>
-            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] max-w-4xl text-balance drop-shadow-lg">
-              {heroCfg.headline ?? "Keshava Seva Samiti"}
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg md:text-xl text-white/90 leading-relaxed">
-              {heroCfg.tagline ?? heroCfg.subtext ?? "Seva for lasting change, sustainable impact, and empowered communities."}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="transition-transform hover:scale-[1.04]">
-                <Link to="/donate"><Heart className="mr-2 h-4 w-4" />Donate Now</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="bg-white/10 border-white/40 text-white hover:bg-white hover:text-foreground transition-all">
-                <Link to="/get-involved"><HandHeart className="mr-2 h-4 w-4" />Get Involved</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* HERO — fullscreen image slideshow */}
+      <HeroSlideshow slides={Array.isArray(heroCfg.slides) && heroCfg.slides.length > 0 ? heroCfg.slides : DEFAULT_HERO_SLIDES} />
+
 
       {/* ABOUT PREVIEW */}
       <section className="container-page py-20">
@@ -199,17 +242,19 @@ function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {(programs ?? []).map((p: any, i: number) => (
-              <Card key={p.id} className="overflow-hidden p-0 shadow-soft hover:shadow-elevated transition-all hover:-translate-y-0.5">
-                <div className="aspect-[16/9] gradient-saffron relative overflow-hidden">
-                  <img src={p.banner_url || [healthCamp, womenWorkshop, groceryDrive][i % 3]} alt={p.title} loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover opacity-90" />
-                </div>
-                <div className="p-6">
-                  <p className="text-xs font-medium uppercase tracking-wider text-primary">{p.category}</p>
-                  <h3 className="mt-2 font-serif text-xl font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.summary}</p>
-                </div>
-              </Card>
+              <Link key={p.id} to="/programs/$slug" params={{ slug: p.slug }} className="group">
+                <Card className="overflow-hidden p-0 h-full shadow-soft hover:shadow-elevated transition-all hover:-translate-y-0.5">
+                  <div className="aspect-[16/9] gradient-saffron relative overflow-hidden">
+                    <img src={p.banner_url || p.thumbnail_url || [healthCamp, womenWorkshop, groceryDrive][i % 3]} alt={p.title} loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105" />
+                  </div>
+                  <div className="p-6">
+                    <p className="text-xs font-medium uppercase tracking-wider text-primary">{p.category}</p>
+                    <h3 className="mt-2 font-serif text-xl font-semibold group-hover:text-primary transition-colors">{p.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.summary}</p>
+                  </div>
+                </Card>
+              </Link>
             ))}
           </div>
         </section>
