@@ -89,6 +89,7 @@ function CsrPage() {
 
   return (
     <>
+      <BackBtn />
       <PageHeader eyebrow="CSR Partnership" title="Partner with KSS" description="Share your organisation's details — our partnerships team will be in touch." />
       <section className="container-page py-16 max-w-3xl">
         <Card className="p-8 shadow-soft animate-fade-in">
