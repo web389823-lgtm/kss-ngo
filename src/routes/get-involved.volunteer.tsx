@@ -54,6 +54,13 @@ const schema = z.object({
 function VolunteerPage() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!submitted) return;
+    const t = setTimeout(() => navigate({ to: "/get-involved" }), 3000);
+    return () => clearTimeout(t);
+  }, [submitted, navigate]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
