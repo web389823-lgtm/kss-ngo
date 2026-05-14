@@ -72,6 +72,7 @@ function CsrPage() {
   if (submitted) {
     return (
       <>
+        <BackBtn />
         <PageHeader eyebrow="Thank you" title="Inquiry received" />
         <section className="container-page py-16 max-w-2xl">
           <Card className="p-10 text-center shadow-soft animate-fade-in">
