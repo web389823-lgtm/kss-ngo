@@ -1,15 +1,85 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowRight, Heart, HandHeart, Sparkles, GraduationCap, Home as HomeIcon,
   Stethoscope, Users, Award, Quote, BookOpen, Drama, Baby, Flower2,
-  Phone, Mail, MapPin, Target, Eye, Handshake,
+  Phone, Mail, MapPin, Target, Eye, Handshake, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Counter } from "@/components/site/Counter";
-import hero from "@/assets/hero-children.jpg";
+
+const DEFAULT_HERO_SLIDES = [
+  "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
+  "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1600",
+  "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1600",
+  "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=1600",
+  "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=1600",
+  "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1600",
+  "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=1600",
+  "https://images.unsplash.com/photo-1607748862156-7c548e7e98f4?w=1600",
+  "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=1600",
+  "https://images.unsplash.com/photo-1578496479932-143f47d35c09?w=1600",
+];
+
+function HeroSlideshow({ slides }: { slides: string[] }) {
+  const [i, setI] = useState(0);
+  const n = slides.length;
+  useEffect(() => {
+    if (n <= 1) return;
+    const t = setInterval(() => setI((x) => (x + 1) % n), 4000);
+    return () => clearInterval(t);
+  }, [n]);
+  if (n === 0) return null;
+  return (
+    <section className="relative w-screen left-1/2 -translate-x-1/2 h-screen overflow-hidden bg-black">
+      {slides.map((src, idx) => (
+        <img
+          key={src + idx}
+          src={src}
+          alt=""
+          aria-hidden={idx !== i}
+          loading={idx === 0 ? "eager" : "lazy"}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-out ${idx === i ? "opacity-100" : "opacity-0"}`}
+        />
+      ))}
+      {n > 1 && (
+        <>
+          <button
+            type="button"
+            aria-label="Previous slide"
+            onClick={() => setI((x) => (x - 1 + n) % n)}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button
+            type="button"
+            aria-label="Next slide"
+            onClick={() => setI((x) => (x + 1) % n)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+            {slides.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                aria-label={`Go to slide ${idx + 1}`}
+                onClick={() => setI(idx)}
+                className={`h-2.5 rounded-full transition-all ${idx === i ? "w-8 bg-white" : "w-2.5 bg-white/50 hover:bg-white/80"}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 import healthCamp from "@/assets/health-camp.jpg";
 import womenWorkshop from "@/assets/women-workshop.jpg";
 import groceryDrive from "@/assets/grocery-drive.jpg";
