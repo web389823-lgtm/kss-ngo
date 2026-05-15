@@ -1,143 +1,152 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
-import { ArrowLeft, CheckCircle2, Building2 } from "lucide-react";
-
-function BackBtn() {
-  return (
-    <div className="container-page pt-6">
-      <Button asChild variant="ghost" size="sm">
-        <Link to="/get-involved"><ArrowLeft className="mr-1 h-4 w-4" />Back to Get Involved</Link>
-      </Button>
-    </div>
-  );
-}
+import { ArrowLeft, ArrowRight, Building2, CheckCircle2, Award, Target } from "lucide-react";
+import csrImg from "@/assets/get-involved-csr.png";
 
 export const Route = createFileRoute("/get-involved/csr")({
-  component: CsrPage,
+  component: CsrInfoPage,
   head: () => ({ meta: [
-    { title: "CSR Partnership Registration — Keshava Seva Samiti" },
-    { name: "description", content: "Register your organisation to partner with KSS on impactful CSR initiatives." },
+    { title: "CSR Partnership — Keshava Seva Samiti" },
+    { name: "description", content: "Partner with KSS for measurable CSR impact in education, healthcare, women empowerment and more." },
   ]}),
 });
 
-const STATES = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman & Nicobar","Chandigarh","Dadra & Nagar Haveli and Daman & Diu","Delhi","Jammu & Kashmir","Ladakh","Lakshadweep","Puducherry"];
-const FOCUS = ["Education","Health","Women Empowerment","Food Security","Environment","Cultural Preservation","General"];
-const BUDGETS = ["Below ₹5 Lakh","₹5–25 Lakh","₹25–50 Lakh","₹50 Lakh–1 Crore","Above ₹1 Crore"];
+const SPONSOR_PROGRAMS = [
+  "Vidya Bhagya tuition center sponsorship",
+  "Scholarship sponsorships for girls",
+  "Health & eye camp sponsorships",
+  "Women vocational training support",
+];
 
-const schema = z.object({
-  company: z.string().trim().min(2).max(200),
-  company_pan: z.string().trim().min(5).max(20),
-  company_tan: z.string().trim().max(20).optional().or(z.literal("")),
-  full_name: z.string().trim().min(2).max(150),
-  designation: z.string().trim().min(1).max(150),
-  email: z.string().trim().email().max(255),
-  phone: z.string().trim().min(7).max(20),
-  address: z.string().trim().min(1).max(500),
-  state: z.string().min(1),
-  city: z.string().trim().max(100).optional().or(z.literal("")),
-  budget_range: z.string().min(1),
-  focus_areas: z.string().min(1),
-  message: z.string().trim().min(1).max(2000),
-});
+const SPONSOR_PROJECTS = [
+  "School infrastructure development",
+  "Smart classroom setup",
+  "RO water systems",
+  "Science laboratory setup",
+  "School library development",
+];
 
-function CsrPage() {
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const navigate = useNavigate();
+const BUDGET_TIERS = [
+  { tier: "Under ₹5 Lakh", desc: "Fund a summer camp (Bala Karanji) or scholarship for 1 girl." },
+  { tier: "₹5–25 Lakh", desc: "Sponsor a tuition center, health camp series, or women's vocational batch." },
+  { tier: "₹25–50 Lakh", desc: "School infrastructure package or annual sports event (Bala Sangama)." },
+  { tier: "₹50 Lakh – 1 Crore", desc: "Multi-year program support, school rehabilitation." },
+  { tier: "Above ₹1 Crore", desc: "Comprehensive annual support, multiple programs, branded facilities." },
+];
 
-  useEffect(() => {
-    if (!submitted) return;
-    const t = setTimeout(() => navigate({ to: "/get-involved" }), 3000);
-    return () => clearTimeout(t);
-  }, [submitted, navigate]);
+const RECOGNITION = [
+  "Logo placement on uniforms, kits and printed materials",
+  "Recognition in annual reports, press releases and digital media",
+  "Joint press conferences and project inaugurations",
+  "Customized impact reports with case studies",
+  "Participation in student felicitation events",
+  "Employee volunteering opportunities",
+];
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const parsed = schema.safeParse(Object.fromEntries(fd.entries()));
-    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Please check the form"); return; }
-    setSubmitting(true);
-    const payload: any = { ...parsed.data, purpose: parsed.data.focus_areas };
-    Object.keys(payload).forEach((k) => (payload[k] === "" || payload[k] === undefined) && delete payload[k]);
-    const { error } = await supabase.from("csr_applications").insert(payload);
-    setSubmitting(false);
-    if (error) { toast.error(error.message); return; }
-    setSubmitted(true);
-    toast.success("Inquiry submitted!");
-  }
+const SDG = [
+  "Promotion of education (SDG 4)",
+  "Healthcare and preventive health (SDG 3)",
+  "Women's empowerment (SDG 5)",
+  "Environmental sustainability (SDG 13)",
+  "Eradicating poverty and hunger (SDG 1)",
+  "Reduced inequalities (SDG 10)",
+];
 
-  if (submitted) {
-    return (
-      <>
-        <BackBtn />
-        <PageHeader eyebrow="Thank you" title="Inquiry received" />
-        <section className="container-page py-16 max-w-2xl">
-          <Card className="p-10 text-center shadow-soft animate-fade-in">
-            <CheckCircle2 className="h-14 w-14 text-primary mx-auto mb-4" />
-            <h2 className="font-serif text-2xl font-semibold">Thank you for your interest</h2>
-            <p className="mt-3 text-muted-foreground">
-              Our partnerships team will contact you within <strong className="text-foreground">2–5 working days</strong> to discuss your CSR mandate and shape a measurable program together.
-            </p>
-          </Card>
-        </section>
-      </>
-    );
-  }
-
+function CsrInfoPage() {
   return (
     <>
-      <BackBtn />
-      <PageHeader eyebrow="CSR Partnership" title="Partner with KSS" description="Share your organisation's details — our partnerships team will be in touch." />
-      <section className="container-page py-16 max-w-3xl">
-        <Card className="p-8 shadow-soft animate-fade-in">
-          <form onSubmit={onSubmit} className="space-y-5">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="md:col-span-2"><Label htmlFor="company">Company Name *</Label><Input id="company" name="company" required /></div>
-              <div><Label htmlFor="company_pan">Company PAN *</Label><Input id="company_pan" name="company_pan" required /></div>
-              <div><Label htmlFor="company_tan">Company TAN</Label><Input id="company_tan" name="company_tan" /></div>
-              <div><Label htmlFor="full_name">Contact Person *</Label><Input id="full_name" name="full_name" required /></div>
-              <div><Label htmlFor="designation">Designation *</Label><Input id="designation" name="designation" required /></div>
-              <div><Label htmlFor="email">Official Email *</Label><Input id="email" name="email" type="email" required /></div>
-              <div><Label htmlFor="phone">Phone *</Label><Input id="phone" name="phone" required /></div>
-              <div className="md:col-span-2"><Label htmlFor="address">Company Address *</Label><Textarea id="address" name="address" rows={2} required /></div>
-              <div>
-                <Label htmlFor="state">State *</Label>
-                <Select name="state" required>
-                  <SelectTrigger id="state"><SelectValue placeholder="Select state" /></SelectTrigger>
-                  <SelectContent className="max-h-72">{STATES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
-                </Select>
+      <div className="container-page pt-6">
+        <Button asChild variant="ghost" size="sm">
+          <Link to="/get-involved"><ArrowLeft className="mr-1 h-4 w-4" />Back to Get Involved</Link>
+        </Button>
+      </div>
+
+      <PageHeader
+        eyebrow="Corporate Social Responsibility"
+        title="Partner with KSS through CSR"
+        description="Align your CSR mandate with measurable, on-ground impact across education, healthcare and women empowerment."
+      />
+
+      <section className="container-page py-12 grid lg:grid-cols-2 gap-10 items-center">
+        <div className="animate-fade-in lg:order-2">
+          <img src={csrImg} alt="CSR partnership with KSS" className="w-full rounded-xl shadow-soft object-cover max-h-[440px]" />
+        </div>
+        <div className="animate-fade-in lg:order-1">
+          <div className="inline-flex items-center gap-2 text-primary mb-3">
+            <Building2 className="h-5 w-5" />
+            <span className="text-sm font-semibold uppercase tracking-wider">Why Partner</span>
+          </div>
+          <h2 className="font-serif text-3xl font-semibold mb-4">Schedule VII compliant. Transparent. Measurable.</h2>
+          <p className="text-muted-foreground leading-relaxed mb-6">
+            With 25 years of grassroots delivery and 14.88 lakh beneficiaries, KSS co-designs CSR programs
+            that meet statutory compliance and deliver on-ground outcomes. Every rupee comes with a transparent
+            impact report — case studies, data and photos.
+          </p>
+          <Button asChild size="lg" className="transition-transform hover:scale-[1.02]">
+            <Link to="/get-involved/csr/register">
+              Register Now <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      </section>
+
+      <section className="container-page py-12 grid md:grid-cols-2 gap-6">
+        <Card className="p-8 shadow-soft">
+          <div className="flex items-center gap-2 text-primary mb-3"><Target className="h-5 w-5" /><span className="text-sm font-semibold uppercase tracking-wider">Sponsor a Program</span></div>
+          <p className="text-sm text-muted-foreground mb-4">₹53,350 – ₹4,95,000+ annually per program</p>
+          <ul className="space-y-2">
+            {SPONSOR_PROGRAMS.map((s) => <li key={s} className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-1 shrink-0" /><span>{s}</span></li>)}
+          </ul>
+        </Card>
+        <Card className="p-8 shadow-soft">
+          <div className="flex items-center gap-2 text-primary mb-3"><Target className="h-5 w-5" /><span className="text-sm font-semibold uppercase tracking-wider">Sponsor a Project</span></div>
+          <p className="text-sm text-muted-foreground mb-4">₹1,00,000 – ₹10,00,000+</p>
+          <ul className="space-y-2">
+            {SPONSOR_PROJECTS.map((s) => <li key={s} className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-1 shrink-0" /><span>{s}</span></li>)}
+          </ul>
+        </Card>
+      </section>
+
+      <section className="container-page py-12">
+        <Card className="p-8 md:p-10 shadow-soft">
+          <h3 className="font-serif text-2xl font-semibold mb-6">Budget-specific opportunities</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            {BUDGET_TIERS.map((b) => (
+              <div key={b.tier} className="border rounded-lg p-4 hover:shadow-soft transition-all">
+                <p className="font-semibold text-primary">{b.tier}</p>
+                <p className="text-sm text-muted-foreground mt-1">{b.desc}</p>
               </div>
-              <div><Label htmlFor="city">City</Label><Input id="city" name="city" /></div>
-              <div>
-                <Label htmlFor="budget_range">CSR Budget Range *</Label>
-                <Select name="budget_range" required>
-                  <SelectTrigger id="budget_range"><SelectValue placeholder="Select" /></SelectTrigger>
-                  <SelectContent>{BUDGETS.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="focus_areas">Area of CSR Focus *</Label>
-                <Select name="focus_areas" required>
-                  <SelectTrigger id="focus_areas"><SelectValue placeholder="Select" /></SelectTrigger>
-                  <SelectContent>{FOCUS.map((f) => <SelectItem key={f} value={f}>{f}</SelectItem>)}</SelectContent>
-                </Select>
-              </div>
-              <div className="md:col-span-2"><Label htmlFor="message">Message / Proposal *</Label><Textarea id="message" name="message" rows={5} required /></div>
-            </div>
-            <Button type="submit" size="lg" disabled={submitting} className="w-full transition-transform hover:scale-[1.01]">
-              <Building2 className="mr-2 h-4 w-4" />{submitting ? "Submitting…" : "Submit Inquiry"}
-            </Button>
-          </form>
+            ))}
+          </div>
+        </Card>
+      </section>
+
+      <section className="container-page py-12 grid md:grid-cols-2 gap-6">
+        <Card className="p-8 shadow-soft">
+          <div className="flex items-center gap-2 text-primary mb-4"><Award className="h-5 w-5" /><span className="text-sm font-semibold uppercase tracking-wider">Branding & Recognition</span></div>
+          <ul className="space-y-2">
+            {RECOGNITION.map((s) => <li key={s} className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-1 shrink-0" /><span>{s}</span></li>)}
+          </ul>
+        </Card>
+        <Card className="p-8 shadow-soft">
+          <div className="flex items-center gap-2 text-primary mb-4"><Target className="h-5 w-5" /><span className="text-sm font-semibold uppercase tracking-wider">Schedule VII / SDG Alignment</span></div>
+          <ul className="space-y-2">
+            {SDG.map((s) => <li key={s} className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary mt-1 shrink-0" /><span>{s}</span></li>)}
+          </ul>
+        </Card>
+      </section>
+
+      <section className="container-page py-12">
+        <Card className="p-10 text-center shadow-soft bg-secondary/30">
+          <h3 className="font-serif text-2xl font-semibold mb-3">Ready to partner with KSS?</h3>
+          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">Share your organisation's details and our partnerships team will respond within 5 working days.</p>
+          <Button asChild size="lg" className="transition-transform hover:scale-[1.02]">
+            <Link to="/get-involved/csr/register">
+              Register for CSR Partnership <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
         </Card>
       </section>
     </>
