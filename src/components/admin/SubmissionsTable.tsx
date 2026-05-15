@@ -49,8 +49,8 @@ export function SubmissionsTable({ table, statuses, title }: { table: "donations
                   <tr key={r.id} className="border-t align-top">
                     <td className="p-3"><div className="font-medium">{r.full_name}</div><div className="text-xs text-muted-foreground">{r.gender} {r.age && `· ${r.age}y`}</div></td>
                     <td className="p-3"><div>{r.email}</div><div className="text-xs text-muted-foreground">{r.phone}</div></td>
-                    {table === "donations" ? <td className="p-3 font-serif">₹{Number(r.amount).toLocaleString()}</td> : <td className="p-3">{r.area_of_interest}<div className="text-xs text-muted-foreground">{r.availability}</div></td>}
-                    <td className="p-3 text-xs max-w-[14rem]"><p className="line-clamp-3">{r.purpose ?? "—"}</p></td>
+                    {table === "donations" ? <td className="p-3 font-serif">₹{Number(r.amount).toLocaleString()}</td> : <td className="p-3">{r.area_of_interest ?? r.primary_interest}<div className="text-xs text-muted-foreground">{r.availability}</div></td>}
+                    <td className="p-3 text-xs max-w-[14rem]"><p className="line-clamp-3">{r.purpose ?? r.reason ?? "—"}</p></td>
                     <td className="p-3"><Badge variant="outline" className="capitalize">{r.status}</Badge></td>
                     <td className="p-3 text-xs text-muted-foreground">{new Date(r.created_at).toLocaleDateString()}</td>
                     <td className="p-3">
