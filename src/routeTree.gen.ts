@@ -23,7 +23,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
 import { Route as ProgramsSlugRouteImport } from './routes/programs.$slug'
+import { Route as GetInvolvedVolunteerInfoRouteImport } from './routes/get-involved.volunteer-info'
 import { Route as GetInvolvedVolunteerRouteImport } from './routes/get-involved.volunteer'
+import { Route as GetInvolvedCsrInfoRouteImport } from './routes/get-involved.csr-info'
 import { Route as GetInvolvedCsrRouteImport } from './routes/get-involved.csr'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminVolunteersRouteImport } from './routes/admin.volunteers'
@@ -111,9 +113,20 @@ const ProgramsSlugRoute = ProgramsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ProgramsRoute,
 } as any)
+const GetInvolvedVolunteerInfoRoute =
+  GetInvolvedVolunteerInfoRouteImport.update({
+    id: '/volunteer-info',
+    path: '/volunteer-info',
+    getParentRoute: () => GetInvolvedRoute,
+  } as any)
 const GetInvolvedVolunteerRoute = GetInvolvedVolunteerRouteImport.update({
   id: '/volunteer',
   path: '/volunteer',
+  getParentRoute: () => GetInvolvedRoute,
+} as any)
+const GetInvolvedCsrInfoRoute = GetInvolvedCsrInfoRouteImport.update({
+  id: '/csr-info',
+  path: '/csr-info',
   getParentRoute: () => GetInvolvedRoute,
 } as any)
 const GetInvolvedCsrRoute = GetInvolvedCsrRouteImport.update({
@@ -224,7 +237,9 @@ export interface FileRoutesByFullPath {
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/csr-info': typeof GetInvolvedCsrInfoRoute
   '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
+  '/get-involved/volunteer-info': typeof GetInvolvedVolunteerInfoRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -256,7 +271,9 @@ export interface FileRoutesByTo {
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/csr-info': typeof GetInvolvedCsrInfoRoute
   '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
+  '/get-involved/volunteer-info': typeof GetInvolvedVolunteerInfoRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -290,7 +307,9 @@ export interface FileRoutesById {
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
+  '/get-involved/csr-info': typeof GetInvolvedCsrInfoRoute
   '/get-involved/volunteer': typeof GetInvolvedVolunteerRoute
+  '/get-involved/volunteer-info': typeof GetInvolvedVolunteerInfoRoute
   '/programs/$slug': typeof ProgramsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -325,7 +344,9 @@ export interface FileRouteTypes {
     | '/admin/volunteers'
     | '/blog/$slug'
     | '/get-involved/csr'
+    | '/get-involved/csr-info'
     | '/get-involved/volunteer'
+    | '/get-involved/volunteer-info'
     | '/programs/$slug'
     | '/projects/$slug'
     | '/admin/'
@@ -357,7 +378,9 @@ export interface FileRouteTypes {
     | '/admin/volunteers'
     | '/blog/$slug'
     | '/get-involved/csr'
+    | '/get-involved/csr-info'
     | '/get-involved/volunteer'
+    | '/get-involved/volunteer-info'
     | '/programs/$slug'
     | '/projects/$slug'
     | '/admin'
@@ -390,7 +413,9 @@ export interface FileRouteTypes {
     | '/admin/volunteers'
     | '/blog/$slug'
     | '/get-involved/csr'
+    | '/get-involved/csr-info'
     | '/get-involved/volunteer'
+    | '/get-involved/volunteer-info'
     | '/programs/$slug'
     | '/projects/$slug'
     | '/admin/'
@@ -511,11 +536,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgramsSlugRouteImport
       parentRoute: typeof ProgramsRoute
     }
+    '/get-involved/volunteer-info': {
+      id: '/get-involved/volunteer-info'
+      path: '/volunteer-info'
+      fullPath: '/get-involved/volunteer-info'
+      preLoaderRoute: typeof GetInvolvedVolunteerInfoRouteImport
+      parentRoute: typeof GetInvolvedRoute
+    }
     '/get-involved/volunteer': {
       id: '/get-involved/volunteer'
       path: '/volunteer'
       fullPath: '/get-involved/volunteer'
       preLoaderRoute: typeof GetInvolvedVolunteerRouteImport
+      parentRoute: typeof GetInvolvedRoute
+    }
+    '/get-involved/csr-info': {
+      id: '/get-involved/csr-info'
+      path: '/csr-info'
+      fullPath: '/get-involved/csr-info'
+      preLoaderRoute: typeof GetInvolvedCsrInfoRouteImport
       parentRoute: typeof GetInvolvedRoute
     }
     '/get-involved/csr': {
@@ -681,12 +720,16 @@ const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface GetInvolvedRouteChildren {
   GetInvolvedCsrRoute: typeof GetInvolvedCsrRoute
+  GetInvolvedCsrInfoRoute: typeof GetInvolvedCsrInfoRoute
   GetInvolvedVolunteerRoute: typeof GetInvolvedVolunteerRoute
+  GetInvolvedVolunteerInfoRoute: typeof GetInvolvedVolunteerInfoRoute
 }
 
 const GetInvolvedRouteChildren: GetInvolvedRouteChildren = {
   GetInvolvedCsrRoute: GetInvolvedCsrRoute,
+  GetInvolvedCsrInfoRoute: GetInvolvedCsrInfoRoute,
   GetInvolvedVolunteerRoute: GetInvolvedVolunteerRoute,
+  GetInvolvedVolunteerInfoRoute: GetInvolvedVolunteerInfoRoute,
 }
 
 const GetInvolvedRouteWithChildren = GetInvolvedRoute._addFileChildren(
@@ -743,3 +786,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
