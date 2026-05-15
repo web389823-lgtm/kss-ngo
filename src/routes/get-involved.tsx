@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, HandHeart, Building2, Info } from "lucide-react";
 import volunteerImg from "@/assets/get-involved-volunteer.png";
 import csrImg from "@/assets/get-involved-csr.png";
+import { RegistrationForms } from "@/components/site/RegistrationForms";
 
 export const Route = createFileRoute("/get-involved")({
   component: GetInvolvedPage,
