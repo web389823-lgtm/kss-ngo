@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, HandHeart, Building2, Info } from "lucide-react";
 import volunteerImg from "@/assets/get-involved-volunteer.png";
 import csrImg from "@/assets/get-involved-csr.png";
+import { RegistrationForms } from "@/components/site/RegistrationForms";
 
 export const Route = createFileRoute("/get-involved")({
   component: GetInvolvedPage,
@@ -35,7 +36,7 @@ function GetInvolvedPage() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/get-involved/volunteer">Register as Volunteer <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <a href="#register">Register as Volunteer <ArrowRight className="ml-2 h-4 w-4" /></a>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10">
                 <Link to="/get-involved/volunteer-info"><Info className="mr-2 h-4 w-4" />View More Information</Link>
@@ -66,7 +67,7 @@ function GetInvolvedPage() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/get-involved/csr">Register for CSR Partnership <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <a href="#register">Register for CSR Partnership <ArrowRight className="ml-2 h-4 w-4" /></a>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10">
                 <Link to="/get-involved/csr-info"><Info className="mr-2 h-4 w-4" />View More Information</Link>
@@ -75,6 +76,7 @@ function GetInvolvedPage() {
           </div>
         </Card>
       </section>
+      <RegistrationForms />
     </>
   );
 }

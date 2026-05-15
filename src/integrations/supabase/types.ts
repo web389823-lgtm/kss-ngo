@@ -131,24 +131,43 @@ export type Database = {
           address: string | null
           admin_notes: string | null
           age: number | null
+          alternate_phone: string | null
           budget_range: string | null
           city: string | null
           company: string | null
+          company_address: string | null
+          company_name: string | null
           company_pan: string | null
           company_tan: string | null
+          company_type: string | null
+          company_website: string | null
+          contact_name: string | null
           created_at: string
+          csr_budget: string | null
+          declaration: boolean | null
           designation: string | null
-          email: string
+          email: string | null
           focus_areas: string | null
-          full_name: string
+          full_name: string | null
           gender: string | null
+          heard_from: string | null
           id: string
+          linkedin: string | null
           message: string | null
+          num_employees: string | null
+          official_email: string | null
           pan: string | null
-          phone: string
+          phone: string | null
+          pin_code: string | null
+          preferred_program: string | null
+          previous_experience: string | null
+          primary_focus: string | null
           purpose: string | null
+          secondary_focus: string | null
           state: string | null
           status: Database["public"]["Enums"]["volunteer_status"]
+          submitted_at: string | null
+          type: string | null
           updated_at: string
         }
         Insert: {
@@ -156,24 +175,43 @@ export type Database = {
           address?: string | null
           admin_notes?: string | null
           age?: number | null
+          alternate_phone?: string | null
           budget_range?: string | null
           city?: string | null
           company?: string | null
+          company_address?: string | null
+          company_name?: string | null
           company_pan?: string | null
           company_tan?: string | null
+          company_type?: string | null
+          company_website?: string | null
+          contact_name?: string | null
           created_at?: string
+          csr_budget?: string | null
+          declaration?: boolean | null
           designation?: string | null
-          email: string
+          email?: string | null
           focus_areas?: string | null
-          full_name: string
+          full_name?: string | null
           gender?: string | null
+          heard_from?: string | null
           id?: string
+          linkedin?: string | null
           message?: string | null
+          num_employees?: string | null
+          official_email?: string | null
           pan?: string | null
-          phone: string
+          phone?: string | null
+          pin_code?: string | null
+          preferred_program?: string | null
+          previous_experience?: string | null
+          primary_focus?: string | null
           purpose?: string | null
+          secondary_focus?: string | null
           state?: string | null
           status?: Database["public"]["Enums"]["volunteer_status"]
+          submitted_at?: string | null
+          type?: string | null
           updated_at?: string
         }
         Update: {
@@ -181,24 +219,43 @@ export type Database = {
           address?: string | null
           admin_notes?: string | null
           age?: number | null
+          alternate_phone?: string | null
           budget_range?: string | null
           city?: string | null
           company?: string | null
+          company_address?: string | null
+          company_name?: string | null
           company_pan?: string | null
           company_tan?: string | null
+          company_type?: string | null
+          company_website?: string | null
+          contact_name?: string | null
           created_at?: string
+          csr_budget?: string | null
+          declaration?: boolean | null
           designation?: string | null
-          email?: string
+          email?: string | null
           focus_areas?: string | null
-          full_name?: string
+          full_name?: string | null
           gender?: string | null
+          heard_from?: string | null
           id?: string
+          linkedin?: string | null
           message?: string | null
+          num_employees?: string | null
+          official_email?: string | null
           pan?: string | null
-          phone?: string
+          phone?: string | null
+          pin_code?: string | null
+          preferred_program?: string | null
+          previous_experience?: string | null
+          primary_focus?: string | null
           purpose?: string | null
+          secondary_focus?: string | null
           state?: string | null
           status?: Database["public"]["Enums"]["volunteer_status"]
+          submitted_at?: string | null
+          type?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -542,6 +599,105 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      volunteer_applications: {
+        Row: {
+          aadhaar: string | null
+          address: string | null
+          admin_notes: string | null
+          age: number | null
+          availability: string | null
+          city: string | null
+          created_at: string
+          declaration: boolean | null
+          education: string | null
+          email: string
+          full_name: string
+          gender: string | null
+          heard_from: string | null
+          hours_per_week: string | null
+          id: string
+          languages: string | null
+          mode: string | null
+          occupation: string | null
+          organization: string | null
+          pan: string | null
+          phone: string | null
+          primary_interest: string | null
+          reason: string | null
+          secondary_interest: string | null
+          special_skills: string | null
+          state: string | null
+          status: string
+          submitted_at: string
+          type: string | null
+          updated_at: string
+        }
+        Insert: {
+          aadhaar?: string | null
+          address?: string | null
+          admin_notes?: string | null
+          age?: number | null
+          availability?: string | null
+          city?: string | null
+          created_at?: string
+          declaration?: boolean | null
+          education?: string | null
+          email: string
+          full_name: string
+          gender?: string | null
+          heard_from?: string | null
+          hours_per_week?: string | null
+          id?: string
+          languages?: string | null
+          mode?: string | null
+          occupation?: string | null
+          organization?: string | null
+          pan?: string | null
+          phone?: string | null
+          primary_interest?: string | null
+          reason?: string | null
+          secondary_interest?: string | null
+          special_skills?: string | null
+          state?: string | null
+          status?: string
+          submitted_at?: string
+          type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          aadhaar?: string | null
+          address?: string | null
+          admin_notes?: string | null
+          age?: number | null
+          availability?: string | null
+          city?: string | null
+          created_at?: string
+          declaration?: boolean | null
+          education?: string | null
+          email?: string
+          full_name?: string
+          gender?: string | null
+          heard_from?: string | null
+          hours_per_week?: string | null
+          id?: string
+          languages?: string | null
+          mode?: string | null
+          occupation?: string | null
+          organization?: string | null
+          pan?: string | null
+          phone?: string | null
+          primary_interest?: string | null
+          reason?: string | null
+          secondary_interest?: string | null
+          special_skills?: string | null
+          state?: string | null
+          status?: string
+          submitted_at?: string
+          type?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
