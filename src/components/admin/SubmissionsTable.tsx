@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { logActivity } from "@/lib/activity-log";
 
-export function SubmissionsTable({ table, statuses, title }: { table: "donations" | "volunteers"; statuses: string[]; title: string }) {
+export function SubmissionsTable({ table, statuses, title }: { table: "donations" | "volunteers" | "volunteer_applications"; statuses: string[]; title: string }) {
   const qc = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ["admin", table],
