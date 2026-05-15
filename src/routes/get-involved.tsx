@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, HandHeart, Building2 } from "lucide-react";
+import { ArrowRight, HandHeart, Building2, Info } from "lucide-react";
 import volunteerImg from "@/assets/get-involved-volunteer.png";
 import csrImg from "@/assets/get-involved-csr.png";
 
@@ -33,9 +33,12 @@ function GetInvolvedPage() {
               reason someone smiles today. Together, we build stronger communities and a brighter,
               more compassionate future for all.
             </p>
-            <div className="mt-6">
+            <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild size="lg">
                 <Link to="/get-involved/volunteer">Register as Volunteer <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10">
+                <Link to="/get-involved/volunteer-info"><Info className="mr-2 h-4 w-4" />View More Information</Link>
               </Button>
             </div>
           </div>
@@ -61,9 +64,12 @@ function GetInvolvedPage() {
               programs, ensures full statutory compliance, and delivers transparent impact reporting
               for every rupee invested.
             </p>
-            <div className="mt-6">
-              <Button asChild size="lg" variant="outline">
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild size="lg">
                 <Link to="/get-involved/csr">Register for CSR Partnership <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10">
+                <Link to="/get-involved/csr-info"><Info className="mr-2 h-4 w-4" />View More Information</Link>
               </Button>
             </div>
           </div>
