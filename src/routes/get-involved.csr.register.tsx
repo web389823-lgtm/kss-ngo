@@ -16,7 +16,7 @@ function BackBtn() {
   return (
     <div className="container-page pt-6">
       <Button asChild variant="ghost" size="sm">
-        <Link to="/get-involved"><ArrowLeft className="mr-1 h-4 w-4" />Back to Get Involved</Link>
+        <Link to="/get-involved/csr"><ArrowLeft className="mr-1 h-4 w-4" />Back to CSR Info</Link>
       </Button>
     </div>
   );
