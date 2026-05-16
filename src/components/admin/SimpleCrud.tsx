@@ -17,7 +17,7 @@ export type Field = {
   name: string;
   label: string;
   // image = upload only (no URL); file = upload OR paste URL (good for videos)
-  type?: "text" | "textarea" | "number" | "date" | "select" | "file" | "image";
+  type?: "text" | "textarea" | "number" | "date" | "select" | "file" | "image" | "gallery";
   required?: boolean;
   options?: { value: string; label: string }[];
   accept?: string;
@@ -43,7 +43,10 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
   function openDialog(row: any | null) {
     setEditing(row);
     const init: Record<string, any> = {};
-    for (const f of fields) init[f.name] = row?.[f.name] ?? "";
+    for (const f of fields) {
+      if (f.type === "gallery") init[f.name] = Array.isArray(row?.[f.name]) ? row[f.name] : [];
+      else init[f.name] = row?.[f.name] ?? "";
+    }
     setValues(init);
     setOpen(true);
   }
@@ -58,7 +61,11 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
     setUploading(null);
     if (error) { toast.error(error.message); return; }
     const { data: pub } = supabase.storage.from(bucket).getPublicUrl(path);
-    setValues((v) => ({ ...v, [field.name]: pub.publicUrl }));
+    if (field.type === "gallery") {
+      setValues((v) => ({ ...v, [field.name]: [...(Array.isArray(v[field.name]) ? v[field.name] : []), pub.publicUrl] }));
+    } else {
+      setValues((v) => ({ ...v, [field.name]: pub.publicUrl }));
+    }
     toast.success("Uploaded");
   }
 
@@ -67,6 +74,10 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
     const obj: any = {};
     for (const f of fields) {
       const v = values[f.name];
+      if (f.type === "gallery") {
+        obj[f.name] = Array.isArray(v) ? v : [];
+        continue;
+      }
       if (v === null || v === undefined || v === "") continue;
       obj[f.name] = f.type === "number" ? Number(v) : v;
     }
@@ -114,23 +125,35 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
       </div>
       <Card className="p-0 overflow-hidden">
         <div className="divide-y">
-          {(data ?? []).map((row: any) => (
-            <div key={row.id} className="p-4 flex items-center justify-between gap-3">
-              <div className="min-w-0 flex items-center gap-3">
-                {row.photo_url && <img src={row.photo_url} alt="" className="h-10 w-10 rounded-full object-cover" />}
-                {!row.photo_url && row.featured_image && <img src={row.featured_image} alt="" className="h-10 w-16 rounded object-cover" />}
-                {!row.photo_url && !row.featured_image && row.media_url && row.media_type !== "video" && <img src={row.media_url} alt="" className="h-10 w-10 rounded object-cover" />}
-                <div className="min-w-0">
-                  <div className="font-medium truncate">{row[primaryField] || row.title || row.name || "(untitled)"}</div>
-                  <div className="text-xs text-muted-foreground">{new Date(row.created_at).toLocaleDateString()}</div>
+          {(data ?? []).map((row: any) => {
+            const thumb = row.thumbnail_url || row.photo_url || row.featured_image || row.banner_url || (row.media_type !== "video" ? row.media_url : null);
+            return (
+              <div key={row.id} className="p-4 flex items-center justify-between gap-3">
+                <div className="min-w-0 flex items-center gap-3 flex-1">
+                  {thumb ? (
+                    <img src={thumb} alt="" className="h-12 w-12 rounded object-cover border" />
+                  ) : (
+                    <div className="h-12 w-12 rounded bg-muted flex items-center justify-center border">
+                      <ImageIcon className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="font-medium truncate">{row[primaryField] || row.title || row.name || "(untitled)"}</div>
+                    <div className="text-xs text-muted-foreground flex gap-2 flex-wrap mt-0.5">
+                      {row.category && <span>{row.category}</span>}
+                      {row.status && <span className="capitalize px-1.5 py-0.5 rounded bg-muted">{row.status}</span>}
+                      {row.sort_order !== undefined && row.sort_order !== null && <span>Order: {row.sort_order}</span>}
+                      <span>{new Date(row.created_at).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-1">
+                  <Button size="sm" variant="ghost" onClick={() => openDialog(row)}><Pencil className="h-4 w-4" /></Button>
+                  {isAdmin && <Button size="sm" variant="ghost" onClick={() => remove(row)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>}
                 </div>
               </div>
-              <div className="flex gap-1">
-                <Button size="sm" variant="ghost" onClick={() => openDialog(row)}><Pencil className="h-4 w-4" /></Button>
-                {isAdmin && <Button size="sm" variant="ghost" onClick={() => remove(row)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>}
-              </div>
-            </div>
-          ))}
+            );
+          })}
           {(data ?? []).length === 0 && <div className="p-8 text-center text-muted-foreground text-sm">No items yet.</div>}
         </div>
       </Card>
@@ -192,17 +215,58 @@ function FieldInput({ field: f, value, onChange, onFile, uploading }: {
   }
   // file: upload OR paste URL (videos can use either)
   if (f.type === "file") {
+    const isImg = !f.accept || f.accept.includes("image");
     return (
       <div className="space-y-2">
         <Label>{f.label}{f.required && " *"}</Label>
         <div className="flex gap-2">
-          <Input placeholder="Paste URL or upload below" value={value} onChange={(e) => onChange(e.target.value)} />
+          <Input placeholder="Paste URL or upload" value={value} onChange={(e) => onChange(e.target.value)} />
           <Button type="button" variant="outline" onClick={() => fileRef.current?.click()} disabled={uploading}>
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
           </Button>
           <input ref={fileRef} type="file" accept={f.accept} className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) onFile(file); e.target.value = ""; }} />
         </div>
-        {value && (f.accept?.includes("video") ? <video src={value} className="mt-2 max-h-40 rounded" controls /> : <img src={value} alt="preview" className="mt-2 max-h-40 rounded object-cover" />)}
+        <div className="mt-2 w-[200px] h-[120px] rounded border bg-muted flex items-center justify-center overflow-hidden">
+          {value ? (
+            f.accept?.includes("video") ? (
+              <video src={value} className="w-full h-full object-cover" controls />
+            ) : (
+              <img src={value} alt="preview" className="w-full h-full object-cover" onError={(e) => ((e.target as HTMLImageElement).style.opacity = "0.2")} />
+            )
+          ) : (
+            <ImageIcon className="h-6 w-6 text-muted-foreground" />
+          )}
+        </div>
+      </div>
+    );
+  }
+  // gallery: multi-image array
+  if (f.type === "gallery") {
+    const items: string[] = Array.isArray(value) ? value : [];
+    return (
+      <div className="space-y-2">
+        <Label>{f.label}{f.required && " *"}</Label>
+        <div className="flex flex-wrap gap-2">
+          {items.map((url, i) => (
+            <div key={i} className="relative w-24 h-24 rounded overflow-hidden border group">
+              <img src={url} alt="" className="w-full h-full object-cover" />
+              <button type="button" onClick={() => onChange(items.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 bg-destructive text-destructive-foreground rounded-bl px-1.5 text-xs opacity-0 group-hover:opacity-100">×</button>
+            </div>
+          ))}
+          <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} className="w-24 h-24 rounded border-2 border-dashed flex items-center justify-center hover:bg-accent">
+            {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Upload className="h-5 w-5 text-muted-foreground" />}
+          </button>
+          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) onFile(file); e.target.value = ""; }} />
+        </div>
+        <div className="flex gap-2">
+          <Input placeholder="…or paste image URL and press Add" onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              const url = (e.target as HTMLInputElement).value.trim();
+              if (url) { onChange([...items, url]); (e.target as HTMLInputElement).value = ""; }
+            }
+          }} />
+        </div>
       </div>
     );
   }
