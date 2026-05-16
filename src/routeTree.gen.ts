@@ -104,40 +104,40 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   getParentRoute: () => AdminRoute,
 } as any)
 const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ProjectsRoute,
+  id: '/projects/$slug',
+  path: '/projects/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ProgramsSlugRoute = ProgramsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ProgramsRoute,
+  id: '/programs/$slug',
+  path: '/programs/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const GetInvolvedVolunteerInfoRoute =
   GetInvolvedVolunteerInfoRouteImport.update({
-    id: '/volunteer-info',
-    path: '/volunteer-info',
-    getParentRoute: () => GetInvolvedRoute,
+    id: '/get-involved/volunteer-info',
+    path: '/get-involved/volunteer-info',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const GetInvolvedVolunteerRoute = GetInvolvedVolunteerRouteImport.update({
-  id: '/volunteer',
-  path: '/volunteer',
-  getParentRoute: () => GetInvolvedRoute,
+  id: '/get-involved/volunteer',
+  path: '/get-involved/volunteer',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const GetInvolvedCsrInfoRoute = GetInvolvedCsrInfoRouteImport.update({
-  id: '/csr-info',
-  path: '/csr-info',
-  getParentRoute: () => GetInvolvedRoute,
+  id: '/get-involved/csr-info',
+  path: '/get-involved/csr-info',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const GetInvolvedCsrRoute = GetInvolvedCsrRouteImport.update({
-  id: '/csr',
-  path: '/csr',
-  getParentRoute: () => GetInvolvedRoute,
+  id: '/get-involved/csr',
+  path: '/get-involved/csr',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminVolunteersRoute = AdminVolunteersRouteImport.update({
   id: '/volunteers',
@@ -430,6 +430,13 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   TeamRoute: typeof TeamRouteWithChildren
   TestimonialsRoute: typeof TestimonialsRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  GetInvolvedCsrRoute: typeof GetInvolvedCsrRoute
+  GetInvolvedCsrInfoRoute: typeof GetInvolvedCsrInfoRoute
+  GetInvolvedVolunteerRoute: typeof GetInvolvedVolunteerRoute
+  GetInvolvedVolunteerInfoRoute: typeof GetInvolvedVolunteerInfoRoute
+  ProgramsSlugRoute: typeof ProgramsSlugRoute
+  ProjectsSlugRoute: typeof ProjectsSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   GetInvolvedIndexRoute: typeof GetInvolvedIndexRoute
   ProgramsIndexRoute: typeof ProgramsIndexRoute
@@ -524,52 +531,52 @@ declare module '@tanstack/react-router' {
     }
     '/projects/$slug': {
       id: '/projects/$slug'
-      path: '/$slug'
+      path: '/projects/$slug'
       fullPath: '/projects/$slug'
       preLoaderRoute: typeof ProjectsSlugRouteImport
-      parentRoute: typeof ProjectsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/programs/$slug': {
       id: '/programs/$slug'
-      path: '/$slug'
+      path: '/programs/$slug'
       fullPath: '/programs/$slug'
       preLoaderRoute: typeof ProgramsSlugRouteImport
-      parentRoute: typeof ProgramsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/get-involved/volunteer-info': {
       id: '/get-involved/volunteer-info'
-      path: '/volunteer-info'
+      path: '/get-involved/volunteer-info'
       fullPath: '/get-involved/volunteer-info'
       preLoaderRoute: typeof GetInvolvedVolunteerInfoRouteImport
-      parentRoute: typeof GetInvolvedRoute
+      parentRoute: typeof rootRouteImport
     }
     '/get-involved/volunteer': {
       id: '/get-involved/volunteer'
-      path: '/volunteer'
+      path: '/get-involved/volunteer'
       fullPath: '/get-involved/volunteer'
       preLoaderRoute: typeof GetInvolvedVolunteerRouteImport
-      parentRoute: typeof GetInvolvedRoute
+      parentRoute: typeof rootRouteImport
     }
     '/get-involved/csr-info': {
       id: '/get-involved/csr-info'
-      path: '/csr-info'
+      path: '/get-involved/csr-info'
       fullPath: '/get-involved/csr-info'
       preLoaderRoute: typeof GetInvolvedCsrInfoRouteImport
-      parentRoute: typeof GetInvolvedRoute
+      parentRoute: typeof rootRouteImport
     }
     '/get-involved/csr': {
       id: '/get-involved/csr'
-      path: '/csr'
+      path: '/get-involved/csr'
       fullPath: '/get-involved/csr'
       preLoaderRoute: typeof GetInvolvedCsrRouteImport
-      parentRoute: typeof GetInvolvedRoute
+      parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
       id: '/blog/$slug'
-      path: '/$slug'
+      path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
     '/admin/volunteers': {
       id: '/admin/volunteers'
@@ -726,6 +733,13 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   TeamRoute: TeamRouteWithChildren,
   TestimonialsRoute: TestimonialsRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  GetInvolvedCsrRoute: GetInvolvedCsrRoute,
+  GetInvolvedCsrInfoRoute: GetInvolvedCsrInfoRoute,
+  GetInvolvedVolunteerRoute: GetInvolvedVolunteerRoute,
+  GetInvolvedVolunteerInfoRoute: GetInvolvedVolunteerInfoRoute,
+  ProgramsSlugRoute: ProgramsSlugRoute,
+  ProjectsSlugRoute: ProjectsSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   GetInvolvedIndexRoute: GetInvolvedIndexRoute,
   ProgramsIndexRoute: ProgramsIndexRoute,
