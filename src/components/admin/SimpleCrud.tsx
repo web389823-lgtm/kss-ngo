@@ -215,17 +215,58 @@ function FieldInput({ field: f, value, onChange, onFile, uploading }: {
   }
   // file: upload OR paste URL (videos can use either)
   if (f.type === "file") {
+    const isImg = !f.accept || f.accept.includes("image");
     return (
       <div className="space-y-2">
         <Label>{f.label}{f.required && " *"}</Label>
         <div className="flex gap-2">
-          <Input placeholder="Paste URL or upload below" value={value} onChange={(e) => onChange(e.target.value)} />
+          <Input placeholder="Paste URL or upload" value={value} onChange={(e) => onChange(e.target.value)} />
           <Button type="button" variant="outline" onClick={() => fileRef.current?.click()} disabled={uploading}>
             {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
           </Button>
           <input ref={fileRef} type="file" accept={f.accept} className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) onFile(file); e.target.value = ""; }} />
         </div>
-        {value && (f.accept?.includes("video") ? <video src={value} className="mt-2 max-h-40 rounded" controls /> : <img src={value} alt="preview" className="mt-2 max-h-40 rounded object-cover" />)}
+        <div className="mt-2 w-[200px] h-[120px] rounded border bg-muted flex items-center justify-center overflow-hidden">
+          {value ? (
+            f.accept?.includes("video") ? (
+              <video src={value} className="w-full h-full object-cover" controls />
+            ) : (
+              <img src={value} alt="preview" className="w-full h-full object-cover" onError={(e) => ((e.target as HTMLImageElement).style.opacity = "0.2")} />
+            )
+          ) : (
+            <ImageIcon className="h-6 w-6 text-muted-foreground" />
+          )}
+        </div>
+      </div>
+    );
+  }
+  // gallery: multi-image array
+  if (f.type === "gallery") {
+    const items: string[] = Array.isArray(value) ? value : [];
+    return (
+      <div className="space-y-2">
+        <Label>{f.label}{f.required && " *"}</Label>
+        <div className="flex flex-wrap gap-2">
+          {items.map((url, i) => (
+            <div key={i} className="relative w-24 h-24 rounded overflow-hidden border group">
+              <img src={url} alt="" className="w-full h-full object-cover" />
+              <button type="button" onClick={() => onChange(items.filter((_, idx) => idx !== i))} className="absolute top-0 right-0 bg-destructive text-destructive-foreground rounded-bl px-1.5 text-xs opacity-0 group-hover:opacity-100">×</button>
+            </div>
+          ))}
+          <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} className="w-24 h-24 rounded border-2 border-dashed flex items-center justify-center hover:bg-accent">
+            {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Upload className="h-5 w-5 text-muted-foreground" />}
+          </button>
+          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) onFile(file); e.target.value = ""; }} />
+        </div>
+        <div className="flex gap-2">
+          <Input placeholder="…or paste image URL and press Add" onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              const url = (e.target as HTMLInputElement).value.trim();
+              if (url) { onChange([...items, url]); (e.target as HTMLInputElement).value = ""; }
+            }
+          }} />
+        </div>
       </div>
     );
   }
