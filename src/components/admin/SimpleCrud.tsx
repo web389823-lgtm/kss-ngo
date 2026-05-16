@@ -67,6 +67,10 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
     const obj: any = {};
     for (const f of fields) {
       const v = values[f.name];
+      if (f.type === "gallery") {
+        obj[f.name] = Array.isArray(v) ? v : [];
+        continue;
+      }
       if (v === null || v === undefined || v === "") continue;
       obj[f.name] = f.type === "number" ? Number(v) : v;
     }
