@@ -132,6 +132,7 @@ export type Database = {
           admin_notes: string | null
           age: number | null
           alternate_phone: string | null
+          assigned_manager: string | null
           budget_range: string | null
           city: string | null
           company: string | null
@@ -162,6 +163,7 @@ export type Database = {
           preferred_program: string | null
           previous_experience: string | null
           primary_focus: string | null
+          proposal_stage: string | null
           purpose: string | null
           secondary_focus: string | null
           state: string | null
@@ -176,6 +178,7 @@ export type Database = {
           admin_notes?: string | null
           age?: number | null
           alternate_phone?: string | null
+          assigned_manager?: string | null
           budget_range?: string | null
           city?: string | null
           company?: string | null
@@ -206,6 +209,7 @@ export type Database = {
           preferred_program?: string | null
           previous_experience?: string | null
           primary_focus?: string | null
+          proposal_stage?: string | null
           purpose?: string | null
           secondary_focus?: string | null
           state?: string | null
@@ -220,6 +224,7 @@ export type Database = {
           admin_notes?: string | null
           age?: number | null
           alternate_phone?: string | null
+          assigned_manager?: string | null
           budget_range?: string | null
           city?: string | null
           company?: string | null
@@ -250,6 +255,7 @@ export type Database = {
           preferred_program?: string | null
           previous_experience?: string | null
           primary_focus?: string | null
+          proposal_stage?: string | null
           purpose?: string | null
           secondary_focus?: string | null
           state?: string | null
@@ -608,6 +614,8 @@ export type Database = {
           address: string | null
           admin_notes: string | null
           age: number | null
+          assigned_date: string | null
+          assigned_program: string | null
           availability: string | null
           city: string | null
           created_at: string
@@ -640,6 +648,8 @@ export type Database = {
           address?: string | null
           admin_notes?: string | null
           age?: number | null
+          assigned_date?: string | null
+          assigned_program?: string | null
           availability?: string | null
           city?: string | null
           created_at?: string
@@ -672,6 +682,8 @@ export type Database = {
           address?: string | null
           admin_notes?: string | null
           age?: number | null
+          assigned_date?: string | null
+          assigned_program?: string | null
           availability?: string | null
           city?: string | null
           created_at?: string
