@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin, Calendar, ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/projects")({
+export const Route = createFileRoute("/projects/")({
   component: ProjectsPage,
   head: () => ({ meta: [
     { title: "Projects — Keshava Seva Samiti" },

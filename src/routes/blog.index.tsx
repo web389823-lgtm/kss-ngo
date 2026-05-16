@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Card } from "@/components/ui/card";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   component: BlogPage,
   head: () => ({ meta: [
     { title: "News & Updates — Keshava Seva Samiti" },
