@@ -17,7 +17,7 @@ export type Field = {
   name: string;
   label: string;
   // image = upload only (no URL); file = upload OR paste URL (good for videos)
-  type?: "text" | "textarea" | "number" | "date" | "select" | "file" | "image";
+  type?: "text" | "textarea" | "number" | "date" | "select" | "file" | "image" | "gallery";
   required?: boolean;
   options?: { value: string; label: string }[];
   accept?: string;
@@ -114,23 +114,35 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
       </div>
       <Card className="p-0 overflow-hidden">
         <div className="divide-y">
-          {(data ?? []).map((row: any) => (
-            <div key={row.id} className="p-4 flex items-center justify-between gap-3">
-              <div className="min-w-0 flex items-center gap-3">
-                {row.photo_url && <img src={row.photo_url} alt="" className="h-10 w-10 rounded-full object-cover" />}
-                {!row.photo_url && row.featured_image && <img src={row.featured_image} alt="" className="h-10 w-16 rounded object-cover" />}
-                {!row.photo_url && !row.featured_image && row.media_url && row.media_type !== "video" && <img src={row.media_url} alt="" className="h-10 w-10 rounded object-cover" />}
-                <div className="min-w-0">
-                  <div className="font-medium truncate">{row[primaryField] || row.title || row.name || "(untitled)"}</div>
-                  <div className="text-xs text-muted-foreground">{new Date(row.created_at).toLocaleDateString()}</div>
+          {(data ?? []).map((row: any) => {
+            const thumb = row.thumbnail_url || row.photo_url || row.featured_image || row.banner_url || (row.media_type !== "video" ? row.media_url : null);
+            return (
+              <div key={row.id} className="p-4 flex items-center justify-between gap-3">
+                <div className="min-w-0 flex items-center gap-3 flex-1">
+                  {thumb ? (
+                    <img src={thumb} alt="" className="h-12 w-12 rounded object-cover border" />
+                  ) : (
+                    <div className="h-12 w-12 rounded bg-muted flex items-center justify-center border">
+                      <ImageIcon className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="font-medium truncate">{row[primaryField] || row.title || row.name || "(untitled)"}</div>
+                    <div className="text-xs text-muted-foreground flex gap-2 flex-wrap mt-0.5">
+                      {row.category && <span>{row.category}</span>}
+                      {row.status && <span className="capitalize px-1.5 py-0.5 rounded bg-muted">{row.status}</span>}
+                      {row.sort_order !== undefined && row.sort_order !== null && <span>Order: {row.sort_order}</span>}
+                      <span>{new Date(row.created_at).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-1">
+                  <Button size="sm" variant="ghost" onClick={() => openDialog(row)}><Pencil className="h-4 w-4" /></Button>
+                  {isAdmin && <Button size="sm" variant="ghost" onClick={() => remove(row)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>}
                 </div>
               </div>
-              <div className="flex gap-1">
-                <Button size="sm" variant="ghost" onClick={() => openDialog(row)}><Pencil className="h-4 w-4" /></Button>
-                {isAdmin && <Button size="sm" variant="ghost" onClick={() => remove(row)} className="text-destructive"><Trash2 className="h-4 w-4" /></Button>}
-              </div>
-            </div>
-          ))}
+            );
+          })}
           {(data ?? []).length === 0 && <div className="p-8 text-center text-muted-foreground text-sm">No items yet.</div>}
         </div>
       </Card>
