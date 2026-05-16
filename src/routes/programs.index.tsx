@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/programs")({
+export const Route = createFileRoute("/programs/")({
   component: ProgramsPage,
   head: () => ({ meta: [
     { title: "Programs — Keshava Seva Samiti" },
