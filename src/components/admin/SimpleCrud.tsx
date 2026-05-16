@@ -43,7 +43,10 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
   function openDialog(row: any | null) {
     setEditing(row);
     const init: Record<string, any> = {};
-    for (const f of fields) init[f.name] = row?.[f.name] ?? "";
+    for (const f of fields) {
+      if (f.type === "gallery") init[f.name] = Array.isArray(row?.[f.name]) ? row[f.name] : [];
+      else init[f.name] = row?.[f.name] ?? "";
+    }
     setValues(init);
     setOpen(true);
   }
@@ -58,7 +61,11 @@ export function SimpleCrud({ table, title, fields, primaryField, orderBy = "crea
     setUploading(null);
     if (error) { toast.error(error.message); return; }
     const { data: pub } = supabase.storage.from(bucket).getPublicUrl(path);
-    setValues((v) => ({ ...v, [field.name]: pub.publicUrl }));
+    if (field.type === "gallery") {
+      setValues((v) => ({ ...v, [field.name]: [...(Array.isArray(v[field.name]) ? v[field.name] : []), pub.publicUrl] }));
+    } else {
+      setValues((v) => ({ ...v, [field.name]: pub.publicUrl }));
+    }
     toast.success("Uploaded");
   }
 
