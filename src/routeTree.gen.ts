@@ -42,6 +42,8 @@ import { Route as AdminCsrRouteImport } from './routes/admin.csr'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as TeamTypeIdRouteImport } from './routes/team.$type.$id'
+import { Route as AboutTrusteeSlugRouteImport } from './routes/about.trustee.$slug'
+import { Route as AboutAdvisorySlugRouteImport } from './routes/about.advisory.$slug'
 
 const TestimonialsRoute = TestimonialsRouteImport.update({
   id: '/testimonials',
@@ -209,10 +211,20 @@ const TeamTypeIdRoute = TeamTypeIdRouteImport.update({
   path: '/$type/$id',
   getParentRoute: () => TeamRoute,
 } as any)
+const AboutTrusteeSlugRoute = AboutTrusteeSlugRouteImport.update({
+  id: '/trustee/$slug',
+  path: '/trustee/$slug',
+  getParentRoute: () => AboutRoute,
+} as any)
+const AboutAdvisorySlugRoute = AboutAdvisorySlugRouteImport.update({
+  id: '/advisory/$slug',
+  path: '/advisory/$slug',
+  getParentRoute: () => AboutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
@@ -243,11 +255,13 @@ export interface FileRoutesByFullPath {
   '/get-involved/': typeof GetInvolvedIndexRoute
   '/programs/': typeof ProgramsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/about/advisory/$slug': typeof AboutAdvisorySlugRoute
+  '/about/trustee/$slug': typeof AboutTrusteeSlugRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/team': typeof TeamRouteWithChildren
@@ -277,12 +291,14 @@ export interface FileRoutesByTo {
   '/get-involved': typeof GetInvolvedIndexRoute
   '/programs': typeof ProgramsIndexRoute
   '/projects': typeof ProjectsIndexRoute
+  '/about/advisory/$slug': typeof AboutAdvisorySlugRoute
+  '/about/trustee/$slug': typeof AboutTrusteeSlugRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/about': typeof AboutRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
@@ -313,6 +329,8 @@ export interface FileRoutesById {
   '/get-involved/': typeof GetInvolvedIndexRoute
   '/programs/': typeof ProgramsIndexRoute
   '/projects/': typeof ProjectsIndexRoute
+  '/about/advisory/$slug': typeof AboutAdvisorySlugRoute
+  '/about/trustee/$slug': typeof AboutTrusteeSlugRoute
   '/team/$type/$id': typeof TeamTypeIdRoute
 }
 export interface FileRouteTypes {
@@ -350,6 +368,8 @@ export interface FileRouteTypes {
     | '/get-involved/'
     | '/programs/'
     | '/projects/'
+    | '/about/advisory/$slug'
+    | '/about/trustee/$slug'
     | '/team/$type/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -384,6 +404,8 @@ export interface FileRouteTypes {
     | '/get-involved'
     | '/programs'
     | '/projects'
+    | '/about/advisory/$slug'
+    | '/about/trustee/$slug'
     | '/team/$type/$id'
   id:
     | '__root__'
@@ -419,12 +441,14 @@ export interface FileRouteTypes {
     | '/get-involved/'
     | '/programs/'
     | '/projects/'
+    | '/about/advisory/$slug'
+    | '/about/trustee/$slug'
     | '/team/$type/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  AboutRoute: typeof AboutRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
   DonateRoute: typeof DonateRoute
   GalleryRoute: typeof GalleryRoute
@@ -676,8 +700,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamTypeIdRouteImport
       parentRoute: typeof TeamRoute
     }
+    '/about/trustee/$slug': {
+      id: '/about/trustee/$slug'
+      path: '/trustee/$slug'
+      fullPath: '/about/trustee/$slug'
+      preLoaderRoute: typeof AboutTrusteeSlugRouteImport
+      parentRoute: typeof AboutRoute
+    }
+    '/about/advisory/$slug': {
+      id: '/about/advisory/$slug'
+      path: '/advisory/$slug'
+      fullPath: '/about/advisory/$slug'
+      preLoaderRoute: typeof AboutAdvisorySlugRouteImport
+      parentRoute: typeof AboutRoute
+    }
   }
 }
+
+interface AboutRouteChildren {
+  AboutAdvisorySlugRoute: typeof AboutAdvisorySlugRoute
+  AboutTrusteeSlugRoute: typeof AboutTrusteeSlugRoute
+}
+
+const AboutRouteChildren: AboutRouteChildren = {
+  AboutAdvisorySlugRoute: AboutAdvisorySlugRoute,
+  AboutTrusteeSlugRoute: AboutTrusteeSlugRoute,
+}
+
+const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 
 interface AdminRouteChildren {
   AdminActivityRoute: typeof AdminActivityRoute
@@ -727,7 +777,7 @@ const TeamRouteWithChildren = TeamRoute._addFileChildren(TeamRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  AboutRoute: AboutRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
   DonateRoute: DonateRoute,
   GalleryRoute: GalleryRoute,
@@ -748,3 +798,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
