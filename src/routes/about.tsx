@@ -11,6 +11,7 @@ import AnimatedNumber from "@/components/AnimatedNumber";
 import FadeImage from "@/components/FadeImage";
 import { supabase } from "@/integrations/supabase/client";
 import aboutSeva from "@/assets/about-seva.jpg";
+import { slugify } from "@/lib/slug";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -333,24 +334,31 @@ function GallerySection() {
   );
 }
 
-function MemberCard({ m, i }: { m: any; i: number }) {
+function MemberCard({ m, i, kind }: { m: any; i: number; kind: "advisory" | "trustee" }) {
+  const navigate = useNavigate();
   const initials = (m.name ?? "").split(" ").map((s: string) => s[0]).slice(0, 2).join("").toUpperCase();
   const subtitle = m.position ?? m.role;
   const description = m.bio ?? m.description;
+  const slug = m.slug ?? slugify(m.name ?? "");
+  const to = kind === "advisory" ? `/about/advisory/${slug}` : `/about/trustee/${slug}`;
   return (
     <motion.div
       initial={{ opacity: 0, y: 36 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
       whileHover={{ y: -8 }}
-      className="bg-card rounded-2xl p-7 text-center shadow-sm hover:shadow-xl transition-shadow group"
+      onClick={() => navigate({ to })}
+      className="bg-card rounded-2xl p-7 text-center shadow-sm hover:shadow-xl transition-shadow group cursor-pointer"
     >
       <div className="mx-auto w-24 h-24 rounded-full overflow-hidden flex items-center justify-center text-white text-2xl font-bold"
         style={{ background: m.photo_url ? "transparent" : "linear-gradient(135deg, #f97316, #ea580c)" }}>
         {m.photo_url ? <img src={m.photo_url} alt={m.name} className="w-full h-full object-cover" /> : initials}
       </div>
-      <h3 className="mt-4 font-bold text-lg transition-colors group-hover:text-[color:var(--saffron,#ea580c)]" style={{ ['--hover' as any]: ORANGE }}>{m.name}</h3>
+      <h3 className="mt-4 font-bold text-lg transition-colors">{m.name}</h3>
       {subtitle && <p className="text-sm font-medium" style={{ color: ORANGE }}>{subtitle}</p>}
-      {description && <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{description}</p>}
+      {description && <p className="mt-2 text-sm text-muted-foreground leading-relaxed line-clamp-3">{description}</p>}
+      <p className="mt-4 inline-flex items-center gap-1 text-[13px] font-semibold transition-transform group-hover:translate-x-1" style={{ color: ORANGE }}>
+        View Profile →
+      </p>
     </motion.div>
   );
 }
@@ -367,7 +375,7 @@ function TeamSection() {
   });
 
   return (
-    <section className="container-page py-20">
+    <section id="team" className="container-page py-20 scroll-mt-24">
       <FadeUp>
         <div className="text-center">
           <SectionLabel>Our Team</SectionLabel>
@@ -383,7 +391,7 @@ function TeamSection() {
           <p className="mt-2 text-muted-foreground">Guiding KSS with wisdom, experience, and vision.</p>
         </FadeUp>
         <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {(advisors ?? []).map((m: any, i: number) => <MemberCard key={m.id} m={m} i={i} />)}
+          {(advisors ?? []).map((m: any, i: number) => <MemberCard key={m.id} m={m} i={i} kind="advisory" />)}
         </div>
       </div>
 
@@ -394,7 +402,7 @@ function TeamSection() {
           <p className="mt-2 text-muted-foreground">Our founding trustees who uphold our mission and values.</p>
         </FadeUp>
         <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {(trustees ?? []).map((m: any, i: number) => <MemberCard key={m.id} m={m} i={i} />)}
+          {(trustees ?? []).map((m: any, i: number) => <MemberCard key={m.id} m={m} i={i} kind="trustee" />)}
         </div>
       </div>
 

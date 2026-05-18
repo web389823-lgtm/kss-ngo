@@ -122,14 +122,8 @@ function HomePage() {
     queryKey: ["blog", "home"],
     queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(3)).data ?? [],
   });
-  const { data: advisory } = useQuery({
-    queryKey: ["advisory_team", "home"],
-    queryFn: async () => (await supabase.from("advisory_team").select("*").order("sort_order")).data ?? [],
-  });
-  const { data: trustees } = useQuery({
-    queryKey: ["trusted_members", "home"],
-    queryFn: async () => (await supabase.from("trusted_members").select("*").order("sort_order")).data ?? [],
-  });
+  // Advisory/Trustee sections removed from home page — they live on /about
+
   const { data: settings } = useQuery({
     queryKey: ["site_settings_home"],
     queryFn: async () => {
@@ -363,61 +357,8 @@ function HomePage() {
         </section>
       )}
 
-      {/* ADVISORY BOARD */}
-      {(advisory ?? []).length > 0 && (
-        <section className="bg-muted/30 py-20">
-          <div className="container-page">
-            <div className="text-center mb-12">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Leadership</p>
-              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Advisory Board</h2>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {(advisory ?? []).map((m: any) => (
-                <Link
-                  key={m.id}
-                  to="/team/$type/$id"
-                  params={{ type: "advisory", id: m.id }}
-                  className="group text-center"
-                >
-                  <div className="mx-auto mb-4 h-40 w-40 md:h-44 md:w-44 rounded-full gradient-saffron overflow-hidden ring-4 ring-background shadow-elevated transition-transform group-hover:scale-105">
-                    {m.photo_url && <img src={m.photo_url} alt={m.name} className="h-full w-full object-cover" />}
-                  </div>
-                  <div className="font-semibold group-hover:text-primary transition-colors">{m.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{m.position}</div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Advisory & Trustee Board sections removed — see /about */}
 
-      {/* TRUSTEE BOARD */}
-      {(trustees ?? []).length > 0 && (
-        <section className="py-20">
-          <div className="container-page">
-            <div className="text-center mb-12">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Governance</p>
-              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Trustee Board</h2>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {(trustees ?? []).map((m: any) => (
-                <Link
-                  key={m.id}
-                  to="/team/$type/$id"
-                  params={{ type: "trustee", id: m.id }}
-                  className="group text-center"
-                >
-                  <div className="mx-auto mb-4 h-40 w-40 md:h-44 md:w-44 rounded-full gradient-saffron overflow-hidden ring-4 ring-background shadow-elevated transition-transform group-hover:scale-105">
-                    {m.photo_url && <img src={m.photo_url} alt={m.name} className="h-full w-full object-cover" />}
-                  </div>
-                  <div className="font-semibold group-hover:text-primary transition-colors">{m.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{m.role}</div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* CONTACT CTA */}
       <section className="container-page py-20">
