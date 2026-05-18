@@ -375,7 +375,7 @@ function TeamSection() {
   });
 
   return (
-    <section className="container-page py-20">
+    <section id="team" className="container-page py-20 scroll-mt-24">
       <FadeUp>
         <div className="text-center">
           <SectionLabel>Our Team</SectionLabel>
