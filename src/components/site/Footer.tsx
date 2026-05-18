@@ -24,7 +24,6 @@ export function Footer() {
             <li><Link to="/about" className="hover:text-primary">About</Link></li>
             <li><Link to="/programs" className="hover:text-primary">Programs</Link></li>
             <li><Link to="/projects" className="hover:text-primary">Projects</Link></li>
-            <li><Link to="/gallery" className="hover:text-primary">Gallery</Link></li>
             <li><Link to="/blog" className="hover:text-primary">News</Link></li>
           </ul>
         </div>
@@ -35,7 +34,7 @@ export function Footer() {
             <li><Link to="/get-involved/volunteer" className="hover:text-primary">Volunteer</Link></li>
             <li><Link to="/get-involved/csr" className="hover:text-primary">CSR Partnership</Link></li>
             <li><Link to="/testimonials" className="hover:text-primary">Testimonials</Link></li>
-            <li><Link to="/team" className="hover:text-primary">Our Team</Link></li>
+            <li><Link to="/about" className="hover:text-primary">Our Team</Link></li>
           </ul>
         </div>
         <div>
