@@ -215,7 +215,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* PROGRAMS FROM DB */}
+      {/* PROGRAMS FROM DB — photo-first interactive grid */}
       {(programs ?? []).length > 0 && (
         <section className="container-page py-20">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
@@ -225,25 +225,13 @@ function HomePage() {
             </div>
             <Button asChild variant="ghost"><Link to="/programs">View all <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {(programs ?? []).map((p: any, i: number) => (
-              <Link key={p.id} to="/programs/$slug" params={{ slug: p.slug }} className="group">
-                <Card className="overflow-hidden p-0 h-full shadow-soft hover:shadow-elevated transition-all hover:-translate-y-0.5">
-                  <div className="aspect-[16/9] gradient-saffron relative overflow-hidden">
-                    <img src={p.banner_url || p.thumbnail_url || [healthCamp, womenWorkshop, groceryDrive][i % 3]} alt={p.title} loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105" />
-                  </div>
-                  <div className="p-6">
-                    <p className="text-xs font-medium uppercase tracking-wider text-primary">{p.category}</p>
-                    <h3 className="mt-2 font-serif text-xl font-semibold group-hover:text-primary transition-colors">{p.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.summary}</p>
-                  </div>
-                </Card>
-              </Link>
-            ))}
-          </div>
+          <ProgramPhotoGrid
+            programs={programs as any}
+            fallbacks={[healthCamp, womenWorkshop, groceryDrive]}
+          />
         </section>
       )}
+
 
       {/* WHY DONATE */}
       <section className="bg-muted/30 py-20">
