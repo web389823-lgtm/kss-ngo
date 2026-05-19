@@ -85,15 +85,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1"><Outlet /></main>
+            <main className={`flex-1 ${isHome ? "" : "pt-20"}`}><Outlet /></main>
             <Footer />
           </div>
+          <CursorDot />
           <Toaster />
         </AuthProvider>
       </ThemeProvider>
