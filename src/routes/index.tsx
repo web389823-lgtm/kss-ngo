@@ -158,7 +158,10 @@ function HomePage() {
             <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Numbers that tell our story</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {(stats ?? []).map((s: any) => {
+            {(stats ?? []).filter((s: any) => {
+              const l = String(s.label ?? "").toLowerCase();
+              return !l.includes("active program") && !l.includes("major project");
+            }).map((s: any) => {
               const Icon = ICONS[s.icon] ?? Sparkles;
               return (
                 <Card key={s.id} className="p-6 text-center shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
