@@ -29,7 +29,14 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md animate-fade-in transition-shadow duration-300 ${scrolled ? "shadow-md" : ""}`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 animate-fade-in transition-all duration-300 ${
+        scrolled
+          ? "bg-background/80 border-b border-border/40 shadow-md"
+          : "bg-white/12 border-b border-white/20"
+      }`}
+      style={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
+    >
       <div className="container-page flex h-20 items-center justify-between gap-6 pl-2 md:pl-4">
         <Link to="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02] mr-4">
           <div className="grid h-11 w-11 place-items-center rounded-full gradient-saffron text-primary-foreground font-serif text-xl font-bold shadow-soft">K</div>

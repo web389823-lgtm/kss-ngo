@@ -10,6 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Counter } from "@/components/site/Counter";
+import MissionTagline from "@/components/site/MissionTagline";
+import ProgramPhotoGrid from "@/components/site/ProgramPhotoGrid";
 
 const DEFAULT_HERO_SLIDES = [
   "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
@@ -145,24 +147,10 @@ function HomePage() {
       <HeroSlideshow slides={Array.isArray(heroCfg.slides) && heroCfg.slides.length > 0 ? heroCfg.slides : DEFAULT_HERO_SLIDES} />
 
 
-      {/* ABOUT PREVIEW */}
-      <section className="container-page py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="relative order-2 lg:order-1">
-            <img src={womenWorkshop} alt="KSS women's workshop" className="rounded-2xl shadow-elevated object-cover aspect-[4/3] w-full" loading="lazy" />
-          </div>
-          <div className="order-1 lg:order-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">About Us</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">{about.title ?? "About Keshava Seva Samiti"}</h2>
-            <p className="mt-5 text-muted-foreground leading-relaxed">{about.p1}</p>
-            <p className="mt-4 text-muted-foreground leading-relaxed">{about.p2}</p>
-            <p className="mt-4 text-muted-foreground leading-relaxed">{about.p3}</p>
-            <Button asChild variant="outline" className="mt-6"><Link to="/about">Learn more <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-          </div>
-        </div>
-      </section>
+      {/* MISSION TAGLINE */}
+      <MissionTagline />
 
-      {/* IMPACT — animated counters */}
+
       <section className="bg-muted/30 py-20">
         <div className="container-page">
           <div className="text-center mb-12">
@@ -170,7 +158,10 @@ function HomePage() {
             <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Numbers that tell our story</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {(stats ?? []).map((s: any) => {
+            {(stats ?? []).filter((s: any) => {
+              const l = String(s.label ?? "").toLowerCase();
+              return !l.includes("active program") && !l.includes("major project");
+            }).map((s: any) => {
               const Icon = ICONS[s.icon] ?? Sparkles;
               return (
                 <Card key={s.id} className="p-6 text-center shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
@@ -224,7 +215,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* PROGRAMS FROM DB */}
+      {/* PROGRAMS FROM DB — photo-first interactive grid */}
       {(programs ?? []).length > 0 && (
         <section className="container-page py-20">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
@@ -234,25 +225,13 @@ function HomePage() {
             </div>
             <Button asChild variant="ghost"><Link to="/programs">View all <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {(programs ?? []).map((p: any, i: number) => (
-              <Link key={p.id} to="/programs/$slug" params={{ slug: p.slug }} className="group">
-                <Card className="overflow-hidden p-0 h-full shadow-soft hover:shadow-elevated transition-all hover:-translate-y-0.5">
-                  <div className="aspect-[16/9] gradient-saffron relative overflow-hidden">
-                    <img src={p.banner_url || p.thumbnail_url || [healthCamp, womenWorkshop, groceryDrive][i % 3]} alt={p.title} loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105" />
-                  </div>
-                  <div className="p-6">
-                    <p className="text-xs font-medium uppercase tracking-wider text-primary">{p.category}</p>
-                    <h3 className="mt-2 font-serif text-xl font-semibold group-hover:text-primary transition-colors">{p.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.summary}</p>
-                  </div>
-                </Card>
-              </Link>
-            ))}
-          </div>
+          <ProgramPhotoGrid
+            programs={programs as any}
+            fallbacks={[healthCamp, womenWorkshop, groceryDrive]}
+          />
         </section>
       )}
+
 
       {/* WHY DONATE */}
       <section className="bg-muted/30 py-20">

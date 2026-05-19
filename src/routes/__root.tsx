@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  Outlet, createRootRouteWithContext, useRouter, HeadContent, Scripts, Link,
+  Outlet, createRootRouteWithContext, useRouter, HeadContent, Scripts, Link, useLocation,
 } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { ThemeProvider } from "@/lib/theme";
@@ -8,6 +8,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import CursorDot from "@/components/site/CursorDot";
 
 function NotFoundComponent() {
   return (
@@ -84,15 +85,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1"><Outlet /></main>
+            <main className={`flex-1 ${isHome ? "" : "pt-20"}`}><Outlet /></main>
             <Footer />
           </div>
+          <CursorDot />
           <Toaster />
         </AuthProvider>
       </ThemeProvider>
