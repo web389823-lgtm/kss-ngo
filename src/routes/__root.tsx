@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
-  Outlet, createRootRouteWithContext, useRouter, HeadContent, Scripts, Link,
+  Outlet, createRootRouteWithContext, useRouter, HeadContent, Scripts, Link, useLocation,
 } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 import { ThemeProvider } from "@/lib/theme";
@@ -8,6 +8,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import CursorDot from "@/components/site/CursorDot";
 
 function NotFoundComponent() {
   return (
