@@ -10,6 +10,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Counter } from "@/components/site/Counter";
+import MissionTagline from "@/components/site/MissionTagline";
+import ProgramPhotoGrid from "@/components/site/ProgramPhotoGrid";
 
 const DEFAULT_HERO_SLIDES = [
   "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
