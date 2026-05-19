@@ -147,24 +147,10 @@ function HomePage() {
       <HeroSlideshow slides={Array.isArray(heroCfg.slides) && heroCfg.slides.length > 0 ? heroCfg.slides : DEFAULT_HERO_SLIDES} />
 
 
-      {/* ABOUT PREVIEW */}
-      <section className="container-page py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="relative order-2 lg:order-1">
-            <img src={womenWorkshop} alt="KSS women's workshop" className="rounded-2xl shadow-elevated object-cover aspect-[4/3] w-full" loading="lazy" />
-          </div>
-          <div className="order-1 lg:order-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">About Us</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">{about.title ?? "About Keshava Seva Samiti"}</h2>
-            <p className="mt-5 text-muted-foreground leading-relaxed">{about.p1}</p>
-            <p className="mt-4 text-muted-foreground leading-relaxed">{about.p2}</p>
-            <p className="mt-4 text-muted-foreground leading-relaxed">{about.p3}</p>
-            <Button asChild variant="outline" className="mt-6"><Link to="/about">Learn more <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-          </div>
-        </div>
-      </section>
+      {/* MISSION TAGLINE */}
+      <MissionTagline />
 
-      {/* IMPACT — animated counters */}
+
       <section className="bg-muted/30 py-20">
         <div className="container-page">
           <div className="text-center mb-12">
