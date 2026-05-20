@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog } from "lucide-react";
+import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog, ImagePlus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ const NAV: NavItem[] = [
   { to: "/admin/programs", label: "Programs", icon: BookOpen },
   { to: "/admin/projects", label: "Projects", icon: FolderKanban },
   { to: "/admin/gallery", label: "Gallery", icon: Image },
+  { to: "/admin/images", label: "Card Images", icon: ImagePlus },
   { to: "/admin/blog", label: "Blog", icon: Newspaper },
   { to: "/admin/testimonials", label: "Testimonials", icon: Quote, adminOnly: true },
   
