@@ -12,6 +12,7 @@ import { Card } from "@/components/ui/card";
 import { Counter } from "@/components/site/Counter";
 import MissionTagline from "@/components/site/MissionTagline";
 import ProgramPhotoGrid from "@/components/site/ProgramPhotoGrid";
+import ProgramHighlightsGrid from "@/components/site/ProgramHighlightsGrid";
 
 const DEFAULT_HERO_SLIDES = [
   "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
@@ -191,24 +192,14 @@ function HomePage() {
         </Card>
       </section>
 
-      {/* PROGRAM HIGHLIGHTS */}
+      {/* PROGRAM HIGHLIGHTS — photo cards with hover reveal */}
       <section className="bg-muted/30 py-20">
         <div className="container-page">
-          <div className="text-center mb-12">
+          <div className="mb-10">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">What We Do</p>
             <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Program highlights</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {PROGRAM_HIGHLIGHTS.map((p) => (
-              <Card key={p.title} className="p-7 shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
-                <div className="grid h-12 w-12 place-items-center rounded-full gradient-saffron text-primary-foreground mb-4">
-                  <p.icon className="h-5 w-5" />
-                </div>
-                <h3 className="font-serif text-xl font-semibold">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.body}</p>
-              </Card>
-            ))}
-          </div>
+          <ProgramHighlightsGrid />
           <div className="text-center mt-10">
             <Button asChild variant="outline"><Link to="/programs">View all programs <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
           </div>
@@ -217,13 +208,11 @@ function HomePage() {
 
       {/* PROGRAMS FROM DB — photo-first interactive grid */}
       {(programs ?? []).length > 0 && (
-        <section className="container-page py-20">
-          <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Programs</p>
-              <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Active initiatives</h2>
-            </div>
-            <Button asChild variant="ghost"><Link to="/programs">View all <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
+        <section className="container-page py-16 max-w-[1600px]">
+          <div className="mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Programs</p>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Active initiatives</h2>
+            <p className="mt-2 text-sm text-muted-foreground max-w-xl">Programs running across communities right now.</p>
           </div>
           <ProgramPhotoGrid
             programs={programs as any}
@@ -265,29 +254,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* GET INVOLVED */}
-      <section className="container-page py-20">
-        <div className="text-center mb-12">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Get Involved</p>
-          <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Be a part of meaningful change</h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-5">
-          {[
-            { icon: HandHeart, title: "Volunteer with us", body: "Give your time and skills to communities that need them most.", to: "/get-involved", cta: "Join now" },
-            { icon: Heart, title: "Support a program", body: "Fund a Seva Basti, a child's education, or a health camp.", to: "/donate", cta: "Donate" },
-            { icon: Handshake, title: "Partner with us", body: "Collaborate on long-term impact through CSR or institutional partnerships.", to: "/get-involved", cta: "Partner" },
-          ].map((x) => (
-            <Card key={x.title} className="p-7 shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
-              <div className="grid h-12 w-12 place-items-center rounded-full gradient-saffron text-primary-foreground mb-4">
-                <x.icon className="h-5 w-5" />
-              </div>
-              <h3 className="font-serif text-xl font-semibold">{x.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{x.body}</p>
-              <Button asChild variant="ghost" className="mt-3 px-0"><Link to={x.to}>{x.cta} <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
-            </Card>
-          ))}
-        </div>
-      </section>
+      {/* GET INVOLVED section removed from homepage */}
 
       {/* NEWS */}
       {(posts ?? []).length > 0 && (

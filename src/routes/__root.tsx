@@ -9,6 +9,7 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import CursorDot from "@/components/site/CursorDot";
+import ScrollProgressBar from "@/components/site/ScrollProgressBar";
 
 function NotFoundComponent() {
   return (
@@ -97,6 +98,7 @@ function RootComponent() {
             <Footer />
           </div>
           <CursorDot />
+          <ScrollProgressBar />
           <Toaster />
         </AuthProvider>
       </ThemeProvider>
