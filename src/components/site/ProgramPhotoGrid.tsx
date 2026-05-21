@@ -14,11 +14,11 @@ type Program = {
 
 export default function ProgramPhotoGrid({ programs, fallbacks }: { programs: Program[]; fallbacks: string[] }) {
   return (
-    <div className="mx-auto max-w-[1400px] px-0">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+    <div className="mx-auto max-w-[1400px] px-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[14px]">
         {programs.map((p, i) => {
           const img = p.thumbnail_url || p.banner_url || fallbacks[i % fallbacks.length];
-          const col = i % 4;
+          const col = i % 3;
           return (
             <motion.article
               key={p.id}
@@ -26,15 +26,15 @@ export default function ProgramPhotoGrid({ programs, fallbacks }: { programs: Pr
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.5, delay: col * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="group relative w-full overflow-hidden rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
-              style={{ aspectRatio: "9 / 16" }}
+              className="group relative w-full overflow-hidden rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+              style={{ aspectRatio: "16 / 9" }}
             >
               <Link to="/programs/$slug" params={{ slug: p.slug }} className="block h-full w-full">
                 <img
                   src={img}
                   alt={p.title}
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover object-[center_top] transition-transform duration-[400ms] group-hover:scale-[1.06]"
+                  className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[400ms] group-hover:scale-[1.06]"
                   style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />

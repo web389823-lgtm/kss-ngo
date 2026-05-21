@@ -59,7 +59,7 @@ function ProgramsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.15 }}
                   transition={{ duration: 0.45, delay: i * 0.06, ease: "easeOut" }}
-                  className="relative overflow-hidden rounded-2xl group shadow-soft hover:shadow-elevated h-[340px]"
+                  className="relative overflow-hidden rounded-2xl group shadow-soft hover:shadow-elevated aspect-video"
                 >
                   <Link to="/programs/$slug" params={{ slug: p.slug }} className="block h-full w-full">
                     <div className="absolute inset-0 overflow-hidden">

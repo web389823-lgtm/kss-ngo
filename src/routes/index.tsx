@@ -107,6 +107,8 @@ function HeroSlideshow({ slides }: { slides: string[] }) {
 import healthCamp from "@/assets/health-camp.jpg";
 import womenWorkshop from "@/assets/women-workshop.jpg";
 import groceryDrive from "@/assets/grocery-drive.jpg";
+import communityGroup from "@/assets/kss-community-group.jpg";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -171,6 +173,29 @@ function HomePage() {
 
       {/* MISSION TAGLINE */}
       <MissionTagline />
+
+      {/* COMMUNITY PHOTO — full-bleed with Ken Burns intro */}
+      <section className="relative w-screen left-1/2 -translate-x-1/2 overflow-hidden bg-black">
+        <motion.img
+          src={communityGroup}
+          alt="KSS community — teachers and children gathered together"
+          loading="lazy"
+          initial={{ opacity: 0, scale: 1.03 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="block w-full"
+          style={{ maxHeight: "520px", height: "auto", objectFit: "cover", objectPosition: "center top" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[20%]"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)" }}
+        />
+      </section>
+      <p className="text-center italic text-[14px] text-[#888] py-4 px-4">
+        KSS community — transforming lives across Bengaluru since 1999
+      </p>
 
 
       <section className="bg-muted/30 py-20">
