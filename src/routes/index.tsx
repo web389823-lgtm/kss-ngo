@@ -107,6 +107,8 @@ function HeroSlideshow({ slides }: { slides: string[] }) {
 import healthCamp from "@/assets/health-camp.jpg";
 import womenWorkshop from "@/assets/women-workshop.jpg";
 import groceryDrive from "@/assets/grocery-drive.jpg";
+import communityGroup from "@/assets/kss-community-group.jpg";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
