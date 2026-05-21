@@ -34,7 +34,7 @@ export default function ProgramPhotoGrid({ programs, fallbacks }: { programs: Pr
                   src={img}
                   alt={p.title}
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover object-[center_top] transition-transform duration-[400ms] group-hover:scale-[1.06]"
+                  className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[400ms] group-hover:scale-[1.06]"
                   style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
