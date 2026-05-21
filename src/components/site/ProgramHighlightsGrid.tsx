@@ -17,12 +17,12 @@ export default function ProgramHighlightsGrid() {
   const fallbackMap = Object.fromEntries(CARD_IMAGE_SLOTS.map((s) => [s.id, s.fallback]));
 
   return (
-    <div className="mx-auto max-w-[1400px] px-0">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+    <div className="mx-auto max-w-[1400px] px-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[14px]">
         {HIGHLIGHTS.map((h, i) => {
           const img = overrides?.[h.slot] || fallbackMap[h.slot];
           const Icon = h.icon;
-          const col = i % 4;
+          const col = i % 3;
           return (
             <motion.article
               key={h.slot}
@@ -30,14 +30,14 @@ export default function ProgramHighlightsGrid() {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.5, delay: col * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="group relative w-full overflow-hidden rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
-              style={{ aspectRatio: "9 / 16" }}
+              className="group relative w-full overflow-hidden rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+              style={{ aspectRatio: "16 / 9" }}
             >
               <img
                 src={img}
                 alt={h.title}
                 loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover object-[center_top] transition-transform duration-[400ms]"
+                className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[400ms] group-hover:scale-[1.06]"
                 style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
               />
               {/* default gradient + title */}
