@@ -29,25 +29,46 @@ const DEFAULT_HERO_SLIDES = [
 
 function HeroSlideshow({ slides }: { slides: string[] }) {
   const [i, setI] = useState(0);
+  const [pY, setPY] = useState(0);
   const n = slides.length;
   useEffect(() => {
     if (n <= 1) return;
     const t = setInterval(() => setI((x) => (x + 1) % n), 4000);
     return () => clearInterval(t);
   }, [n]);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setPY(window.scrollY * 0.4));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
+  }, []);
   if (n === 0) return null;
   return (
     <section className="relative w-screen left-1/2 -translate-x-1/2 h-screen overflow-hidden bg-black">
-      {slides.map((src, idx) => (
-        <img
-          key={src + idx}
-          src={src}
-          alt=""
-          aria-hidden={idx !== i}
-          loading={idx === 0 ? "eager" : "lazy"}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-out ${idx === i ? "opacity-100" : "opacity-0"}`}
-        />
-      ))}
+      <div className="absolute inset-0 will-change-transform" style={{ transform: `translate3d(0, ${pY}px, 0)` }}>
+        {slides.map((src, idx) => (
+          <img
+            key={src + idx}
+            src={src}
+            alt=""
+            aria-hidden={idx !== i}
+            loading={idx === 0 ? "eager" : "lazy"}
+            className={`absolute inset-0 h-[120%] w-full object-cover transition-opacity duration-1000 ease-out ${idx === i ? "opacity-100" : "opacity-0"}`}
+          />
+        ))}
+      </div>
+      {/* Floating decorative orange shapes */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <span className="absolute h-72 w-72 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_8s_ease-in-out_infinite]" style={{ top: "12%", left: "8%" }} />
+        <span className="absolute h-96 w-96 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_12s_ease-in-out_infinite]" style={{ top: "55%", right: "10%" }} />
+        <span className="absolute h-56 w-56 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_10s_ease-in-out_infinite]" style={{ bottom: "8%", left: "30%" }} />
+        <span className="absolute h-40 w-40 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_9s_ease-in-out_infinite]" style={{ top: "20%", right: "30%" }} />
+      </div>
       {n > 1 && (
         <>
           <button

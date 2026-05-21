@@ -4,22 +4,12 @@ import { Link } from "@tanstack/react-router";
 import { useCardImages, CARD_IMAGE_SLOTS } from "@/lib/card-images";
 
 const HIGHLIGHTS = [
-  { slot: "ph_education", icon: GraduationCap, title: "Education", body: "Academic support, essentials, guidance and encouragement so children continue their learning journey." },
-  { slot: "ph_women", icon: Flower2, title: "Women Empowerment", body: "Skill development, livelihood opportunities, health awareness and civic participation for women." },
-  { slot: "ph_culture", icon: Drama, title: "Culture & Values", body: "Bharatiya values embedded into camps and events that promote teamwork, leadership and harmony." },
-  { slot: "ph_balasangam", icon: Baby, title: "BalaSangam", body: "Our flagship annual children's event — sports, creativity and learning at scale." },
-  { slot: "ph_yoga", icon: Sparkles, title: "Yoga Day", body: "Large-scale community participation in International Yoga Day for physical and mental well-being." },
-  { slot: "ph_seva_bastis", icon: BookOpen, title: "Seva Bastis", body: "Nearly 100 community centres across 65+ locations bringing education, healthcare and care." },
-];
-
-// Asymmetric masonry on a 6-col grid
-const SPANS = [
-  "md:col-span-2 md:row-span-2 aspect-[1/1.3]", // tall
-  "md:col-span-2 aspect-[1.6/1]",
-  "md:col-span-2 aspect-[1.6/1]",
-  "md:col-span-3 aspect-[1.6/1]",
-  "md:col-span-3 aspect-[1.6/1]",
-  "md:col-span-2 md:row-span-2 aspect-[1/1.3]",
+  { slot: "ph_education", icon: GraduationCap, category: "Education", title: "Education", body: "Academic support, essentials, guidance and encouragement so children continue their learning journey." },
+  { slot: "ph_women", icon: Flower2, category: "Empowerment", title: "Women Empowerment", body: "Skill development, livelihood opportunities, health awareness and civic participation for women." },
+  { slot: "ph_culture", icon: Drama, category: "Culture", title: "Culture & Values", body: "Bharatiya values embedded into camps and events that promote teamwork, leadership and harmony." },
+  { slot: "ph_balasangam", icon: Baby, category: "Children", title: "BalaSangam", body: "Our flagship annual children's event — sports, creativity and learning at scale." },
+  { slot: "ph_yoga", icon: Sparkles, category: "Wellness", title: "Yoga Day", body: "Large-scale community participation in International Yoga Day for physical and mental well-being." },
+  { slot: "ph_seva_bastis", icon: BookOpen, category: "Community", title: "Seva Bastis", body: "Nearly 100 community centres across 65+ locations bringing education, healthcare and care." },
 ];
 
 export default function ProgramHighlightsGrid() {
@@ -27,48 +17,61 @@ export default function ProgramHighlightsGrid() {
   const fallbackMap = Object.fromEntries(CARD_IMAGE_SLOTS.map((s) => [s.id, s.fallback]));
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-6 gap-3 auto-rows-auto">
-      {HIGHLIGHTS.map((h, i) => {
-        const img = overrides?.[h.slot] || fallbackMap[h.slot];
-        const Icon = h.icon;
-        return (
-          <motion.div
-            key={h.slot}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.5, delay: i * 0.08, ease: [0.34, 1.56, 0.64, 1] }}
-            className={`relative overflow-hidden rounded-2xl group shadow-soft hover:shadow-elevated ${SPANS[i % SPANS.length]}`}
-          >
-            <div className="absolute inset-0 overflow-hidden">
+    <div className="mx-auto max-w-[1400px] px-0">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        {HIGHLIGHTS.map((h, i) => {
+          const img = overrides?.[h.slot] || fallbackMap[h.slot];
+          const Icon = h.icon;
+          const col = i % 4;
+          return (
+            <motion.article
+              key={h.slot}
+              initial={{ opacity: 0, y: 60, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.5, delay: col * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="group relative w-full overflow-hidden rounded-[20px] shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+              style={{ aspectRatio: "9 / 16" }}
+            >
               <img
                 src={img}
                 alt={h.title}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:-translate-y-4"
-                style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+                className="absolute inset-0 h-full w-full object-cover object-[center_top] transition-transform duration-[400ms]"
+                style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
               />
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
-            </div>
+              {/* default gradient + title */}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+              <span className="absolute left-3 top-3 z-10 rounded-full bg-[#E8540A] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+                {h.category}
+              </span>
+              <div className="absolute inset-x-4 bottom-4 z-10 text-white drop-shadow transition-opacity duration-300 group-hover:opacity-0">
+                <h3 className="font-serif text-lg md:text-xl font-bold leading-tight">{h.title}</h3>
+              </div>
 
-            <div className="absolute left-5 bottom-5 z-10 text-white drop-shadow transition-opacity duration-200 group-hover:opacity-0">
-              <div className="font-serif text-lg md:text-xl font-semibold">{h.title}</div>
-            </div>
-
-            <div
-              className="absolute inset-x-0 bottom-0 z-10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#FAF7F2]/95 backdrop-blur-sm p-5"
-              style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-            >
-              <Icon className="h-5 w-5 text-[#E8540A] mb-1.5" />
-              <h3 className="font-serif text-lg md:text-xl font-semibold text-[#1a1a1a]">{h.title}</h3>
-              <p className="mt-1.5 text-sm text-neutral-700 line-clamp-3">{h.body}</p>
-              <Link to="/programs" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-[#E8540A]">
-                Learn More <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </motion.div>
-        );
-      })}
+              {/* hover overlay + slide-up panel */}
+              <div
+                className="absolute inset-0 bg-black/45 opacity-0 transition-opacity duration-[400ms] group-hover:opacity-100"
+                style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
+              />
+              <div
+                className="absolute inset-x-0 bottom-0 z-20 translate-y-full group-hover:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-[400ms] bg-[#FAF7F2]/95 backdrop-blur-sm p-4 md:p-5"
+                style={{ height: "60%", transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
+              >
+                <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#E8540A]">
+                  <Icon className="h-3.5 w-3.5" />
+                  {h.category}
+                </div>
+                <h3 className="mt-1.5 font-serif text-base md:text-lg font-bold text-[#1a1a1a] leading-snug">{h.title}</h3>
+                <p className="mt-1.5 text-xs md:text-[13px] text-neutral-700 line-clamp-2 leading-relaxed">{h.body}</p>
+                <Link to="/programs" className="mt-2 inline-flex items-center gap-1 text-xs md:text-sm font-semibold text-[#E8540A]">
+                  Read More <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </motion.article>
+          );
+        })}
+      </div>
     </div>
   );
 }
