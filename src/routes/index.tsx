@@ -400,34 +400,12 @@ function HomePage() {
       {/* Advisory & Trustee Board sections removed — see /about */}
 
 
-      {/* CONTACT CTA */}
-      <section className="container-page py-20">
-        <Card className="overflow-hidden p-0 shadow-elevated border-0">
-          <div className="grid md:grid-cols-2">
-            <div className="p-10 md:p-12 gradient-saffron text-primary-foreground">
-              <h3 className="font-serif text-3xl font-semibold">Have questions or want to collaborate?</h3>
-              <p className="mt-3 opacity-95">We'd love to hear from you. Reach out for partnerships, volunteering, or general queries.</p>
-              <Button asChild variant="secondary" size="lg" className="mt-6"><Link to="/get-involved">Contact Us <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-            </div>
-            <div className="p-10 md:p-12 bg-card">
-              <ul className="space-y-5">
-                <li className="flex items-start gap-3">
-                  <Phone className="h-5 w-5 text-primary mt-0.5" />
-                  <div><div className="text-xs uppercase tracking-wider text-muted-foreground">Phone</div><div className="font-medium">{contact.phone}</div></div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Mail className="h-5 w-5 text-primary mt-0.5" />
-                  <div><div className="text-xs uppercase tracking-wider text-muted-foreground">Email</div><div className="font-medium">{contact.email}</div></div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-primary mt-0.5" />
-                  <div><div className="text-xs uppercase tracking-wider text-muted-foreground">Address</div><div className="font-medium">{contact.address}</div></div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </Card>
-      </section>
+      {/* SEVA MOMENTS — YouTube videos */}
+      <SevaMoments />
+
+      {/* GET IN TOUCH form */}
+      <GetInTouchForm />
+
     </div>
   );
 }
