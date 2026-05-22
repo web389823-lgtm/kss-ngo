@@ -409,3 +409,234 @@ function HomePage() {
     </div>
   );
 }
+
+// ─────────────────────────────────────────────────────────────
+// SEVA MOMENTS — 4 YouTube videos
+// ─────────────────────────────────────────────────────────────
+const SEVA_VIDEOS = [
+  { id: "1CLR2c_k4Yk", title: "KSS Video 1" },
+  { id: "ooQP-qfjgxQ", title: "KSS Video 2" },
+  { id: "AZ5P1_PQQkU", title: "KSS Video 3" },
+  { id: "UlfHOIpal5A", title: "KSS Video 4" },
+];
+
+function SevaMoments() {
+  return (
+    <section style={{ background: "#C44B0A", padding: "clamp(40px, 6vw, 80px) 0" }}>
+      <div className="mx-auto px-4" style={{ maxWidth: "1100px" }}>
+        <div className="text-center mb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/80" style={{ fontFamily: "Inter, sans-serif" }}>Seva Moments</p>
+          <h2 className="mt-3 text-white" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: "clamp(1.8rem, 3vw, 2.8rem)" }}>
+            Stories from the ground
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: "16px" }}>
+          {SEVA_VIDEOS.map((v) => (
+            <div
+              key={v.id}
+              className="transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+              style={{
+                position: "relative",
+                width: "100%",
+                aspectRatio: "16 / 9",
+                overflow: "hidden",
+                borderRadius: "12px",
+                background: "#000",
+              }}
+            >
+              <iframe
+                src={`https://www.youtube.com/embed/${v.id}`}
+                title={v.title}
+                frameBorder={0}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                loading="lazy"
+                style={{ width: "100%", height: "100%", borderRadius: "12px", display: "block", border: 0 }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-8">
+          <a
+            href="https://www.youtube.com/@KSS-SEVA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block transition-colors duration-200"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "#fff",
+              border: "1px solid #fff",
+              borderRadius: "8px",
+              padding: "10px 22px",
+              background: "transparent",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#C44B0A"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#fff"; }}
+          >
+            View all videos on YouTube →
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// GET IN TOUCH — form
+// ─────────────────────────────────────────────────────────────
+function GetInTouchForm() {
+  const [form, setForm] = useState({ first_name: "", last_name: "", email: "", phone: "", address: "", message: "" });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const update = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const errs: Record<string, string> = {};
+    if (!form.first_name.trim()) errs.first_name = "Required";
+    if (!form.email.trim()) errs.email = "Required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = "Invalid email";
+    if (!form.phone.trim()) errs.phone = "Required";
+    if (!form.address.trim()) errs.address = "Required";
+    if (!form.message.trim()) errs.message = "Required";
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+
+    setSubmitting(true);
+    const { error } = await supabase.from("contact_submissions" as any).insert({
+      first_name: form.first_name.trim(),
+      last_name: form.last_name.trim() || null,
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      address: form.address.trim(),
+      message: form.message.trim(),
+    });
+    setSubmitting(false);
+    if (error) {
+      const { toast } = await import("sonner");
+      toast.error(error.message);
+      return;
+    }
+    const { toast } = await import("sonner");
+    toast.success("Thank you! We'll be in touch soon.", { duration: 4000 });
+    setForm({ first_name: "", last_name: "", email: "", phone: "", address: "", message: "" });
+    setErrors({});
+  }
+
+  const inputStyle: React.CSSProperties = {
+    background: "#fff",
+    borderRadius: "8px",
+    padding: "12px 16px",
+    border: "none",
+    fontFamily: "Inter, sans-serif",
+    fontSize: "14px",
+    color: "#333",
+    width: "100%",
+    outline: "none",
+  };
+  const labelStyle: React.CSSProperties = {
+    color: "#fff",
+    fontFamily: "Inter, sans-serif",
+    fontSize: "13px",
+    display: "block",
+    marginBottom: "6px",
+  };
+  const reqStyle: React.CSSProperties = { color: "#ffaaaa", marginLeft: 2 };
+  const errStyle: React.CSSProperties = { color: "#ffaaaa", fontSize: "12px", marginTop: "4px", fontFamily: "Inter, sans-serif" };
+
+  return (
+    <section style={{ background: "#8B1A00", padding: "clamp(40px, 6vw, 80px) 0" }}>
+      <div className="mx-auto px-4" style={{ maxWidth: "760px" }}>
+        <h2
+          className="text-center text-white"
+          style={{
+            fontFamily: '"Playfair Display", serif',
+            fontWeight: 700,
+            fontSize: "clamp(1.8rem, 3vw, 2.8rem)",
+            marginBottom: "32px",
+            letterSpacing: "0.04em",
+          }}
+        >
+          GET IN TOUCH
+        </h2>
+        <form onSubmit={onSubmit} noValidate className="grid gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label style={labelStyle}>First name<span style={reqStyle}>*</span></label>
+              <input style={inputStyle} value={form.first_name} onChange={(e) => update("first_name", e.target.value)} autoComplete="given-name" />
+              {errors.first_name && <p style={errStyle}>{errors.first_name}</p>}
+            </div>
+            <div>
+              <label style={labelStyle}>Last name</label>
+              <input style={inputStyle} value={form.last_name} onChange={(e) => update("last_name", e.target.value)} autoComplete="family-name" />
+            </div>
+          </div>
+          <div>
+            <label style={labelStyle}>Email<span style={reqStyle}>*</span></label>
+            <input type="email" style={inputStyle} value={form.email} onChange={(e) => update("email", e.target.value)} autoComplete="email" />
+            {errors.email && <p style={errStyle}>{errors.email}</p>}
+          </div>
+          <div>
+            <label style={labelStyle}>Phone<span style={reqStyle}>*</span></label>
+            <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
+              <span style={{ ...inputStyle, width: "auto", display: "inline-flex", alignItems: "center", gap: "6px", flex: "0 0 auto" }}>
+                🇮🇳 +91
+              </span>
+              <input
+                type="tel"
+                style={{ ...inputStyle, flex: 1 }}
+                value={form.phone}
+                onChange={(e) => update("phone", e.target.value)}
+                autoComplete="tel"
+                inputMode="tel"
+              />
+            </div>
+            {errors.phone && <p style={errStyle}>{errors.phone}</p>}
+          </div>
+          <div>
+            <label style={labelStyle}>Address<span style={reqStyle}>*</span></label>
+            <input style={inputStyle} value={form.address} onChange={(e) => update("address", e.target.value)} autoComplete="street-address" />
+            {errors.address && <p style={errStyle}>{errors.address}</p>}
+          </div>
+          <div>
+            <label style={labelStyle}>We're here to listen and collaborate!<span style={reqStyle}>*</span></label>
+            <textarea
+              style={{ ...inputStyle, height: "120px", resize: "vertical" }}
+              placeholder="Share your inquiries or ways to support our initiatives and create meaningful impact."
+              value={form.message}
+              onChange={(e) => update("message", e.target.value)}
+            />
+            {errors.message && <p style={errStyle}>{errors.message}</p>}
+          </div>
+          <div className="text-center mt-2">
+            <button
+              type="submit"
+              disabled={submitting}
+              className="transition-all duration-200 hover:scale-[1.02] w-full md:w-auto"
+              style={{
+                background: "#8B6914",
+                color: "#fff",
+                fontFamily: "Inter, sans-serif",
+                fontWeight: 500,
+                fontSize: "15px",
+                borderRadius: "8px",
+                padding: "14px 48px",
+                border: "none",
+                cursor: submitting ? "not-allowed" : "pointer",
+                opacity: submitting ? 0.7 : 1,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "#6e520f"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "#8B6914"; }}
+            >
+              {submitting ? "Submitting…" : "Submit"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
+
