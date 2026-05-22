@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowRight, Heart, Sparkles, GraduationCap, Home as HomeIcon,
-  Stethoscope, Quote, BookOpen, Drama, Baby, Flower2,
+  Stethoscope, Users, Award, Quote, BookOpen, Drama, Baby, Flower2,
   ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
