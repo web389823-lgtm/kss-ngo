@@ -174,28 +174,87 @@ function HomePage() {
       {/* MISSION TAGLINE */}
       <MissionTagline />
 
-      {/* COMMUNITY PHOTO — full-bleed with Ken Burns intro */}
-      <section className="relative w-screen left-1/2 -translate-x-1/2 overflow-hidden bg-black">
-        <motion.img
-          src={communityGroup}
-          alt="KSS community — teachers and children gathered together"
-          loading="lazy"
-          initial={{ opacity: 0, scale: 1.03 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="block w-full"
-          style={{ maxHeight: "520px", height: "auto", objectFit: "cover", objectPosition: "center top" }}
-        />
+      {/* COMMUNITY PHOTO — strict 16:9 with side margins */}
+      <section
+        style={{
+          marginTop: "clamp(24px, 4vw, 48px)",
+          marginBottom: 0,
+        }}
+      >
         <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[20%]"
-          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)" }}
-        />
+          className="mx-auto"
+          style={{
+            maxWidth: "1200px",
+            width: "calc(100% - 80px)",
+            padding: "0 40px",
+          }}
+        >
+          <div
+            className="relative overflow-hidden"
+            style={{
+              width: "100%",
+              aspectRatio: "16 / 9",
+              borderRadius: "16px",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.15)",
+            }}
+          >
+            <motion.img
+              src={communityGroup}
+              alt="KSS community — teachers and children gathered together"
+              loading="lazy"
+              initial={{ scale: 1.03 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center top",
+                display: "block",
+              }}
+            />
+            <div
+              aria-hidden
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "30%",
+                background: "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)",
+              }}
+            />
+          </div>
+        </div>
+        <p
+          className="mx-auto"
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontStyle: "italic",
+            fontSize: "13px",
+            color: "#888",
+            textAlign: "center",
+            padding: "12px 0 24px 0",
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          KSS community — transforming lives across Bengaluru since 1999
+        </p>
+        <style>{`
+          @media (max-width: 1024px) {
+            section > div.mx-auto[style*="1200px"] { width: calc(100% - 48px) !important; padding: 0 24px !important; }
+          }
+          @media (max-width: 640px) {
+            section > div.mx-auto[style*="1200px"] { width: calc(100% - 32px) !important; padding: 0 16px !important; }
+          }
+        `}</style>
       </section>
-      <p className="text-center italic text-[14px] text-[#888] py-4 px-4">
-        KSS community — transforming lives across Bengaluru since 1999
-      </p>
+
 
 
       <section className="bg-muted/30 py-20">
