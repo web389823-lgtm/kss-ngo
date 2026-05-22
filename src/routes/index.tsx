@@ -3,9 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  ArrowRight, Heart, HandHeart, Sparkles, GraduationCap, Home as HomeIcon,
-  Stethoscope, Users, Award, Quote, BookOpen, Drama, Baby, Flower2,
-  Phone, Mail, MapPin, Target, Eye, Handshake, ChevronLeft, ChevronRight,
+  ArrowRight, Heart, Sparkles, GraduationCap, Home as HomeIcon,
+  Stethoscope, Quote, BookOpen, Drama, Baby, Flower2,
+  ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
