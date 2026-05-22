@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, GraduationCap, Flower2, Drama, Baby, Sparkles, BookOpen } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useCardImages, CARD_IMAGE_SLOTS } from "@/lib/card-images";
 
 const HIGHLIGHTS = [
@@ -15,6 +16,7 @@ const HIGHLIGHTS = [
 export default function ProgramHighlightsGrid() {
   const { data: overrides } = useCardImages();
   const fallbackMap = Object.fromEntries(CARD_IMAGE_SLOTS.map((s) => [s.id, s.fallback]));
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
     <div className="mx-auto max-w-[1400px] px-6">
@@ -23,6 +25,7 @@ export default function ProgramHighlightsGrid() {
           const img = overrides?.[h.slot] || fallbackMap[h.slot];
           const Icon = h.icon;
           const col = i % 3;
+          const isOpen = openIdx === i;
           return (
             <motion.article
               key={h.slot}
@@ -30,32 +33,31 @@ export default function ProgramHighlightsGrid() {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.5, delay: col * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="group relative w-full overflow-hidden rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+              onClick={() => setOpenIdx(isOpen ? null : i)}
+              className={`group relative w-full overflow-hidden rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] cursor-pointer ${isOpen ? "is-open" : ""}`}
               style={{ aspectRatio: "16 / 9" }}
             >
               <img
                 src={img}
                 alt={h.title}
                 loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[400ms] group-hover:scale-[1.06]"
+                className={`absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[400ms] group-hover:scale-[1.06] ${isOpen ? "scale-[1.06]" : ""}`}
                 style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
               />
-              {/* default gradient + title */}
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               <span className="absolute left-3 top-3 z-10 rounded-full bg-[#E8540A] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
                 {h.category}
               </span>
-              <div className="absolute inset-x-4 bottom-4 z-10 text-white drop-shadow transition-opacity duration-300 group-hover:opacity-0">
+              <div className={`absolute inset-x-4 bottom-4 z-10 text-white drop-shadow transition-opacity duration-300 group-hover:opacity-0 ${isOpen ? "opacity-0" : ""}`}>
                 <h3 className="font-serif text-lg md:text-xl font-bold leading-tight">{h.title}</h3>
               </div>
 
-              {/* hover overlay + slide-up panel */}
               <div
-                className="absolute inset-0 bg-black/45 opacity-0 transition-opacity duration-[400ms] group-hover:opacity-100"
+                className={`absolute inset-0 bg-black/45 transition-opacity duration-[400ms] group-hover:opacity-100 ${isOpen ? "opacity-100" : "opacity-0"}`}
                 style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
               />
               <div
-                className="absolute inset-x-0 bottom-0 z-20 translate-y-full group-hover:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-[400ms] bg-[#FAF7F2]/95 backdrop-blur-sm p-4 md:p-5"
+                className={`absolute inset-x-0 bottom-0 z-20 group-hover:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-[400ms] bg-[#FAF7F2]/95 backdrop-blur-sm p-4 md:p-5 ${isOpen ? "translate-y-0" : "translate-y-full"}`}
                 style={{ height: "60%", transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
               >
                 <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#E8540A]">
@@ -64,7 +66,7 @@ export default function ProgramHighlightsGrid() {
                 </div>
                 <h3 className="mt-1.5 font-serif text-base md:text-lg font-bold text-[#1a1a1a] leading-snug">{h.title}</h3>
                 <p className="mt-1.5 text-xs md:text-[13px] text-neutral-700 line-clamp-2 leading-relaxed">{h.body}</p>
-                <Link to="/programs" className="mt-2 inline-flex items-center gap-1 text-xs md:text-sm font-semibold text-[#E8540A]">
+                <Link to="/programs" onClick={(e) => e.stopPropagation()} className="mt-2 inline-flex items-center gap-1 text-xs md:text-sm font-semibold text-[#E8540A]">
                   Read More <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
@@ -72,6 +74,9 @@ export default function ProgramHighlightsGrid() {
           );
         })}
       </div>
+      <p className="md:hidden text-center text-[12px] text-[#999] mt-4" style={{ fontFamily: "Inter, sans-serif" }}>
+        Tap any card to explore
+      </p>
     </div>
   );
 }
