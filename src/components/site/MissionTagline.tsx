@@ -7,7 +7,7 @@ function Leaf({ flip = false }: { flip?: boolean }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ transform: flip ? "scaleX(-1)" : undefined }}
-      className="w-20 md:w-28 lg:w-32 h-auto text-[#C0392B]"
+      className="w-12 md:w-16 lg:w-20 h-auto text-[#C0392B]"
       aria-hidden
     >
       <path
@@ -27,22 +27,34 @@ function Leaf({ flip = false }: { flip?: boolean }) {
 
 export default function MissionTagline() {
   return (
-    <section className="bg-[#FAF7F2] py-20 md:py-28 overflow-hidden">
+    <section
+      className="bg-[#FAF7F2] overflow-hidden"
+      style={{
+        paddingTop: "clamp(24px, 3vw, 40px)",
+        paddingBottom: "clamp(24px, 3vw, 40px)",
+      }}
+    >
       <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
+        initial={{ opacity: 0, scale: 0.97 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-        className="container-page flex items-center justify-center gap-4 md:gap-10"
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="container-page flex items-center justify-center gap-3 md:gap-6"
       >
         <Leaf />
         <p
-          className="text-center font-serif text-2xl md:text-4xl lg:text-5xl leading-snug max-w-4xl"
-          style={{ color: "#3949AB" }}
+          className="text-center max-w-4xl"
+          style={{
+            color: "#3949AB",
+            fontFamily: '"Playfair Display", serif',
+            fontWeight: 700,
+            fontSize: "clamp(1.6rem, 2.8vw, 2.4rem)",
+            lineHeight: 1.4,
+          }}
         >
-          <span style={{ color: "#2E7D32", fontWeight: 700 }}>Seva</span>{" "}
+          <span style={{ color: "#2E7D32" }}>Seva</span>{" "}
           for lasting change, sustainable impact, and empowered{" "}
-          <span style={{ color: "#E8540A", fontWeight: 700 }}>communities.</span>
+          <span style={{ color: "#E8540A" }}>communities.</span>
         </p>
         <Leaf flip />
       </motion.div>

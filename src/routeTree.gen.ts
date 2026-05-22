@@ -40,6 +40,7 @@ import { Route as AdminImagesRouteImport } from './routes/admin.images'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminDonationsRouteImport } from './routes/admin.donations'
 import { Route as AdminCsrRouteImport } from './routes/admin.csr'
+import { Route as AdminContactsRouteImport } from './routes/admin.contacts'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as TeamTypeIdRouteImport } from './routes/team.$type.$id'
@@ -202,6 +203,11 @@ const AdminCsrRoute = AdminCsrRouteImport.update({
   path: '/csr',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminContactsRoute = AdminContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBlogRoute = AdminBlogRouteImport.update({
   id: '/blog',
   path: '/blog',
@@ -238,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/contacts': typeof AdminContactsRoute
   '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -275,6 +282,7 @@ export interface FileRoutesByTo {
   '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/contacts': typeof AdminContactsRoute
   '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -314,6 +322,7 @@ export interface FileRoutesById {
   '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
+  '/admin/contacts': typeof AdminContactsRoute
   '/admin/csr': typeof AdminCsrRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -354,6 +363,7 @@ export interface FileRouteTypes {
     | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
+    | '/admin/contacts'
     | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
@@ -391,6 +401,7 @@ export interface FileRouteTypes {
     | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
+    | '/admin/contacts'
     | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
@@ -429,6 +440,7 @@ export interface FileRouteTypes {
     | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
+    | '/admin/contacts'
     | '/admin/csr'
     | '/admin/donations'
     | '/admin/gallery'
@@ -698,6 +710,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCsrRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/contacts': {
+      id: '/admin/contacts'
+      path: '/contacts'
+      fullPath: '/admin/contacts'
+      preLoaderRoute: typeof AdminContactsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/blog': {
       id: '/admin/blog'
       path: '/blog'
@@ -751,6 +770,7 @@ const AboutRouteWithChildren = AboutRoute._addFileChildren(AboutRouteChildren)
 interface AdminRouteChildren {
   AdminActivityRoute: typeof AdminActivityRoute
   AdminBlogRoute: typeof AdminBlogRoute
+  AdminContactsRoute: typeof AdminContactsRoute
   AdminCsrRoute: typeof AdminCsrRoute
   AdminDonationsRoute: typeof AdminDonationsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
@@ -769,6 +789,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminActivityRoute: AdminActivityRoute,
   AdminBlogRoute: AdminBlogRoute,
+  AdminContactsRoute: AdminContactsRoute,
   AdminCsrRoute: AdminCsrRoute,
   AdminDonationsRoute: AdminDonationsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
