@@ -283,19 +283,8 @@ function HomePage() {
         </div>
       </section>
 
-      {/* MISSION & VISION */}
-      <section className="container-page py-20 grid md:grid-cols-2 gap-6">
-        <Card className="p-8 shadow-soft border-l-4 border-primary">
-          <Target className="h-8 w-8 text-primary mb-4" />
-          <h3 className="font-serif text-2xl font-semibold">Our Mission</h3>
-          <p className="mt-3 text-muted-foreground leading-relaxed">{mv.mission}</p>
-        </Card>
-        <Card className="p-8 shadow-soft border-l-4 border-amber-500">
-          <Eye className="h-8 w-8 text-amber-600 mb-4" />
-          <h3 className="font-serif text-2xl font-semibold">Our Vision</h3>
-          <p className="mt-3 text-muted-foreground leading-relaxed">{mv.vision}</p>
-        </Card>
-      </section>
+      {/* MISSION & VISION removed from homepage — see /about */}
+
 
       {/* PROGRAM HIGHLIGHTS — photo cards with hover reveal */}
       <section className="bg-muted/30 py-20">
