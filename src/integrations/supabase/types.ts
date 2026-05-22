@@ -125,6 +125,42 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_submissions: {
+        Row: {
+          address: string
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          is_read: boolean
+          last_name: string | null
+          message: string
+          phone: string
+        }
+        Insert: {
+          address: string
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          is_read?: boolean
+          last_name?: string | null
+          message: string
+          phone: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          is_read?: boolean
+          last_name?: string | null
+          message?: string
+          phone?: string
+        }
+        Relationships: []
+      }
       csr_applications: {
         Row: {
           aadhaar: string | null
