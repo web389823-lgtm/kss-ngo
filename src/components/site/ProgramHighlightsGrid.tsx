@@ -17,6 +17,23 @@ export default function ProgramHighlightsGrid() {
   const { data: overrides } = useCardImages();
   const fallbackMap = Object.fromEntries(CARD_IMAGE_SLOTS.map((s) => [s.id, s.fallback]));
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const navigate = useNavigate();
+  const timerRef = useRef<number | null>(null);
+
+  const handleCardClick = (i: number) => {
+    const isTouch = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+    if (!isTouch) {
+      navigate({ to: "/programs" });
+      return;
+    }
+    if (openIdx !== i) {
+      setOpenIdx(i);
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+      timerRef.current = window.setTimeout(() => navigate({ to: "/programs" }), 2000);
+    } else {
+      navigate({ to: "/programs" });
+    }
+  };
 
   return (
     <div className="mx-auto max-w-[1400px] px-6">
