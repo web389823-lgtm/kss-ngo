@@ -74,10 +74,12 @@ function VolunteerInfoPage() {
       </div>
       <PageHeader eyebrow="Volunteer" title="Volunteer with KSS" description="Be the reason someone smiles today — join 650+ KSS changemakers." />
       <section className="container-page py-12 space-y-8">
+        <WaysToVolunteer />
         <Section title="Why Volunteer with KSS" items={WHY} />
         <Section title="Volunteer Roles Available" items={ROLES} />
         <Section title="Eligibility" items={ELIGIBILITY} />
         <Section title="What to Expect" items={EXPECT} />
+
 
         <Button asChild size="lg" className="w-full">
           <Link to="/get-involved/volunteer">
