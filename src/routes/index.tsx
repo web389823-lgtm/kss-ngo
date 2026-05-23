@@ -403,6 +403,9 @@ function HomePage() {
       {/* SEVA MOMENTS — YouTube videos */}
       <SevaMoments />
 
+      {/* VOICES OF APPRECIATION carousel */}
+      <VoicesOfAppreciation />
+
       {/* GET IN TOUCH form */}
       <GetInTouchForm />
 
