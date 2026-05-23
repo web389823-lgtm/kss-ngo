@@ -90,17 +90,6 @@ function CsrInfoPage() {
         <ListSection title="Why Partner with KSS" items={WHY} />
         <ListSection title="SDG Alignment" items={SDGS} />
 
-        <Card className="p-8 shadow-soft animate-fade-in">
-          <h3 className="font-serif text-2xl font-semibold mb-5">What You Can Fund</h3>
-          <div className="space-y-4">
-            {TIERS.map((t) => (
-              <div key={t.range} className="border-l-4 border-primary pl-4 py-2">
-                <div className="font-semibold">{t.range}</div>
-                <div className="text-muted-foreground">{t.desc}</div>
-              </div>
-            ))}
-          </div>
-        </Card>
 
         <ListSection title="Branding & Recognition for Partners" items={RECOGNITION} />
         <ListSection title="Programs Open for CSR" items={PROGRAMS} />
