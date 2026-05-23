@@ -45,9 +45,6 @@ export default function ProgramHighlightsGrid() {
                 style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
               />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              <span className="absolute left-3 top-3 z-10 rounded-full bg-[#E8540A] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
-                {h.category}
-              </span>
               <div className={`absolute inset-x-4 bottom-4 z-10 text-white drop-shadow transition-opacity duration-300 group-hover:opacity-0 ${isOpen ? "opacity-0" : ""}`}>
                 <h3 className="font-serif text-lg md:text-xl font-bold leading-tight">{h.title}</h3>
               </div>
