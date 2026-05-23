@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect, useState } from "react";
+import kssLogo from "@/assets/kss-logo.jpg";
 
 const NAV = [
   { to: "/", label: "Home" },
