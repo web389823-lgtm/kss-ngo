@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, GraduationCap, Flower2, Drama, Baby, Sparkles, BookOpen } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useState, useRef } from "react";
 import { useCardImages, CARD_IMAGE_SLOTS } from "@/lib/card-images";
 
 const HIGHLIGHTS = [
