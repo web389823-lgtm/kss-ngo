@@ -88,6 +88,9 @@ function WaysToVolunteer() {
       </div>
     </section>
   );
+}
+
+
 
 function VolunteerInfoPage() {
   const navigate = useNavigate();
