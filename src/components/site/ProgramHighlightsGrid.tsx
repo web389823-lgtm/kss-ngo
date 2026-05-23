@@ -50,7 +50,7 @@ export default function ProgramHighlightsGrid() {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.5, delay: col * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-              onClick={() => setOpenIdx(isOpen ? null : i)}
+              onClick={() => handleCardClick(i)}
               className={`group relative w-full overflow-hidden rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] cursor-pointer ${isOpen ? "is-open" : ""}`}
               style={{ aspectRatio: "16 / 9" }}
             >
