@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, GraduationCap, Flower2, Drama, Baby, Sparkles, BookOpen } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useState, useRef } from "react";
 import { useCardImages, CARD_IMAGE_SLOTS } from "@/lib/card-images";
 
 const HIGHLIGHTS = [
@@ -17,6 +17,23 @@ export default function ProgramHighlightsGrid() {
   const { data: overrides } = useCardImages();
   const fallbackMap = Object.fromEntries(CARD_IMAGE_SLOTS.map((s) => [s.id, s.fallback]));
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const navigate = useNavigate();
+  const timerRef = useRef<number | null>(null);
+
+  const handleCardClick = (i: number) => {
+    const isTouch = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+    if (!isTouch) {
+      navigate({ to: "/programs" });
+      return;
+    }
+    if (openIdx !== i) {
+      setOpenIdx(i);
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+      timerRef.current = window.setTimeout(() => navigate({ to: "/programs" }), 2000);
+    } else {
+      navigate({ to: "/programs" });
+    }
+  };
 
   return (
     <div className="mx-auto max-w-[1400px] px-6">
@@ -33,7 +50,7 @@ export default function ProgramHighlightsGrid() {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.5, delay: col * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-              onClick={() => setOpenIdx(isOpen ? null : i)}
+              onClick={() => handleCardClick(i)}
               className={`group relative w-full overflow-hidden rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] cursor-pointer ${isOpen ? "is-open" : ""}`}
               style={{ aspectRatio: "16 / 9" }}
             >
@@ -45,9 +62,6 @@ export default function ProgramHighlightsGrid() {
                 style={{ transitionTimingFunction: "cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
               />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              <span className="absolute left-3 top-3 z-10 rounded-full bg-[#E8540A] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
-                {h.category}
-              </span>
               <div className={`absolute inset-x-4 bottom-4 z-10 text-white drop-shadow transition-opacity duration-300 group-hover:opacity-0 ${isOpen ? "opacity-0" : ""}`}>
                 <h3 className="font-serif text-lg md:text-xl font-bold leading-tight">{h.title}</h3>
               </div>
