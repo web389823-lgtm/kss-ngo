@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, CheckCircle2, HandHeart } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, HandHeart, Briefcase, GraduationCap, Laptop, HandHelping } from "lucide-react";
 
 export const Route = createFileRoute("/get-involved/volunteer-info")({
   component: VolunteerInfoPage,
