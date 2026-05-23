@@ -40,7 +40,7 @@ export function Header() {
     >
       <div className="container-page flex h-20 items-center justify-between gap-6 pl-2 md:pl-4">
         <Link to="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02] mr-4">
-          <div className="grid h-11 w-11 place-items-center rounded-full gradient-saffron text-primary-foreground font-serif text-xl font-bold shadow-soft">K</div>
+          <img src={kssLogo} alt="Keshava Seva Samiti Logo" className="h-9 md:h-11 w-auto object-contain block" style={{ background: "transparent" }} />
           <div className="leading-tight">
             <div className="font-serif text-lg font-semibold">Keshava Seva Samiti</div>
             <div className="text-[11px] text-muted-foreground tracking-wider uppercase">Since 1999</div>
