@@ -425,11 +425,11 @@ const SEVA_VIDEOS = [
 
 function SevaMoments() {
   return (
-    <section style={{ background: "#C44B0A", padding: "clamp(40px, 6vw, 80px) 0" }}>
+    <section style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
       <div className="mx-auto px-4" style={{ maxWidth: "1100px" }}>
         <div className="text-center mb-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/80" style={{ fontFamily: "Inter, sans-serif" }}>Seva Moments</p>
-          <h2 className="mt-3 text-white" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: "clamp(1.8rem, 3vw, 2.8rem)" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: "12px", letterSpacing: "2px", color: "#E8540A", textTransform: "uppercase" }}>Seva Moments</p>
+          <h2 className="mt-3" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "#1a1a1a" }}>
             Stories from the ground
           </h2>
         </div>
@@ -437,7 +437,7 @@ function SevaMoments() {
           {SEVA_VIDEOS.map((v) => (
             <div
               key={v.id}
-              className="transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+              className="transition-all duration-300 hover:scale-[1.02]"
               style={{
                 position: "relative",
                 width: "100%",
@@ -445,13 +445,14 @@ function SevaMoments() {
                 overflow: "hidden",
                 borderRadius: "12px",
                 background: "#000",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
               }}
             >
               <iframe
                 src={`https://www.youtube.com/embed/${v.id}`}
                 title={v.title}
                 frameBorder={0}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                 allowFullScreen
                 loading="lazy"
                 style={{ width: "100%", height: "100%", borderRadius: "12px", display: "block", border: 0 }}
@@ -459,27 +460,121 @@ function SevaMoments() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-8">
-          <a
-            href="https://www.youtube.com/@KSS-SEVA"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block transition-colors duration-200"
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "#fff",
-              border: "1px solid #fff",
-              borderRadius: "8px",
-              padding: "10px 22px",
-              background: "transparent",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#C44B0A"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#fff"; }}
+        <a
+          href="https://www.youtube.com/@KSS-SEVA"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block transition-all duration-200"
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: "15px",
+            fontWeight: 500,
+            color: "#fff",
+            border: "2px solid #E8540A",
+            borderRadius: "8px",
+            padding: "14px 36px",
+            background: "#E8540A",
+            margin: "24px auto 0",
+            width: "fit-content",
+            textAlign: "center",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#E8540A"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "#E8540A"; e.currentTarget.style.color = "#fff"; }}
+        >
+          🎬 Visit our YouTube Channel →
+        </a>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// VOICES OF APPRECIATION — carousel
+// ─────────────────────────────────────────────────────────────
+const VOICES = [
+  {
+    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Sri_Sri_Sri_Shivakumara_Swamiji.jpg/440px-Sri_Sri_Sri_Shivakumara_Swamiji.jpg",
+    quote: <>It is admirable that Swami Vivekananda's slogan of <em style={{ color: "#4CAF50", fontStyle: "italic", fontWeight: 600 }}>Daridra Devobhava</em> has been reflected in the projects organized by Keshava Seva Samiti.</>,
+    name: "- Dr. Sri Sri Sri Shivakumara Swamiji",
+  },
+  {
+    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Balagangadharanatha_Swamiji.jpg/440px-Balagangadharanatha_Swamiji.jpg",
+    quote: <>Keshava Seva Samiti's implementation of initiatives such as <em style={{ color: "#4CAF50", fontStyle: "italic", fontWeight: 600 }}>Vidya Vahini, Arogya Bhagya, Mathrushakti, and Vocational Education</em> is truly commendable.</>,
+    name: "- Dr. Sri Sri Sri Balagangadharanatha Swamiji",
+  },
+  {
+    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/B.S.Yediyurappa.jpg/440px-B.S.Yediyurappa.jpg",
+    quote: <>KSS has been <strong style={{ color: "#4CAF50", fontWeight: 700 }}>working hard</strong> with large number of backward and poor people & has organised many programs for the <strong style={{ color: "#4CAF50", fontWeight: 700 }}>empowerment of women & development of children</strong>.</>,
+    name: "- Sri B. S. Yediyurappa, Former Chief Minister of Karnataka",
+  },
+  {
+    photo: "https://api.dicebear.com/9.x/initials/svg?seed=Community+Leader&backgroundColor=E8540A",
+    quote: <>KSS continues to inspire and transform communities with dedication and compassion.</>,
+    name: "- Community Leader",
+  },
+];
+
+function VoicesOfAppreciation() {
+  const [idx, setIdx] = useState(0);
+  const n = VOICES.length;
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setIdx((x) => (x + 1) % n), 5000);
+    return () => clearInterval(t);
+  }, [n]);
+  const v = VOICES[idx];
+  const HeartCurl = ({ flip = false }: { flip?: boolean }) => (
+    <svg width="60" height="24" viewBox="0 0 60 24" fill="none" style={{ transform: flip ? "scaleX(-1)" : undefined, opacity: 0.5 }}>
+      <path d="M2 12 C 10 4, 20 4, 28 12 C 32 8, 40 8, 44 14" stroke="#E8540A" strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M44 14 c -1 -3, 3 -5, 4 -2 c 1 -3, 5 -1, 4 2 c -1 2, -4 4, -4 4 s -3 -2, -4 -4 z" fill="#E8540A" />
+    </svg>
+  );
+  return (
+    <section style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
+      <div className="mx-auto px-4" style={{ maxWidth: 900 }}>
+        <div className="flex items-center justify-center gap-4 mb-8">
+          <HeartCurl />
+          <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, letterSpacing: "3px", color: "#1a1a1a", fontSize: "clamp(1.1rem, 2.2vw, 1.5rem)" }}>
+            VOICES OF APPRECIATION
+          </h2>
+          <HeartCurl flip />
+        </div>
+        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", minHeight: 320 }}>
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            View all videos on YouTube →
-          </a>
+            <img
+              src={v.photo}
+              alt=""
+              style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover", border: "4px solid #fff", boxShadow: "0 4px 16px rgba(0,0,0,0.15)", margin: "0 auto 24px" }}
+              loading="lazy"
+            />
+            <p style={{ fontFamily: "Inter, sans-serif", fontStyle: "italic", fontSize: 17, color: "#2a2a2a", lineHeight: 1.7, marginBottom: 20 }}>
+              "{v.quote}"
+            </p>
+            <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, color: "#E8540A", fontSize: 15 }}>{v.name}</p>
+          </motion.div>
+        </div>
+        <div className="flex justify-center gap-2 mt-8">
+          {VOICES.map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Slide ${i + 1}`}
+              onClick={() => setIdx(i)}
+              style={{
+                width: i === idx ? 10 : 8,
+                height: i === idx ? 10 : 8,
+                borderRadius: "50%",
+                background: i === idx ? "#E8540A" : "#ccc",
+                border: "none",
+                cursor: "pointer",
+                transition: "all 250ms",
+              }}
+            />
+          ))}
         </div>
       </div>
     </section>
@@ -533,53 +628,57 @@ function GetInTouchForm() {
     background: "#fff",
     borderRadius: "8px",
     padding: "12px 16px",
-    border: "none",
+    border: "1.5px solid #e0e0e0",
     fontFamily: "Inter, sans-serif",
     fontSize: "14px",
     color: "#333",
     width: "100%",
     outline: "none",
+    transition: "border-color 200ms, box-shadow 200ms",
+  };
+  const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.borderColor = "#E8540A";
+    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(232,84,10,0.1)";
+  };
+  const onBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.borderColor = "#e0e0e0";
+    e.currentTarget.style.boxShadow = "none";
   };
   const labelStyle: React.CSSProperties = {
-    color: "#fff",
+    color: "#333333",
     fontFamily: "Inter, sans-serif",
     fontSize: "13px",
+    fontWeight: 500,
     display: "block",
     marginBottom: "6px",
   };
-  const reqStyle: React.CSSProperties = { color: "#ffaaaa", marginLeft: 2 };
-  const errStyle: React.CSSProperties = { color: "#ffaaaa", fontSize: "12px", marginTop: "4px", fontFamily: "Inter, sans-serif" };
+  const reqStyle: React.CSSProperties = { color: "#E8540A", marginLeft: 2 };
+  const errStyle: React.CSSProperties = { color: "#d32f2f", fontSize: "12px", marginTop: "4px", fontFamily: "Inter, sans-serif" };
 
   return (
-    <section style={{ background: "#8B1A00", padding: "clamp(40px, 6vw, 80px) 0" }}>
+    <section style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
       <div className="mx-auto px-4" style={{ maxWidth: "760px" }}>
-        <h2
-          className="text-center text-white"
-          style={{
-            fontFamily: '"Playfair Display", serif',
-            fontWeight: 700,
-            fontSize: "clamp(1.8rem, 3vw, 2.8rem)",
-            marginBottom: "32px",
-            letterSpacing: "0.04em",
-          }}
-        >
-          GET IN TOUCH
-        </h2>
+        <div className="text-center">
+          <h2 style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "#1a1a1a", letterSpacing: "0.04em" }}>
+            GET IN TOUCH
+          </h2>
+          <div style={{ width: 60, height: 3, background: "#E8540A", margin: "8px auto 32px" }} />
+        </div>
         <form onSubmit={onSubmit} noValidate className="grid gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label style={labelStyle}>First name<span style={reqStyle}>*</span></label>
-              <input style={inputStyle} value={form.first_name} onChange={(e) => update("first_name", e.target.value)} autoComplete="given-name" />
+              <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.first_name} onChange={(e) => update("first_name", e.target.value)} autoComplete="given-name" />
               {errors.first_name && <p style={errStyle}>{errors.first_name}</p>}
             </div>
             <div>
               <label style={labelStyle}>Last name</label>
-              <input style={inputStyle} value={form.last_name} onChange={(e) => update("last_name", e.target.value)} autoComplete="family-name" />
+              <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.last_name} onChange={(e) => update("last_name", e.target.value)} autoComplete="family-name" />
             </div>
           </div>
           <div>
             <label style={labelStyle}>Email<span style={reqStyle}>*</span></label>
-            <input type="email" style={inputStyle} value={form.email} onChange={(e) => update("email", e.target.value)} autoComplete="email" />
+            <input type="email" style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.email} onChange={(e) => update("email", e.target.value)} autoComplete="email" />
             {errors.email && <p style={errStyle}>{errors.email}</p>}
           </div>
           <div>
@@ -591,6 +690,8 @@ function GetInTouchForm() {
               <input
                 type="tel"
                 style={{ ...inputStyle, flex: 1 }}
+                onFocus={onFocus}
+                onBlur={onBlur}
                 value={form.phone}
                 onChange={(e) => update("phone", e.target.value)}
                 autoComplete="tel"
@@ -601,13 +702,15 @@ function GetInTouchForm() {
           </div>
           <div>
             <label style={labelStyle}>Address<span style={reqStyle}>*</span></label>
-            <input style={inputStyle} value={form.address} onChange={(e) => update("address", e.target.value)} autoComplete="street-address" />
+            <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.address} onChange={(e) => update("address", e.target.value)} autoComplete="street-address" />
             {errors.address && <p style={errStyle}>{errors.address}</p>}
           </div>
           <div>
             <label style={labelStyle}>We're here to listen and collaborate!<span style={reqStyle}>*</span></label>
             <textarea
               style={{ ...inputStyle, height: "120px", resize: "vertical" }}
+              onFocus={onFocus}
+              onBlur={onBlur}
               placeholder="Share your inquiries or ways to support our initiatives and create meaningful impact."
               value={form.message}
               onChange={(e) => update("message", e.target.value)}
@@ -620,10 +723,10 @@ function GetInTouchForm() {
               disabled={submitting}
               className="transition-all duration-200 hover:scale-[1.02] w-full md:w-auto"
               style={{
-                background: "#8B6914",
+                background: "#E8540A",
                 color: "#fff",
                 fontFamily: "Inter, sans-serif",
-                fontWeight: 500,
+                fontWeight: 600,
                 fontSize: "15px",
                 borderRadius: "8px",
                 padding: "14px 48px",
@@ -631,8 +734,8 @@ function GetInTouchForm() {
                 cursor: submitting ? "not-allowed" : "pointer",
                 opacity: submitting ? 0.7 : 1,
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#6e520f"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#8B6914"; }}
+              onMouseEnter={(e) => { if (!submitting) e.currentTarget.style.background = "#c4470a"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "#E8540A"; }}
             >
               {submitting ? "Submitting…" : "Submit"}
             </button>
@@ -642,4 +745,5 @@ function GetInTouchForm() {
     </section>
   );
 }
+
 
