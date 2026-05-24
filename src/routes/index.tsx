@@ -460,29 +460,6 @@ function SevaMoments() {
             </div>
           ))}
         </div>
-        <a
-          href="https://www.youtube.com/@KSS-SEVA"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block transition-all duration-200"
-          style={{
-            fontFamily: "Inter, sans-serif",
-            fontSize: "15px",
-            fontWeight: 500,
-            color: "#fff",
-            border: "2px solid #E8540A",
-            borderRadius: "8px",
-            padding: "14px 36px",
-            background: "#E8540A",
-            margin: "24px auto 0",
-            width: "fit-content",
-            textAlign: "center",
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#E8540A"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "#E8540A"; e.currentTarget.style.color = "#fff"; }}
-        >
-          🎬 Visit our YouTube Channel →
-        </a>
       </div>
     </section>
   );
@@ -506,11 +483,6 @@ const VOICES = [
     photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/B.S.Yediyurappa.jpg/440px-B.S.Yediyurappa.jpg",
     quote: <>KSS has been <strong style={{ color: "#4CAF50", fontWeight: 700 }}>working hard</strong> with large number of backward and poor people & has organised many programs for the <strong style={{ color: "#4CAF50", fontWeight: 700 }}>empowerment of women & development of children</strong>.</>,
     name: "- Sri B. S. Yediyurappa, Former Chief Minister of Karnataka",
-  },
-  {
-    photo: "https://api.dicebear.com/9.x/initials/svg?seed=Community+Leader&backgroundColor=E8540A",
-    quote: <>KSS continues to inspire and transform communities with dedication and compassion.</>,
-    name: "- Community Leader",
   },
 ];
 
