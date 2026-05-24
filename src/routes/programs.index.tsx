@@ -5,6 +5,8 @@ import { PageHeader } from "@/components/site/PageHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { useAutoPeek } from "@/lib/use-auto-peek";
 
 export const Route = createFileRoute("/programs/")({
   component: ProgramsPage,
@@ -25,6 +27,69 @@ const FALLBACKS = [
   "https://images.unsplash.com/photo-1599447421416-3414500d18a5?w=1200",
 ];
 
+function ProgramCard({ p, img, i }: { p: any; img: string; i: number }) {
+  const [open, setOpen] = useState(false);
+  const ref = useAutoPeek<HTMLDivElement>((o) => setOpen(o));
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.45, delay: i * 0.06, ease: "easeOut" }}
+      onClick={() => setOpen((o) => !o)}
+      className="group relative overflow-hidden rounded-2xl shadow-soft hover:shadow-elevated"
+      style={{ aspectRatio: "16 / 9" }}
+    >
+      <img
+        src={img}
+        alt={p.title}
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[400ms] group-hover:scale-[1.04]"
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-black/70 to-transparent" />
+      <h3
+        className="absolute left-5 bottom-4 z-10 text-white font-bold leading-tight pr-5"
+        style={{ fontFamily: '"Playfair Display", serif', fontSize: "clamp(1rem, 2vw, 1.25rem)", textShadow: "0 2px 8px rgba(0,0,0,0.4)" }}
+      >
+        {p.title}
+      </h3>
+      <div
+        className={`absolute inset-x-0 bottom-0 z-20 bg-white group-hover:translate-y-0 group-focus-within:translate-y-0 ${open ? "translate-y-0" : "translate-y-full"}`}
+        style={{
+          height: "50%",
+          padding: "16px 20px",
+          borderRadius: "0 0 16px 16px",
+          boxShadow: "0 -4px 20px rgba(0,0,0,0.08)",
+          transition: "transform 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        }}
+      >
+        {p.category && (
+          <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: "11px", color: "#E8540A", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+            {p.category}
+          </div>
+        )}
+        <h4 style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, color: "#1a1a1a", fontSize: "16px", marginTop: "4px", lineHeight: 1.3 }}>
+          {p.title}
+        </h4>
+        {p.summary && (
+          <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 400, color: "#666", fontSize: "13px", lineHeight: 1.5, marginTop: "6px" }} className="line-clamp-2">
+            {p.summary}
+          </p>
+        )}
+        <Link
+          to="/programs/$slug"
+          params={{ slug: p.slug }}
+          onClick={(e) => e.stopPropagation()}
+          style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: "13px", color: "#E8540A", marginTop: "8px", display: "inline-flex", alignItems: "center", gap: "4px", cursor: "pointer" }}
+        >
+          Read More <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
+    </motion.div>
+  );
+}
+
 function ProgramsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["programs", "all"],
@@ -43,56 +108,16 @@ function ProgramsPage() {
           className="h-1 w-24 bg-[#E8540A] rounded-full mb-10"
         />
         {isLoading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: "clamp(8px, 1.5vw, 14px)" }}>
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-[340px] w-full rounded-2xl" />
+              <Skeleton key={i} className="w-full rounded-2xl" style={{ aspectRatio: "16 / 9" }} />
             ))}
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: "clamp(8px, 1.5vw, 14px)" }}>
             {(data ?? []).map((p: any, i: number) => {
               const img = p.thumbnail_url || p.banner_url || FALLBACKS[i % FALLBACKS.length];
-              return (
-                <motion.div
-                  key={p.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.45, delay: i * 0.06, ease: "easeOut" }}
-                  className="relative overflow-hidden rounded-2xl group shadow-soft hover:shadow-elevated aspect-video"
-                >
-                  <Link to="/programs/$slug" params={{ slug: p.slug }} className="block h-full w-full">
-                    <div className="absolute inset-0 overflow-hidden">
-                      <img
-                        src={img}
-                        alt={p.title}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:-translate-y-5 group-hover:scale-[1.03]"
-                        style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-                      />
-                      <div className="absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
-                    </div>
-                    {p.category && (
-                      <span className="absolute top-4 left-4 z-10 inline-block text-[10px] font-semibold uppercase tracking-wider text-white bg-[#E8540A] px-2.5 py-1 rounded-full">
-                        {p.category}
-                      </span>
-                    )}
-                    <div className="absolute left-5 bottom-5 z-10 text-white drop-shadow font-serif text-xl md:text-2xl font-semibold transition-opacity duration-200 group-hover:opacity-0">
-                      {p.title}
-                    </div>
-                    <div
-                      className="absolute inset-x-0 bottom-0 z-10 translate-y-full group-hover:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-300 bg-[#FAF7F2]/95 backdrop-blur-sm p-5"
-                      style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
-                    >
-                      <h3 className="font-serif text-xl font-semibold text-[#1a1a1a]">{p.title}</h3>
-                      {p.summary && <p className="mt-1.5 text-sm text-neutral-700 line-clamp-2">{p.summary}</p>}
-                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[#E8540A]">
-                        Read More <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                      </span>
-                    </div>
-                  </Link>
-                </motion.div>
-              );
+              return <ProgramCard key={p.id} p={p} img={img} i={i} />;
             })}
           </div>
         )}
