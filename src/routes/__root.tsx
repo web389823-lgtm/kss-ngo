@@ -10,6 +10,8 @@ import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import CursorDot from "@/components/site/CursorDot";
 import ScrollProgressBar from "@/components/site/ScrollProgressBar";
+import FloatingContactButton from "@/components/site/FloatingContactButton";
+
 
 function NotFoundComponent() {
   return (
@@ -99,8 +101,10 @@ function RootComponent() {
           </div>
           <CursorDot />
           <ScrollProgressBar />
+          <FloatingContactButton />
           <Toaster />
         </AuthProvider>
+
       </ThemeProvider>
     </QueryClientProvider>
   );
