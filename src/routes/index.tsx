@@ -13,6 +13,9 @@ import { Counter } from "@/components/site/Counter";
 import MissionTagline from "@/components/site/MissionTagline";
 import ProgramPhotoGrid from "@/components/site/ProgramPhotoGrid";
 import ProgramHighlightsGrid from "@/components/site/ProgramHighlightsGrid";
+import VoicesOfAppreciation from "@/components/site/VoicesOfAppreciation";
+import TestimonialsSection from "@/components/site/TestimonialsSection";
+
 
 const DEFAULT_HERO_SLIDES = [
   "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
@@ -375,43 +378,24 @@ function HomePage() {
         </section>
       )}
 
-      {/* TESTIMONIALS */}
-      {(testimonials ?? []).length > 0 && (
-        <section className="container-page py-20">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Voices</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Stories from those we serve</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {(testimonials ?? []).map((t: any) => (
-              <Card key={t.id} className="p-7 shadow-soft">
-                <Quote className="h-6 w-6 text-primary/40" />
-                <p className="mt-4 text-sm leading-relaxed">"{t.content}"</p>
-                <div className="mt-6">
-                  <div className="font-semibold text-sm">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* VOICES OF APPRECIATION carousel (now above Testimonials) */}
+      <VoicesOfAppreciation />
 
-      {/* Advisory & Trustee Board sections removed — see /about */}
-
+      {/* TESTIMONIALS — approved from DB + Leave a Review */}
+      <TestimonialsSection />
 
       {/* SEVA MOMENTS — YouTube videos */}
       <SevaMoments />
 
-      {/* VOICES OF APPRECIATION carousel */}
-      <VoicesOfAppreciation />
-
       {/* GET IN TOUCH form */}
-      <GetInTouchForm />
+      <div id="get-in-touch">
+        <GetInTouchForm />
+      </div>
 
     </div>
   );
 }
+
 
 // ─────────────────────────────────────────────────────────────
 // SEVA MOMENTS — 4 YouTube videos
@@ -465,93 +449,8 @@ function SevaMoments() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// VOICES OF APPRECIATION — carousel
-// ─────────────────────────────────────────────────────────────
-const VOICES = [
-  {
-    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Sri_Sri_Sri_Shivakumara_Swamiji.jpg/440px-Sri_Sri_Sri_Shivakumara_Swamiji.jpg",
-    quote: <>It is admirable that Swami Vivekananda's slogan of <em style={{ color: "#4CAF50", fontStyle: "italic", fontWeight: 600 }}>Daridra Devobhava</em> has been reflected in the projects organized by Keshava Seva Samiti.</>,
-    name: "- Dr. Sri Sri Sri Shivakumara Swamiji",
-  },
-  {
-    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Balagangadharanatha_Swamiji.jpg/440px-Balagangadharanatha_Swamiji.jpg",
-    quote: <>Keshava Seva Samiti's implementation of initiatives such as <em style={{ color: "#4CAF50", fontStyle: "italic", fontWeight: 600 }}>Vidya Vahini, Arogya Bhagya, Mathrushakti, and Vocational Education</em> is truly commendable.</>,
-    name: "- Dr. Sri Sri Sri Balagangadharanatha Swamiji",
-  },
-  {
-    photo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/B.S.Yediyurappa.jpg/440px-B.S.Yediyurappa.jpg",
-    quote: <>KSS has been <strong style={{ color: "#4CAF50", fontWeight: 700 }}>working hard</strong> with large number of backward and poor people & has organised many programs for the <strong style={{ color: "#4CAF50", fontWeight: 700 }}>empowerment of women & development of children</strong>.</>,
-    name: "- Sri B. S. Yediyurappa, Former Chief Minister of Karnataka",
-  },
-];
+// Old inline VoicesOfAppreciation removed — now uses @/components/site/VoicesOfAppreciation
 
-function VoicesOfAppreciation() {
-  const [idx, setIdx] = useState(0);
-  const n = VOICES.length;
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setIdx((x) => (x + 1) % n), 5000);
-    return () => clearInterval(t);
-  }, [n]);
-  const v = VOICES[idx];
-  const HeartCurl = ({ flip = false }: { flip?: boolean }) => (
-    <svg width="60" height="24" viewBox="0 0 60 24" fill="none" style={{ transform: flip ? "scaleX(-1)" : undefined, opacity: 0.5 }}>
-      <path d="M2 12 C 10 4, 20 4, 28 12 C 32 8, 40 8, 44 14" stroke="#E8540A" strokeWidth="2" strokeLinecap="round" fill="none" />
-      <path d="M44 14 c -1 -3, 3 -5, 4 -2 c 1 -3, 5 -1, 4 2 c -1 2, -4 4, -4 4 s -3 -2, -4 -4 z" fill="#E8540A" />
-    </svg>
-  );
-  return (
-    <section style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
-      <div className="mx-auto px-4" style={{ maxWidth: 900 }}>
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <HeartCurl />
-          <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, letterSpacing: "3px", color: "#1a1a1a", fontSize: "clamp(1.1rem, 2.2vw, 1.5rem)" }}>
-            VOICES OF APPRECIATION
-          </h2>
-          <HeartCurl flip />
-        </div>
-        <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", minHeight: 320 }}>
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <img
-              src={v.photo}
-              alt=""
-              style={{ width: 120, height: 120, borderRadius: "50%", objectFit: "cover", border: "4px solid #fff", boxShadow: "0 4px 16px rgba(0,0,0,0.15)", margin: "0 auto 24px" }}
-              loading="lazy"
-            />
-            <p style={{ fontFamily: "Inter, sans-serif", fontStyle: "italic", fontSize: 17, color: "#2a2a2a", lineHeight: 1.7, marginBottom: 20 }}>
-              "{v.quote}"
-            </p>
-            <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, color: "#E8540A", fontSize: 15 }}>{v.name}</p>
-          </motion.div>
-        </div>
-        <div className="flex justify-center gap-2 mt-8">
-          {VOICES.map((_, i) => (
-            <button
-              key={i}
-              aria-label={`Slide ${i + 1}`}
-              onClick={() => setIdx(i)}
-              style={{
-                width: i === idx ? 10 : 8,
-                height: i === idx ? 10 : 8,
-                borderRadius: "50%",
-                background: i === idx ? "#E8540A" : "#ccc",
-                border: "none",
-                cursor: "pointer",
-                transition: "all 250ms",
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ─────────────────────────────────────────────────────────────
 // GET IN TOUCH — form
