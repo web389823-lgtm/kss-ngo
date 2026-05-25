@@ -422,6 +422,36 @@ export type Database = {
         }
         Relationships: []
       }
+      news_banner: {
+        Row: {
+          headline: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          link_url: string | null
+          tag_label: string | null
+          updated_at: string
+        }
+        Insert: {
+          headline?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          link_url?: string | null
+          tag_label?: string | null
+          updated_at?: string
+        }
+        Update: {
+          headline?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          link_url?: string | null
+          tag_label?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -573,6 +603,8 @@ export type Database = {
           photo_url: string | null
           rating: number | null
           role: string | null
+          role_location: string | null
+          status: string
         }
         Insert: {
           content: string
@@ -583,6 +615,8 @@ export type Database = {
           photo_url?: string | null
           rating?: number | null
           role?: string | null
+          role_location?: string | null
+          status?: string
         }
         Update: {
           content?: string
@@ -593,6 +627,8 @@ export type Database = {
           photo_url?: string | null
           rating?: number | null
           role?: string | null
+          role_location?: string | null
+          status?: string
         }
         Relationships: []
       }
@@ -644,6 +680,42 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      voices_of_appreciation: {
+        Row: {
+          created_at: string
+          display_order: number
+          highlight_words: string | null
+          id: string
+          name: string
+          photo_url: string | null
+          quote: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          highlight_words?: string | null
+          id?: string
+          name: string
+          photo_url?: string | null
+          quote: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          highlight_words?: string | null
+          id?: string
+          name?: string
+          photo_url?: string | null
+          quote?: string
+          title?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
