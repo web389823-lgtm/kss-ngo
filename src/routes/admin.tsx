@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog, ImagePlus, Mail } from "lucide-react";
+import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog, ImagePlus, Mail, MessageSquareQuote, MessageCircle, FileEdit, Megaphone } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 
@@ -21,13 +21,17 @@ const NAV: NavItem[] = [
   { to: "/admin/gallery", label: "Gallery", icon: Image },
   { to: "/admin/images", label: "Card Images", icon: ImagePlus },
   { to: "/admin/blog", label: "Blog", icon: Newspaper },
-  { to: "/admin/testimonials", label: "Testimonials", icon: Quote, adminOnly: true },
-  
+  { to: "/admin/news-banner", label: "News Banner", icon: Megaphone },
+  { to: "/admin/voices", label: "Voices of Appreciation", icon: MessageSquareQuote },
+  { to: "/admin/testimonials-manager", label: "Reviews / Testimonials", icon: MessageCircle, adminOnly: true },
+  { to: "/admin/volunteer-page", label: "Volunteer Page Editor", icon: FileEdit, adminOnly: true },
+  { to: "/admin/csr-page", label: "CSR Page Editor", icon: FileEdit, adminOnly: true },
   { to: "/admin/team", label: "Team", icon: Users, adminOnly: true },
   { to: "/admin/users", label: "Admins & Staff", icon: UsersRound, adminOnly: true },
   { to: "/admin/activity", label: "Activity Log", icon: Activity, adminOnly: true },
   { to: "/admin/settings", label: "Settings", icon: Settings, adminOnly: true },
 ];
+
 
 function AdminLayout() {
   const { user, role, isStaff, isAdmin, loading, signOut, refreshRole } = useAuth();

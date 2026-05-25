@@ -29,16 +29,21 @@ import { Route as GetInvolvedCsrInfoRouteImport } from './routes/get-involved.cs
 import { Route as GetInvolvedCsrRouteImport } from './routes/get-involved.csr'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AdminVolunteersRouteImport } from './routes/admin.volunteers'
+import { Route as AdminVolunteerPageRouteImport } from './routes/admin.volunteer-page'
+import { Route as AdminVoicesRouteImport } from './routes/admin.voices'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTestimonialsManagerRouteImport } from './routes/admin.testimonials-manager'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AdminTeamRouteImport } from './routes/admin.team'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
+import { Route as AdminNewsBannerRouteImport } from './routes/admin.news-banner'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminImagesRouteImport } from './routes/admin.images'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminDonationsRouteImport } from './routes/admin.donations'
+import { Route as AdminCsrPageRouteImport } from './routes/admin.csr-page'
 import { Route as AdminCsrRouteImport } from './routes/admin.csr'
 import { Route as AdminContactsRouteImport } from './routes/admin.contacts'
 import { Route as AdminBlogRouteImport } from './routes/admin.blog'
@@ -148,11 +153,27 @@ const AdminVolunteersRoute = AdminVolunteersRouteImport.update({
   path: '/volunteers',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminVolunteerPageRoute = AdminVolunteerPageRouteImport.update({
+  id: '/volunteer-page',
+  path: '/volunteer-page',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminVoicesRoute = AdminVoicesRouteImport.update({
+  id: '/voices',
+  path: '/voices',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTestimonialsManagerRoute =
+  AdminTestimonialsManagerRouteImport.update({
+    id: '/testimonials-manager',
+    path: '/testimonials-manager',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
   id: '/testimonials',
   path: '/testimonials',
@@ -178,6 +199,11 @@ const AdminProgramsRoute = AdminProgramsRouteImport.update({
   path: '/programs',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNewsBannerRoute = AdminNewsBannerRouteImport.update({
+  id: '/news-banner',
+  path: '/news-banner',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -196,6 +222,11 @@ const AdminGalleryRoute = AdminGalleryRouteImport.update({
 const AdminDonationsRoute = AdminDonationsRouteImport.update({
   id: '/donations',
   path: '/donations',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCsrPageRoute = AdminCsrPageRouteImport.update({
+  id: '/csr-page',
+  path: '/csr-page',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminCsrRoute = AdminCsrRouteImport.update({
@@ -246,16 +277,21 @@ export interface FileRoutesByFullPath {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/csr': typeof AdminCsrRoute
+  '/admin/csr-page': typeof AdminCsrPageRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/news-banner': typeof AdminNewsBannerRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/testimonials-manager': typeof AdminTestimonialsManagerRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/voices': typeof AdminVoicesRoute
+  '/admin/volunteer-page': typeof AdminVolunteerPageRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
@@ -284,16 +320,21 @@ export interface FileRoutesByTo {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/csr': typeof AdminCsrRoute
+  '/admin/csr-page': typeof AdminCsrPageRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/news-banner': typeof AdminNewsBannerRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/testimonials-manager': typeof AdminTestimonialsManagerRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/voices': typeof AdminVoicesRoute
+  '/admin/volunteer-page': typeof AdminVolunteerPageRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
@@ -324,16 +365,21 @@ export interface FileRoutesById {
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
   '/admin/csr': typeof AdminCsrRoute
+  '/admin/csr-page': typeof AdminCsrPageRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/news-banner': typeof AdminNewsBannerRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/team': typeof AdminTeamRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/admin/testimonials-manager': typeof AdminTestimonialsManagerRoute
   '/admin/users': typeof AdminUsersRoute
+  '/admin/voices': typeof AdminVoicesRoute
+  '/admin/volunteer-page': typeof AdminVolunteerPageRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
@@ -365,16 +411,21 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/contacts'
     | '/admin/csr'
+    | '/admin/csr-page'
     | '/admin/donations'
     | '/admin/gallery'
     | '/admin/images'
     | '/admin/login'
+    | '/admin/news-banner'
     | '/admin/programs'
     | '/admin/projects'
     | '/admin/settings'
     | '/admin/team'
     | '/admin/testimonials'
+    | '/admin/testimonials-manager'
     | '/admin/users'
+    | '/admin/voices'
+    | '/admin/volunteer-page'
     | '/admin/volunteers'
     | '/blog/$slug'
     | '/get-involved/csr'
@@ -403,16 +454,21 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/contacts'
     | '/admin/csr'
+    | '/admin/csr-page'
     | '/admin/donations'
     | '/admin/gallery'
     | '/admin/images'
     | '/admin/login'
+    | '/admin/news-banner'
     | '/admin/programs'
     | '/admin/projects'
     | '/admin/settings'
     | '/admin/team'
     | '/admin/testimonials'
+    | '/admin/testimonials-manager'
     | '/admin/users'
+    | '/admin/voices'
+    | '/admin/volunteer-page'
     | '/admin/volunteers'
     | '/blog/$slug'
     | '/get-involved/csr'
@@ -442,16 +498,21 @@ export interface FileRouteTypes {
     | '/admin/blog'
     | '/admin/contacts'
     | '/admin/csr'
+    | '/admin/csr-page'
     | '/admin/donations'
     | '/admin/gallery'
     | '/admin/images'
     | '/admin/login'
+    | '/admin/news-banner'
     | '/admin/programs'
     | '/admin/projects'
     | '/admin/settings'
     | '/admin/team'
     | '/admin/testimonials'
+    | '/admin/testimonials-manager'
     | '/admin/users'
+    | '/admin/voices'
+    | '/admin/volunteer-page'
     | '/admin/volunteers'
     | '/blog/$slug'
     | '/get-involved/csr'
@@ -633,11 +694,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminVolunteersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/volunteer-page': {
+      id: '/admin/volunteer-page'
+      path: '/volunteer-page'
+      fullPath: '/admin/volunteer-page'
+      preLoaderRoute: typeof AdminVolunteerPageRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/voices': {
+      id: '/admin/voices'
+      path: '/voices'
+      fullPath: '/admin/voices'
+      preLoaderRoute: typeof AdminVoicesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/users'
       fullPath: '/admin/users'
       preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/testimonials-manager': {
+      id: '/admin/testimonials-manager'
+      path: '/testimonials-manager'
+      fullPath: '/admin/testimonials-manager'
+      preLoaderRoute: typeof AdminTestimonialsManagerRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/testimonials': {
@@ -675,6 +757,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProgramsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/news-banner': {
+      id: '/admin/news-banner'
+      path: '/news-banner'
+      fullPath: '/admin/news-banner'
+      preLoaderRoute: typeof AdminNewsBannerRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -701,6 +790,13 @@ declare module '@tanstack/react-router' {
       path: '/donations'
       fullPath: '/admin/donations'
       preLoaderRoute: typeof AdminDonationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/csr-page': {
+      id: '/admin/csr-page'
+      path: '/csr-page'
+      fullPath: '/admin/csr-page'
+      preLoaderRoute: typeof AdminCsrPageRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/csr': {
@@ -772,16 +868,21 @@ interface AdminRouteChildren {
   AdminBlogRoute: typeof AdminBlogRoute
   AdminContactsRoute: typeof AdminContactsRoute
   AdminCsrRoute: typeof AdminCsrRoute
+  AdminCsrPageRoute: typeof AdminCsrPageRoute
   AdminDonationsRoute: typeof AdminDonationsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminImagesRoute: typeof AdminImagesRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminNewsBannerRoute: typeof AdminNewsBannerRoute
   AdminProgramsRoute: typeof AdminProgramsRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTeamRoute: typeof AdminTeamRoute
   AdminTestimonialsRoute: typeof AdminTestimonialsRoute
+  AdminTestimonialsManagerRoute: typeof AdminTestimonialsManagerRoute
   AdminUsersRoute: typeof AdminUsersRoute
+  AdminVoicesRoute: typeof AdminVoicesRoute
+  AdminVolunteerPageRoute: typeof AdminVolunteerPageRoute
   AdminVolunteersRoute: typeof AdminVolunteersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -791,16 +892,21 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBlogRoute: AdminBlogRoute,
   AdminContactsRoute: AdminContactsRoute,
   AdminCsrRoute: AdminCsrRoute,
+  AdminCsrPageRoute: AdminCsrPageRoute,
   AdminDonationsRoute: AdminDonationsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminImagesRoute: AdminImagesRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminNewsBannerRoute: AdminNewsBannerRoute,
   AdminProgramsRoute: AdminProgramsRoute,
   AdminProjectsRoute: AdminProjectsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminTeamRoute: AdminTeamRoute,
   AdminTestimonialsRoute: AdminTestimonialsRoute,
+  AdminTestimonialsManagerRoute: AdminTestimonialsManagerRoute,
   AdminUsersRoute: AdminUsersRoute,
+  AdminVoicesRoute: AdminVoicesRoute,
+  AdminVolunteerPageRoute: AdminVolunteerPageRoute,
   AdminVolunteersRoute: AdminVolunteersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
