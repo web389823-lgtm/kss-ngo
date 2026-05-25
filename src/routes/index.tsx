@@ -378,43 +378,24 @@ function HomePage() {
         </section>
       )}
 
-      {/* TESTIMONIALS */}
-      {(testimonials ?? []).length > 0 && (
-        <section className="container-page py-20">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Voices</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Stories from those we serve</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {(testimonials ?? []).map((t: any) => (
-              <Card key={t.id} className="p-7 shadow-soft">
-                <Quote className="h-6 w-6 text-primary/40" />
-                <p className="mt-4 text-sm leading-relaxed">"{t.content}"</p>
-                <div className="mt-6">
-                  <div className="font-semibold text-sm">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* VOICES OF APPRECIATION carousel (now above Testimonials) */}
+      <VoicesOfAppreciation />
 
-      {/* Advisory & Trustee Board sections removed — see /about */}
-
+      {/* TESTIMONIALS — approved from DB + Leave a Review */}
+      <TestimonialsSection />
 
       {/* SEVA MOMENTS — YouTube videos */}
       <SevaMoments />
 
-      {/* VOICES OF APPRECIATION carousel */}
-      <VoicesOfAppreciation />
-
       {/* GET IN TOUCH form */}
-      <GetInTouchForm />
+      <div id="get-in-touch">
+        <GetInTouchForm />
+      </div>
 
     </div>
   );
 }
+
 
 // ─────────────────────────────────────────────────────────────
 // SEVA MOMENTS — 4 YouTube videos
