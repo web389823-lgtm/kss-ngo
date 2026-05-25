@@ -13,6 +13,9 @@ import { Counter } from "@/components/site/Counter";
 import MissionTagline from "@/components/site/MissionTagline";
 import ProgramPhotoGrid from "@/components/site/ProgramPhotoGrid";
 import ProgramHighlightsGrid from "@/components/site/ProgramHighlightsGrid";
+import VoicesOfAppreciation from "@/components/site/VoicesOfAppreciation";
+import TestimonialsSection from "@/components/site/TestimonialsSection";
+
 
 const DEFAULT_HERO_SLIDES = [
   "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
