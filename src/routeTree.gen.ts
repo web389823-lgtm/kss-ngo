@@ -41,6 +41,7 @@ import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminNewsBannerRouteImport } from './routes/admin.news-banner'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminImagesRouteImport } from './routes/admin.images'
+import { Route as AdminHeroCarouselRouteImport } from './routes/admin.hero-carousel'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminDonationsRouteImport } from './routes/admin.donations'
 import { Route as AdminCsrPageRouteImport } from './routes/admin.csr-page'
@@ -214,6 +215,11 @@ const AdminImagesRoute = AdminImagesRouteImport.update({
   path: '/images',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHeroCarouselRoute = AdminHeroCarouselRouteImport.update({
+  id: '/hero-carousel',
+  path: '/hero-carousel',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminGalleryRoute = AdminGalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -280,6 +286,7 @@ export interface FileRoutesByFullPath {
   '/admin/csr-page': typeof AdminCsrPageRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/hero-carousel': typeof AdminHeroCarouselRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/news-banner': typeof AdminNewsBannerRoute
@@ -323,6 +330,7 @@ export interface FileRoutesByTo {
   '/admin/csr-page': typeof AdminCsrPageRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/hero-carousel': typeof AdminHeroCarouselRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/news-banner': typeof AdminNewsBannerRoute
@@ -368,6 +376,7 @@ export interface FileRoutesById {
   '/admin/csr-page': typeof AdminCsrPageRoute
   '/admin/donations': typeof AdminDonationsRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/hero-carousel': typeof AdminHeroCarouselRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/news-banner': typeof AdminNewsBannerRoute
@@ -414,6 +423,7 @@ export interface FileRouteTypes {
     | '/admin/csr-page'
     | '/admin/donations'
     | '/admin/gallery'
+    | '/admin/hero-carousel'
     | '/admin/images'
     | '/admin/login'
     | '/admin/news-banner'
@@ -457,6 +467,7 @@ export interface FileRouteTypes {
     | '/admin/csr-page'
     | '/admin/donations'
     | '/admin/gallery'
+    | '/admin/hero-carousel'
     | '/admin/images'
     | '/admin/login'
     | '/admin/news-banner'
@@ -501,6 +512,7 @@ export interface FileRouteTypes {
     | '/admin/csr-page'
     | '/admin/donations'
     | '/admin/gallery'
+    | '/admin/hero-carousel'
     | '/admin/images'
     | '/admin/login'
     | '/admin/news-banner'
@@ -778,6 +790,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminImagesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/hero-carousel': {
+      id: '/admin/hero-carousel'
+      path: '/hero-carousel'
+      fullPath: '/admin/hero-carousel'
+      preLoaderRoute: typeof AdminHeroCarouselRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/gallery': {
       id: '/admin/gallery'
       path: '/gallery'
@@ -871,6 +890,7 @@ interface AdminRouteChildren {
   AdminCsrPageRoute: typeof AdminCsrPageRoute
   AdminDonationsRoute: typeof AdminDonationsRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
+  AdminHeroCarouselRoute: typeof AdminHeroCarouselRoute
   AdminImagesRoute: typeof AdminImagesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminNewsBannerRoute: typeof AdminNewsBannerRoute
@@ -895,6 +915,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCsrPageRoute: AdminCsrPageRoute,
   AdminDonationsRoute: AdminDonationsRoute,
   AdminGalleryRoute: AdminGalleryRoute,
+  AdminHeroCarouselRoute: AdminHeroCarouselRoute,
   AdminImagesRoute: AdminImagesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminNewsBannerRoute: AdminNewsBannerRoute,
@@ -946,3 +967,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -125,6 +125,27 @@ export type Database = {
         }
         Relationships: []
       }
+      carousel_settings: {
+        Row: {
+          advance_seconds: number
+          id: string
+          transition_type: string
+          updated_at: string
+        }
+        Insert: {
+          advance_seconds?: number
+          id?: string
+          transition_type?: string
+          updated_at?: string
+        }
+        Update: {
+          advance_seconds?: number
+          id?: string
+          transition_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           address: string
@@ -392,6 +413,54 @@ export type Database = {
         }
         Relationships: []
       }
+      hero_carousel_slides: {
+        Row: {
+          created_at: string
+          cta_link: string | null
+          cta_text: string | null
+          display_order: number
+          headline: string | null
+          id: string
+          image_source: string
+          image_url: string
+          overlay_opacity: number
+          status: string
+          subtext: string | null
+          text_position: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_link?: string | null
+          cta_text?: string | null
+          display_order?: number
+          headline?: string | null
+          id?: string
+          image_source?: string
+          image_url: string
+          overlay_opacity?: number
+          status?: string
+          subtext?: string | null
+          text_position?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_link?: string | null
+          cta_text?: string | null
+          display_order?: number
+          headline?: string | null
+          id?: string
+          image_source?: string
+          image_url?: string
+          overlay_opacity?: number
+          status?: string
+          subtext?: string | null
+          text_position?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       impact_stats: {
         Row: {
           created_at: string
@@ -429,6 +498,7 @@ export type Database = {
           image_url: string | null
           is_active: boolean
           link_url: string | null
+          ratio: string
           tag_label: string | null
           updated_at: string
         }
@@ -438,6 +508,7 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           link_url?: string | null
+          ratio?: string
           tag_label?: string | null
           updated_at?: string
         }
@@ -447,6 +518,7 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           link_url?: string | null
+          ratio?: string
           tag_label?: string | null
           updated_at?: string
         }
