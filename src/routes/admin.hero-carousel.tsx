@@ -67,16 +67,15 @@ function HeroCarouselAdmin() {
   const { data: slides = [] } = useQuery({
     queryKey: ["admin", "hero_carousel_slides"],
     queryFn: async () =>
-      ((await supabase
+      (((await supabase
         .from("hero_carousel_slides" as any)
         .select("*")
-        .order("display_order")).data ?? []) as Slide[],
+        .order("display_order")).data ?? []) as unknown) as Slide[],
   });
   const { data: settingsRows } = useQuery({
     queryKey: ["admin", "carousel_settings"],
     queryFn: async () =>
-      ((await supabase.from("carousel_settings" as any).select("*").limit(1)).data ??
-        []) as Settings[],
+      (((await supabase.from("carousel_settings" as any).select("*").limit(1)).data ?? []) as unknown) as Settings[],
   });
   const settings = settingsRows?.[0];
 
