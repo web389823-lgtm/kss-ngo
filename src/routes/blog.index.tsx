@@ -14,7 +14,7 @@ export const Route = createFileRoute("/blog/")({
   ]}),
 });
 
-type Banner = { id: string; image_url: string | null; tag_label: string | null; headline: string | null; link_url: string | null; is_active: boolean };
+type Banner = { id: string; image_url: string | null; tag_label: string | null; headline: string | null; link_url: string | null; is_active: boolean; ratio?: string | null };
 
 function BlogPage() {
   const { data } = useQuery({
@@ -30,14 +30,19 @@ function BlogPage() {
   const headline = banner?.headline || "Latest from KSS";
   const tag = banner?.tag_label || "LATEST NEWS";
   const linkUrl = banner?.link_url || "";
+  const isPortrait = banner?.ratio === "9:16";
 
-  const bannerInner = (
+  const bannerInner = banner ? (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
       className="relative overflow-hidden group cursor-pointer mx-auto"
-      style={{ width: "100%", maxWidth: 1200, aspectRatio: "16 / 9", maxHeight: 400, borderRadius: 16 }}
+      style={
+        isPortrait
+          ? { width: "100%", maxWidth: 400, aspectRatio: "9 / 16", borderRadius: 16, margin: "0 auto" }
+          : { width: "100%", maxWidth: 1200, aspectRatio: "16 / 9", maxHeight: 480, borderRadius: 16 }
+      }
     >
       <motion.img
         src={bannerImg}
@@ -61,24 +66,26 @@ function BlogPage() {
         </div>
       </div>
     </motion.div>
-  );
+  ) : null;
 
   return (
     <>
       <PageHeader eyebrow="News & Updates" title="Stories from the field" description="Latest news, reflections and updates from our programs." />
 
-      {/* HERO BANNER */}
-      <section className="container-page mt-6 mb-2">
-        {linkUrl ? (
-          linkUrl.startsWith("/") ? (
-            <Link to={linkUrl} className="block">{bannerInner}</Link>
+      {/* HERO BANNER (hidden when admin sets is_active = false) */}
+      {bannerInner && (
+        <section className="container-page mt-6 mb-2">
+          {linkUrl ? (
+            linkUrl.startsWith("/") ? (
+              <Link to={linkUrl} className="block">{bannerInner}</Link>
+            ) : (
+              <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="block">{bannerInner}</a>
+            )
           ) : (
-            <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="block">{bannerInner}</a>
-          )
-        ) : (
-          bannerInner
-        )}
-      </section>
+            bannerInner
+          )}
+        </section>
+      )}
 
       <section className="container-page py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

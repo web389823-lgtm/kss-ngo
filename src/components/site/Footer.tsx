@@ -21,20 +21,35 @@ export function Footer() {
         <div>
           <h4 className="text-sm font-semibold mb-4">Explore</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/about" className="hover:text-primary">About</Link></li>
-            <li><Link to="/programs" className="hover:text-primary">Programs</Link></li>
-            <li><Link to="/projects" className="hover:text-primary">Projects</Link></li>
-            <li><Link to="/blog" className="hover:text-primary">News</Link></li>
+            <li><Link to="/" className="hover:text-primary transition-colors">Home</Link></li>
+            <li><Link to="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+            <li><Link to="/programs" className="hover:text-primary transition-colors">Programs</Link></li>
+            <li><Link to="/projects" className="hover:text-primary transition-colors">Projects</Link></li>
+            <li><Link to="/blog" className="hover:text-primary transition-colors">News</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="text-sm font-semibold mb-4">Get Involved</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/donate" className="hover:text-primary">Donate</Link></li>
-            <li><Link to="/get-involved/volunteer" className="hover:text-primary">Volunteer</Link></li>
-            <li><Link to="/get-involved/csr" className="hover:text-primary">CSR Partnership</Link></li>
-            <li><Link to="/testimonials" className="hover:text-primary">Testimonials</Link></li>
-            <li><Link to="/about" className="hover:text-primary">Our Team</Link></li>
+            <li><Link to="/get-involved" className="hover:text-primary transition-colors">Get Involved</Link></li>
+            <li><Link to="/donate" className="hover:text-primary transition-colors">Donate</Link></li>
+            <li><Link to="/get-involved/volunteer" className="hover:text-primary transition-colors">Volunteer</Link></li>
+            <li><Link to="/get-involved/csr" className="hover:text-primary transition-colors">Partner with Us</Link></li>
+            <li>
+              <Link
+                to="/"
+                hash="get-in-touch"
+                onClick={(e) => {
+                  if (typeof window !== "undefined" && window.location.pathname === "/") {
+                    e.preventDefault();
+                    document.getElementById("get-in-touch")?.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                className="hover:text-primary transition-colors"
+              >
+                Contact
+              </Link>
+            </li>
           </ul>
         </div>
         <div>

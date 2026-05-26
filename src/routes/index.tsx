@@ -378,14 +378,14 @@ function HomePage() {
         </section>
       )}
 
-      {/* VOICES OF APPRECIATION carousel (now above Testimonials) */}
-      <VoicesOfAppreciation />
+      {/* SEVA MOMENTS — YouTube videos */}
+      <SevaMoments />
 
       {/* TESTIMONIALS — approved from DB + Leave a Review */}
       <TestimonialsSection />
 
-      {/* SEVA MOMENTS — YouTube videos */}
-      <SevaMoments />
+      {/* VOICES OF APPRECIATION carousel */}
+      <VoicesOfAppreciation />
 
       {/* GET IN TOUCH form */}
       <div id="get-in-touch">
