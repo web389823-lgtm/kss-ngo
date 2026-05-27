@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/sonner";
 import CursorDot from "@/components/site/CursorDot";
 import ScrollProgressBar from "@/components/site/ScrollProgressBar";
 import FloatingContactButton from "@/components/site/FloatingContactButton";
+import ScrollReveal from "@/components/site/ScrollReveal";
 
 
 function NotFoundComponent() {
@@ -113,6 +114,7 @@ function RootComponent() {
           </div>
           <CursorDot />
           <ScrollProgressBar />
+          <ScrollReveal />
           <FloatingContactButton />
           <Toaster />
         </AuthProvider>
