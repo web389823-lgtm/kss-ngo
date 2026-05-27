@@ -114,6 +114,7 @@ function RootComponent() {
           </div>
           <CursorDot />
           <ScrollProgressBar />
+          <ScrollReveal />
           <FloatingContactButton />
           <Toaster />
         </AuthProvider>
