@@ -68,9 +68,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" },
     ],
-    scripts: [
-      { src: "https://cdn.jotfor.ms/agent/embedjs/019e65ac2e497ed98d7c0ae0793f5def2a9d/embed.js?autoOpenChatIn=1", async: true },
-    ],
+    scripts: [],
   }),
   shellComponent: RootShell,
   component: RootComponent,
