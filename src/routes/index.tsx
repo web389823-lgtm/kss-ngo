@@ -409,7 +409,7 @@ const SEVA_VIDEOS = [
 
 function SevaMoments() {
   return (
-    <section style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
+    <section data-reveal style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
       <div className="mx-auto px-4" style={{ maxWidth: "1100px" }}>
         <div className="text-center mb-10">
           <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: "12px", letterSpacing: "2px", color: "#E8540A", textTransform: "uppercase" }}>Seva Moments</p>
@@ -527,7 +527,7 @@ function GetInTouchForm() {
   const errStyle: React.CSSProperties = { color: "#d32f2f", fontSize: "12px", marginTop: "4px", fontFamily: "Inter, sans-serif" };
 
   return (
-    <section style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
+    <section data-reveal style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
       <div className="mx-auto px-4" style={{ maxWidth: "760px" }}>
         <div className="text-center">
           <h2 style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "#1a1a1a", letterSpacing: "0.04em" }}>
