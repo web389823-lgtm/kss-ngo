@@ -260,7 +260,7 @@ function HomePage() {
 
 
 
-      <section className="bg-muted/30 py-20">
+      <section data-reveal className="bg-muted/30 py-20">
         <div className="container-page">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Impact</p>
@@ -290,7 +290,7 @@ function HomePage() {
 
 
       {/* PROGRAM HIGHLIGHTS — photo cards with hover reveal */}
-      <section className="bg-muted/30 py-20">
+      <section data-reveal className="bg-muted/30 py-20">
         <div className="container-page">
           <div className="mb-10">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">What We Do</p>
@@ -305,7 +305,7 @@ function HomePage() {
 
       {/* PROGRAMS FROM DB — photo-first interactive grid */}
       {(programs ?? []).length > 0 && (
-        <section className="container-page py-16 max-w-[1600px]">
+        <section data-reveal className="container-page py-16 max-w-[1600px]">
           <div className="mb-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Programs</p>
             <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Active initiatives</h2>
@@ -320,7 +320,7 @@ function HomePage() {
 
 
       {/* WHY DONATE */}
-      <section className="bg-muted/30 py-20">
+      <section data-reveal className="bg-muted/30 py-20">
         <div className="container-page grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Why Donate</p>
@@ -355,7 +355,7 @@ function HomePage() {
 
       {/* NEWS */}
       {(posts ?? []).length > 0 && (
-        <section className="bg-muted/30 py-20">
+        <section data-reveal className="bg-muted/30 py-20">
           <div className="container-page">
             <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
               <div>
