@@ -42,6 +42,7 @@ function AboutPage() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
       <Hero />
       <Intro />
+      <Milestones />
       <MVV />
       <Impact />
       <Story />
@@ -53,6 +54,72 @@ function AboutPage() {
     </motion.div>
   );
 }
+
+const MILESTONES = [
+  { year: "1999", title: "Founded", desc: "KSS established in Bengaluru with a vision to Reach the Unreached." },
+  { year: "2001", title: "First Seva Basti", desc: "Opened first community centre in North Bengaluru." },
+  { year: "2005", title: "Vidya Vahini Launched", desc: "Free tuition programme started for underprivileged children." },
+  { year: "2008", title: "Arogya Bhagya Begins", desc: "Free health camps introduced across constituencies." },
+  { year: "2010", title: "Women Empowerment", desc: "Nari Uttejan programme launched for vocational skill training." },
+  { year: "2015", title: "50 Seva Bastis", desc: "Reached 50 community centres across Bengaluru." },
+  { year: "2019", title: "20 Years of Seva", desc: "Celebrated 2 decades of service with BalaSangam mega event." },
+  { year: "2024", title: "100 Community Centres", desc: "Expanded to ~100 Seva Bastis across 65+ locations." },
+];
+
+function Milestones() {
+  return (
+    <section className="py-20" style={{ background: "#fff" }}>
+      <div className="container-page max-w-4xl">
+        <div className="text-center mb-12">
+          <h2 style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 700, color: "#1a1a1a", fontSize: "clamp(1.8rem, 3vw, 2.4rem)" }}>
+            Our Journey
+          </h2>
+          <div style={{ width: 60, height: 3, background: ORANGE, margin: "12px auto 0", borderRadius: 2 }} />
+        </div>
+        <div className="kss-timeline relative">
+          <style>{`
+            .kss-timeline::before {
+              content: ""; position: absolute; top: 0; bottom: 0; width: 3px;
+              background: ${ORANGE}; left: 50%; transform: translateX(-50%);
+            }
+            .kss-mile { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 28px; }
+            .kss-mile .kss-mile-card { background: #fff; border: 1px solid #f0e6dc; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+            .kss-mile.left .kss-mile-card { grid-column: 1; text-align: right; }
+            .kss-mile.right .kss-mile-card { grid-column: 2; text-align: left; }
+            .kss-mile .kss-dot { position: absolute; left: 50%; top: 22px; width: 14px; height: 14px; border-radius: 50%; background: ${ORANGE}; transform: translateX(-50%); box-shadow: 0 0 0 4px #fff; }
+            @media (max-width: 767px) {
+              .kss-timeline::before { left: 12px; transform: none; }
+              .kss-mile { grid-template-columns: 1fr; gap: 0; padding-left: 36px; }
+              .kss-mile .kss-mile-card { grid-column: 1 !important; text-align: left !important; }
+              .kss-mile .kss-dot { left: 12px; transform: translateX(-50%); }
+            }
+          `}</style>
+          {MILESTONES.map((m, i) => {
+            const side = i % 2 === 0 ? "left" : "right";
+            return (
+              <motion.div
+                key={m.year}
+                className={`kss-mile ${side}`}
+                initial={{ opacity: 0, x: side === "left" ? -40 : 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: i * 0.15, ease: "easeOut" }}
+              >
+                <span className="kss-dot" />
+                <div className="kss-mile-card">
+                  <div style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 700, fontSize: 24, color: ORANGE }}>{m.year}</div>
+                  <div style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 700, fontSize: 18, color: "#1a1a1a", marginTop: 2 }}>{m.title}</div>
+                  <p style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 400, fontSize: 14, color: "#666", marginTop: 6, lineHeight: 1.6 }}>{m.desc}</p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
 function Hero() {
   return (
