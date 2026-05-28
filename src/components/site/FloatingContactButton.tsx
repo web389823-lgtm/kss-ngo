@@ -75,14 +75,15 @@ export default function FloatingContactButton() {
         @media (max-width: 640px) {
           .kss-floating-cta {
             top: auto !important;
-            bottom: 80px !important;
+            bottom: 30% !important;
             transform: translateX(0) !important;
-            font-size: 11px !important;
-            padding: 12px 8px !important;
+            font-size: 10px !important;
+            padding: 10px 7px !important;
             animation: none !important;
           }
           .kss-floating-cta:hover { transform: translateX(-4px) !important; }
         }
+
         @media (prefers-reduced-motion: reduce) {
           .kss-floating-cta { animation: none !important; transition: none !important; }
         }
