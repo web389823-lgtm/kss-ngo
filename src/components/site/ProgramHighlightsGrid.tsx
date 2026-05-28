@@ -85,8 +85,24 @@ export default function ProgramHighlightsGrid() {
   const fallbackMap = Object.fromEntries(CARD_IMAGE_SLOTS.map((s) => [s.id, s.fallback]));
 
   return (
-    <div className="mx-auto max-w-[1400px] px-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: "clamp(8px, 1.5vw, 14px)" }}>
+    <div className="mx-auto max-w-[1400px] px-6 kss-ph-wrap">
+      <style>{`
+        .kss-ph-wrap .kss-ph-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: clamp(8px, 1.5vw, 14px);
+        }
+        @media (max-width: 1023px) and (min-width: 768px) {
+          .kss-ph-wrap .kss-ph-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 767px) {
+          .kss-ph-wrap { padding-left: 12px !important; padding-right: 12px !important; }
+          .kss-ph-wrap .kss-ph-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+          .kss-ph-wrap .kss-ph-full { grid-column: 1 / -1; aspect-ratio: 16 / 9 !important; }
+          .kss-ph-wrap .kss-ph-half { aspect-ratio: 3 / 4 !important; }
+        }
+      `}</style>
+      <div className="kss-ph-grid">
         {HIGHLIGHTS.map((h, i) => (
           <HighlightCard key={h.slot} h={h} col={i % 3} fallbackMap={fallbackMap} overrides={overrides} />
         ))}
@@ -94,3 +110,4 @@ export default function ProgramHighlightsGrid() {
     </div>
   );
 }
+
