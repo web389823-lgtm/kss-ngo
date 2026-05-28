@@ -19,6 +19,8 @@ function HighlightCard({ h, col, fallbackMap, overrides }: { h: typeof HIGHLIGHT
   const ref = useAutoPeek<HTMLDivElement>((o) => setOpen(o));
   const img = overrides?.[h.slot] || fallbackMap[h.slot];
 
+  const isFullBleed = h.slot === "ph_education" || h.slot === "ph_seva_bastis";
+
   return (
     <motion.article
       ref={ref}
@@ -27,9 +29,10 @@ function HighlightCard({ h, col, fallbackMap, overrides }: { h: typeof HIGHLIGHT
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.5, delay: col * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
       onClick={() => setOpen((o) => !o)}
-      className={`group relative w-full overflow-hidden rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)] ${open ? "is-open" : ""}`}
+      className={`group relative w-full overflow-hidden rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)] ${open ? "is-open" : ""} ${isFullBleed ? "kss-ph-full" : "kss-ph-half"}`}
       style={{ aspectRatio: "16 / 9" }}
     >
+
       <img
         src={img}
         alt={h.title}
