@@ -133,15 +133,29 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
+  * { border-color: var(--color-border); font-family: 'Assistant', sans-serif !important; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: "Inter", system-ui, sans-serif;
-    font-feature-settings: "ss01", "cv11";
+    font-family: 'Assistant', sans-serif !important;
+    font-weight: 400;
+    letter-spacing: 0;
   }
-  h1, h2, h3, h4, h5, h6 { font-family: "Playfair Display", Georgia, serif; font-weight: 700; letter-spacing: -0.01em; }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Assistant', sans-serif !important;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  p, span, label, a, li, td, th, input, textarea, nav, .nav-link {
+    font-family: 'Assistant', sans-serif !important;
+    font-weight: 400;
+  }
+  button, .btn, [role="button"], .eyebrow, .uppercase {
+    font-family: 'Assistant', sans-serif !important;
+    font-weight: 600;
+  }
 }
+
 
 @layer utilities {
   .gradient-hero { background: var(--gradient-hero); }
