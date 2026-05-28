@@ -44,10 +44,10 @@ export default function KssCard({
   }, [isActive]);
 
   const go = () => {
-    if (url.startsWith("http")) {
+    if (url.startsWith("http") || url.includes("?") || url.includes("#")) {
       window.location.href = url;
     } else {
-      navigate({ to: url });
+      navigate({ to: url }).catch(() => { window.location.href = url; });
     }
   };
 
