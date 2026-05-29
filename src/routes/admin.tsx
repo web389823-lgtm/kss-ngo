@@ -24,6 +24,7 @@ const NAV: NavItem[] = [
   { to: "/admin/blog", label: "Blog", icon: Newspaper },
   { to: "/admin/news-banner", label: "News Banner", icon: Megaphone },
   { to: "/admin/voices", label: "Voices of Appreciation", icon: MessageSquareQuote },
+  { to: "/admin/milestones", label: "Milestones", icon: CalendarDays },
   { to: "/admin/testimonials-manager", label: "Reviews / Testimonials", icon: MessageCircle, adminOnly: true },
   { to: "/admin/volunteer-page", label: "Volunteer Page Editor", icon: FileEdit, adminOnly: true },
   { to: "/admin/csr-page", label: "CSR Page Editor", icon: FileEdit, adminOnly: true },
