@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog, ImagePlus, Mail, MessageSquareQuote, MessageCircle, FileEdit, Megaphone, GalleryHorizontal } from "lucide-react";
+import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog, ImagePlus, Mail, MessageSquareQuote, MessageCircle, FileEdit, Megaphone, GalleryHorizontal, CalendarDays } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 
