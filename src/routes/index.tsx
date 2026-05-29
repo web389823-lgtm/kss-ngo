@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   ArrowRight, Heart, Sparkles, GraduationCap, Home as HomeIcon,
@@ -407,6 +407,41 @@ const SEVA_VIDEOS = [
   { id: "UlfHOIpal5A", title: "KSS Video 4" },
 ];
 
+function SevaVideoTile({ v }: { v: { id: string; title: string } }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [play, setPlay] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { setPlay(true); io.disconnect(); } }),
+      { threshold: 0.5 }
+    );
+    io.observe(ref.current);
+    return () => io.disconnect();
+  }, []);
+  const src = play
+    ? `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&playsinline=1&rel=0`
+    : `https://www.youtube.com/embed/${v.id}?rel=0`;
+  return (
+    <div
+      ref={ref}
+      className="transition-all duration-300 hover:scale-[1.02]"
+      style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", overflow: "hidden", borderRadius: "12px", background: "#000", boxShadow: "0 4px 20px rgba(0,0,0,0.10)" }}
+    >
+      <iframe
+        src={src}
+        title={v.title}
+        frameBorder={0}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+        allowFullScreen
+        loading="lazy"
+        style={{ width: "100%", height: "100%", borderRadius: "12px", display: "block", border: 0 }}
+      />
+    </div>
+  );
+}
+
 function SevaMoments() {
   return (
     <section data-reveal style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
@@ -418,31 +453,7 @@ function SevaMoments() {
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: "16px" }}>
-          {SEVA_VIDEOS.map((v) => (
-            <div
-              key={v.id}
-              className="transition-all duration-300 hover:scale-[1.02]"
-              style={{
-                position: "relative",
-                width: "100%",
-                aspectRatio: "16 / 9",
-                overflow: "hidden",
-                borderRadius: "12px",
-                background: "#000",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
-              }}
-            >
-              <iframe
-                src={`https://www.youtube.com/embed/${v.id}`}
-                title={v.title}
-                frameBorder={0}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-                allowFullScreen
-                loading="lazy"
-                style={{ width: "100%", height: "100%", borderRadius: "12px", display: "block", border: 0 }}
-              />
-            </div>
-          ))}
+          {SEVA_VIDEOS.map((v) => <SevaVideoTile key={v.id} v={v} />)}
         </div>
       </div>
     </section>

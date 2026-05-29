@@ -55,66 +55,111 @@ function AboutPage() {
   );
 }
 
-const MILESTONES = [
-  { year: "1999", title: "Founded", desc: "KSS established in Bengaluru with a vision to Reach the Unreached." },
-  { year: "2001", title: "First Seva Basti", desc: "Opened first community centre in North Bengaluru." },
-  { year: "2005", title: "Vidya Vahini Launched", desc: "Free tuition programme started for underprivileged children." },
-  { year: "2008", title: "Arogya Bhagya Begins", desc: "Free health camps introduced across constituencies." },
-  { year: "2010", title: "Women Empowerment", desc: "Nari Uttejan programme launched for vocational skill training." },
-  { year: "2015", title: "50 Seva Bastis", desc: "Reached 50 community centres across Bengaluru." },
-  { year: "2019", title: "20 Years of Seva", desc: "Celebrated 2 decades of service with BalaSangam mega event." },
-  { year: "2024", title: "100 Community Centres", desc: "Expanded to ~100 Seva Bastis across 65+ locations." },
-];
+type MilestoneRow = {
+  id: string;
+  year: number;
+  title: string;
+  description: string | null;
+  photo_url: string | null;
+  link_url: string | null;
+  link_text: string | null;
+  display_order: number;
+};
 
 function Milestones() {
+  const { data } = useQuery({
+    queryKey: ["milestones-public"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("milestones" as any)
+        .select("*")
+        .order("year", { ascending: false })
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      return (data as any[] as MilestoneRow[]) || [];
+    },
+  });
+
+  const grouped = useMemo(() => {
+    const g: Record<number, MilestoneRow[]> = {};
+    (data || []).forEach((m) => { (g[m.year] = g[m.year] || []).push(m); });
+    return g;
+  }, [data]);
+  const years = Object.keys(grouped).map(Number).sort((a, b) => b - a);
+
   return (
-    <section className="py-20" style={{ background: "#fff" }}>
-      <div className="container-page max-w-4xl">
-        <div className="text-center mb-12">
-          <h2 style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 700, color: "#1a1a1a", fontSize: "clamp(1.8rem, 3vw, 2.4rem)" }}>
-            Our Journey
-          </h2>
-          <div style={{ width: 60, height: 3, background: ORANGE, margin: "12px auto 0", borderRadius: 2 }} />
+    <section className="py-20" style={{ background: "#fff", fontFamily: "'Assistant', sans-serif" }}>
+      <style>{`
+        .kss-ml-divider { display: flex; align-items: center; gap: 16px; margin: 48px 0 28px 0; }
+        .kss-ml-divider .ln-l { flex: 1; height: 2px; background: linear-gradient(to right, transparent, #E8540A); }
+        .kss-ml-divider .ln-r { flex: 1; height: 2px; background: linear-gradient(to left, transparent, #E8540A); }
+        .kss-ml-pill { background: #E8540A; color: #fff; font-family: 'Assistant', sans-serif; font-weight: 700; font-size: 22px; padding: 8px 28px; border-radius: 40px; white-space: nowrap; }
+        .kss-ml-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 16px; }
+        .kss-ml-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); border: 1px solid rgba(232,84,10,0.08); transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease; display: flex; flex-direction: column; }
+        .kss-ml-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); border-color: rgba(232,84,10,0.2); }
+        .kss-ml-photo { width: 100%; aspect-ratio: 16/9; overflow: hidden; position: relative; background: linear-gradient(135deg, #E8540A 0%, #FF8C42 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 28px; letter-spacing: 2px; }
+        .kss-ml-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; display: block; }
+        .kss-ml-card:hover .kss-ml-photo img { transform: scale(1.05); }
+        .kss-ml-body { padding: 20px; }
+        .kss-ml-title { font-family: 'Assistant', sans-serif; font-weight: 700; font-size: 16px; color: #1a1a1a; margin: 0 0 8px 0; line-height: 1.4; }
+        .kss-ml-desc { font-family: 'Assistant', sans-serif; font-weight: 400; font-size: 13px; color: #666; line-height: 1.6; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .kss-ml-link { color: #E8540A; font-family: 'Assistant', sans-serif; font-weight: 600; font-size: 13px; margin-top: 12px; display: inline-block; text-decoration: none; }
+        .kss-ml-link:hover { text-decoration: underline; }
+        @media (max-width: 767px) {
+          .kss-ml-pill { font-size: 18px; padding: 6px 20px; }
+          .kss-ml-grid { grid-template-columns: 1fr; gap: 14px; }
+          .kss-ml-body { padding: 16px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .kss-ml-card, .kss-ml-photo img { transition: none !important; }
+          .kss-ml-card:hover { transform: none !important; }
+        }
+      `}</style>
+      <div className="container-page max-w-6xl">
+        <div className="text-center mb-4">
+          <p style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 600, fontSize: 12, color: "#E8540A", letterSpacing: 3, textTransform: "uppercase" }}>Our Journey</p>
+          <h2 style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 700, color: "#1a1a1a", fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: 8 }}>Milestones</h2>
+          <div style={{ width: 60, height: 3, background: ORANGE, margin: "10px auto 48px auto", borderRadius: 2 }} />
         </div>
-        <div className="kss-timeline relative">
-          <style>{`
-            .kss-timeline::before {
-              content: ""; position: absolute; top: 0; bottom: 0; width: 3px;
-              background: ${ORANGE}; left: 50%; transform: translateX(-50%);
-            }
-            .kss-mile { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 28px; }
-            .kss-mile .kss-mile-card { background: #fff; border: 1px solid #f0e6dc; border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-            .kss-mile.left .kss-mile-card { grid-column: 1; text-align: right; }
-            .kss-mile.right .kss-mile-card { grid-column: 2; text-align: left; }
-            .kss-mile .kss-dot { position: absolute; left: 50%; top: 22px; width: 14px; height: 14px; border-radius: 50%; background: ${ORANGE}; transform: translateX(-50%); box-shadow: 0 0 0 4px #fff; }
-            @media (max-width: 767px) {
-              .kss-timeline::before { left: 12px; transform: none; }
-              .kss-mile { grid-template-columns: 1fr; gap: 0; padding-left: 36px; }
-              .kss-mile .kss-mile-card { grid-column: 1 !important; text-align: left !important; }
-              .kss-mile .kss-dot { left: 12px; transform: translateX(-50%); }
-            }
-          `}</style>
-          {MILESTONES.map((m, i) => {
-            const side = i % 2 === 0 ? "left" : "right";
-            return (
-              <motion.div
-                key={m.year}
-                className={`kss-mile ${side}`}
-                initial={{ opacity: 0, x: side === "left" ? -40 : 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: i * 0.15, ease: "easeOut" }}
-              >
-                <span className="kss-dot" />
-                <div className="kss-mile-card">
-                  <div style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 700, fontSize: 24, color: ORANGE }}>{m.year}</div>
-                  <div style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 700, fontSize: 18, color: "#1a1a1a", marginTop: 2 }}>{m.title}</div>
-                  <p style={{ fontFamily: "'Assistant', sans-serif", fontWeight: 400, fontSize: 14, color: "#666", marginTop: 6, lineHeight: 1.6 }}>{m.desc}</p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+        {years.map((y) => (
+          <div key={y}>
+            <motion.div className="kss-ml-divider"
+              initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+              viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.6, ease: "easeOut" }}>
+              <span className="ln-l" />
+              <span className="kss-ml-pill">{y}</span>
+              <span className="ln-r" />
+            </motion.div>
+            <div className="kss-ml-grid">
+              {grouped[y].map((m, i) => {
+                const Inner = (
+                  <>
+                    <div className="kss-ml-photo">
+                      {m.photo_url ? <img src={m.photo_url} alt={m.title} loading="lazy" /> : <span>KSS</span>}
+                    </div>
+                    <div className="kss-ml-body">
+                      <h3 className="kss-ml-title">{m.title}</h3>
+                      {m.description && <p className="kss-ml-desc">{m.description}</p>}
+                      {m.link_url && (
+                        <a href={m.link_url} target="_blank" rel="noopener noreferrer" className="kss-ml-link" onClick={(e) => e.stopPropagation()}>
+                          {m.link_text || "Read More"} →
+                        </a>
+                      )}
+                    </div>
+                  </>
+                );
+                return (
+                  <motion.div key={m.id} className="kss-ml-card"
+                    initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}>
+                    {Inner}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );

@@ -39,6 +39,7 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminProjectsRouteImport } from './routes/admin.projects'
 import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminNewsBannerRouteImport } from './routes/admin.news-banner'
+import { Route as AdminMilestonesRouteImport } from './routes/admin.milestones'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminImagesRouteImport } from './routes/admin.images'
 import { Route as AdminHeroCarouselRouteImport } from './routes/admin.hero-carousel'
@@ -205,6 +206,11 @@ const AdminNewsBannerRoute = AdminNewsBannerRouteImport.update({
   path: '/news-banner',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminMilestonesRoute = AdminMilestonesRouteImport.update({
+  id: '/milestones',
+  path: '/milestones',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -289,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/admin/hero-carousel': typeof AdminHeroCarouselRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/milestones': typeof AdminMilestonesRoute
   '/admin/news-banner': typeof AdminNewsBannerRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -333,6 +340,7 @@ export interface FileRoutesByTo {
   '/admin/hero-carousel': typeof AdminHeroCarouselRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/milestones': typeof AdminMilestonesRoute
   '/admin/news-banner': typeof AdminNewsBannerRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -379,6 +387,7 @@ export interface FileRoutesById {
   '/admin/hero-carousel': typeof AdminHeroCarouselRoute
   '/admin/images': typeof AdminImagesRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/milestones': typeof AdminMilestonesRoute
   '/admin/news-banner': typeof AdminNewsBannerRoute
   '/admin/programs': typeof AdminProgramsRoute
   '/admin/projects': typeof AdminProjectsRoute
@@ -426,6 +435,7 @@ export interface FileRouteTypes {
     | '/admin/hero-carousel'
     | '/admin/images'
     | '/admin/login'
+    | '/admin/milestones'
     | '/admin/news-banner'
     | '/admin/programs'
     | '/admin/projects'
@@ -470,6 +480,7 @@ export interface FileRouteTypes {
     | '/admin/hero-carousel'
     | '/admin/images'
     | '/admin/login'
+    | '/admin/milestones'
     | '/admin/news-banner'
     | '/admin/programs'
     | '/admin/projects'
@@ -515,6 +526,7 @@ export interface FileRouteTypes {
     | '/admin/hero-carousel'
     | '/admin/images'
     | '/admin/login'
+    | '/admin/milestones'
     | '/admin/news-banner'
     | '/admin/programs'
     | '/admin/projects'
@@ -776,6 +788,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsBannerRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/milestones': {
+      id: '/admin/milestones'
+      path: '/milestones'
+      fullPath: '/admin/milestones'
+      preLoaderRoute: typeof AdminMilestonesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -893,6 +912,7 @@ interface AdminRouteChildren {
   AdminHeroCarouselRoute: typeof AdminHeroCarouselRoute
   AdminImagesRoute: typeof AdminImagesRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminMilestonesRoute: typeof AdminMilestonesRoute
   AdminNewsBannerRoute: typeof AdminNewsBannerRoute
   AdminProgramsRoute: typeof AdminProgramsRoute
   AdminProjectsRoute: typeof AdminProjectsRoute
@@ -918,6 +938,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminHeroCarouselRoute: AdminHeroCarouselRoute,
   AdminImagesRoute: AdminImagesRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminMilestonesRoute: AdminMilestonesRoute,
   AdminNewsBannerRoute: AdminNewsBannerRoute,
   AdminProgramsRoute: AdminProgramsRoute,
   AdminProjectsRoute: AdminProjectsRoute,
@@ -967,13 +988,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

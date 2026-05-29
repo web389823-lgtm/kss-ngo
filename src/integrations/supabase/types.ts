@@ -491,6 +491,45 @@ export type Database = {
         }
         Relationships: []
       }
+      milestones: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          link_text: string | null
+          link_url: string | null
+          photo_url: string | null
+          title: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          link_text?: string | null
+          link_url?: string | null
+          photo_url?: string | null
+          title: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          link_text?: string | null
+          link_url?: string | null
+          photo_url?: string | null
+          title?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
       news_banner: {
         Row: {
           headline: string | null
