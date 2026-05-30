@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Target, Eye, Heart, Users, Home, Calendar, UserCheck,
   CheckCircle2, Mail, Phone, MapPin, X, ChevronLeft, ChevronRight,
