@@ -17,28 +17,70 @@ import VoicesOfAppreciation from "@/components/site/VoicesOfAppreciation";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
 
 
-const DEFAULT_HERO_SLIDES = [
-  "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
-  "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1600",
-  "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1600",
-  "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=1600",
-  "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=1600",
-  "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=1600",
-  "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=1600",
-  "https://images.unsplash.com/photo-1607748862156-7c548e7e98f4?w=1600",
-  "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=1600",
-  "https://images.unsplash.com/photo-1578496479932-143f47d35c09?w=1600",
-];
+type HeroSlide = {
+  id: string;
+  image_url: string;
+  headline: string | null;
+  subtext: string | null;
+  cta_text: string | null;
+  cta_link: string | null;
+  text_position: "center" | "left" | "right";
+  overlay_opacity: number;
+  status: string;
+  display_order: number;
+};
 
-function HeroSlideshow({ slides }: { slides: string[] }) {
+const FALLBACK_SLIDE: HeroSlide = {
+  id: "fallback",
+  image_url: "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
+  headline: "Reach the Unreached",
+  subtext: "Keshava Seva Samiti has been transforming lives since 1999.",
+  cta_text: "Join Now",
+  cta_link: "/get-involved",
+  text_position: "center",
+  overlay_opacity: 40,
+  status: "active",
+  display_order: 0,
+};
+
+function HeroSlideshow() {
+  const [slides, setSlides] = useState<HeroSlide[]>([]);
   const [i, setI] = useState(0);
   const [pY, setPY] = useState(0);
+
+  const fetchSlides = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("hero_carousel_slides" as any)
+        .select("*")
+        .eq("status", "active")
+        .order("display_order", { ascending: true });
+      if (error) throw error;
+      const list = ((data as any[]) || []) as HeroSlide[];
+      setSlides(list.length > 0 ? list : [FALLBACK_SLIDE]);
+    } catch (e) {
+      console.error("Hero fetch error:", e);
+      setSlides([FALLBACK_SLIDE]);
+    }
+  };
+
+  useEffect(() => {
+    fetchSlides();
+    const channel = supabase
+      .channel("carousel-changes")
+      .on("postgres_changes" as any, { event: "*", schema: "public", table: "hero_carousel_slides" }, () => fetchSlides())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
   const n = slides.length;
   useEffect(() => {
     if (n <= 1) return;
-    const t = setInterval(() => setI((x) => (x + 1) % n), 4000);
+    const t = setInterval(() => setI((x) => (x + 1) % n), 5000);
     return () => clearInterval(t);
   }, [n]);
+  useEffect(() => { if (i >= n && n > 0) setI(0); }, [n, i]);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -50,55 +92,63 @@ function HeroSlideshow({ slides }: { slides: string[] }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
   }, []);
+
   if (n === 0) return null;
+  const cur = slides[i];
+  const align = (p: string) =>
+    p === "left" ? "items-center justify-start text-left" :
+    p === "right" ? "items-center justify-end text-right" :
+    "items-center justify-center text-center";
+
   return (
     <section className="relative w-screen left-1/2 -translate-x-1/2 h-screen overflow-hidden bg-black">
       <div className="absolute inset-0 will-change-transform" style={{ transform: `translate3d(0, ${pY}px, 0)` }}>
-        {slides.map((src, idx) => (
+        {slides.map((s, idx) => (
           <img
-            key={src + idx}
-            src={src}
-            alt=""
+            key={s.id}
+            src={s.image_url}
+            alt={s.headline ?? ""}
             aria-hidden={idx !== i}
             loading={idx === 0 ? "eager" : "lazy"}
             className={`absolute inset-0 h-[120%] w-full object-cover transition-opacity duration-1000 ease-out ${idx === i ? "opacity-100" : "opacity-0"}`}
           />
         ))}
       </div>
-      {/* Floating decorative orange shapes */}
+      {cur && (
+        <div aria-hidden className="absolute inset-0" style={{ background: `rgba(0,0,0,${(cur.overlay_opacity ?? 40) / 100})` }} />
+      )}
+      {cur && (cur.headline || cur.subtext || cur.cta_text) && (
+        <div className={`absolute inset-0 z-[5] flex px-8 md:px-16 ${align(cur.text_position || "center")}`}>
+          <div className="max-w-3xl text-white" style={{ fontFamily: "'Assistant', sans-serif" }}>
+            {cur.headline && (
+              <h1 className="font-bold drop-shadow-lg" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: 1.15 }}>{cur.headline}</h1>
+            )}
+            {cur.subtext && (
+              <p className="mt-4 opacity-95 drop-shadow" style={{ fontSize: "clamp(1rem, 1.6vw, 1.4rem)", lineHeight: 1.5 }}>{cur.subtext}</p>
+            )}
+            {cur.cta_text && cur.cta_link && (
+              <a href={cur.cta_link} className="inline-block mt-7 px-7 py-3 rounded-full font-semibold transition-all hover:-translate-y-0.5" style={{ background: "#E8540A", color: "#fff", fontSize: "15px" }}>
+                {cur.cta_text}
+              </a>
+            )}
+          </div>
+        </div>
+      )}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <span className="absolute h-72 w-72 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_8s_ease-in-out_infinite]" style={{ top: "12%", left: "8%" }} />
         <span className="absolute h-96 w-96 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_12s_ease-in-out_infinite]" style={{ top: "55%", right: "10%" }} />
-        <span className="absolute h-56 w-56 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_10s_ease-in-out_infinite]" style={{ bottom: "8%", left: "30%" }} />
-        <span className="absolute h-40 w-40 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_9s_ease-in-out_infinite]" style={{ top: "20%", right: "30%" }} />
       </div>
       {n > 1 && (
         <>
-          <button
-            type="button"
-            aria-label="Previous slide"
-            onClick={() => setI((x) => (x - 1 + n) % n)}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition"
-          >
+          <button type="button" aria-label="Previous slide" onClick={() => setI((x) => (x - 1 + n) % n)} className="absolute left-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition">
             <ChevronLeft className="h-6 w-6" />
           </button>
-          <button
-            type="button"
-            aria-label="Next slide"
-            onClick={() => setI((x) => (x + 1) % n)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition"
-          >
+          <button type="button" aria-label="Next slide" onClick={() => setI((x) => (x + 1) % n)} className="absolute right-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition">
             <ChevronRight className="h-6 w-6" />
           </button>
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
             {slides.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                aria-label={`Go to slide ${idx + 1}`}
-                onClick={() => setI(idx)}
-                className={`h-2.5 rounded-full transition-all ${idx === i ? "w-8 bg-white" : "w-2.5 bg-white/50 hover:bg-white/80"}`}
-              />
+              <button key={idx} type="button" aria-label={`Go to slide ${idx + 1}`} onClick={() => setI(idx)} className={`h-2.5 rounded-full transition-all ${idx === i ? "w-8 bg-white" : "w-2.5 bg-white/50 hover:bg-white/80"}`} />
             ))}
           </div>
         </>
@@ -171,7 +221,7 @@ function HomePage() {
   return (
     <div>
       {/* HERO — fullscreen image slideshow */}
-      <HeroSlideshow slides={Array.isArray(heroCfg.slides) && heroCfg.slides.length > 0 ? heroCfg.slides : DEFAULT_HERO_SLIDES} />
+      <HeroSlideshow />
 
 
       {/* MISSION TAGLINE */}
