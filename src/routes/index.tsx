@@ -221,7 +221,7 @@ function HomePage() {
   return (
     <div>
       {/* HERO — fullscreen image slideshow */}
-      <HeroSlideshow slides={Array.isArray(heroCfg.slides) && heroCfg.slides.length > 0 ? heroCfg.slides : DEFAULT_HERO_SLIDES} />
+      <HeroSlideshow />
 
 
       {/* MISSION TAGLINE */}
