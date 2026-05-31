@@ -9,10 +9,9 @@ import { AuthProvider } from "@/lib/auth-context";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Toaster } from "@/components/ui/sonner";
-import CursorDot from "@/components/site/CursorDot";
 import ScrollProgressBar from "@/components/site/ScrollProgressBar";
 import FloatingContactButton from "@/components/site/FloatingContactButton";
-import ScrollReveal from "@/components/site/ScrollReveal";
+import SiteEnhancements from "@/components/site/SiteEnhancements";
 
 
 function NotFoundComponent() {
@@ -112,9 +111,8 @@ function RootComponent() {
             <main className={`flex-1 ${isHome ? "" : "pt-20"}`}><Outlet /></main>
             <Footer />
           </div>
-          <CursorDot />
           <ScrollProgressBar />
-          <ScrollReveal />
+          <SiteEnhancements />
           <FloatingContactButton />
           <Toaster />
         </AuthProvider>

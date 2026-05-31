@@ -16,20 +16,5 @@ export default function ScrollProgressBar() {
       window.removeEventListener("resize", onScroll);
     };
   }, []);
-  return (
-    <div
-      aria-hidden
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        height: 3,
-        width: `${w}%`,
-        background: "#E8540A",
-        zIndex: 10000,
-        transition: "width 80ms linear",
-        pointerEvents: "none",
-      }}
-    />
-  );
+  return <div aria-hidden className="kss-progress-bar" style={{ width: `${w}%` }} />;
 }
