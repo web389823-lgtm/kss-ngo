@@ -1,7 +1,5 @@
-import { Link } from "@tanstack/react-router";
-import { Menu, Moon, Sun, Heart, LayoutDashboard, LogIn, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { Heart, LayoutDashboard, LogIn, LogOut, Moon, Sun } from "lucide-react";
 import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth-context";
 import { useEffect, useState } from "react";
@@ -21,91 +19,88 @@ export function Header() {
   const { user, isStaff, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const path = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => { setOpen(false); }, [path]);
+
+  const isActive = (to: string) => to === "/" ? path === "/" : path.startsWith(to);
+
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-40 animate-fade-in transition-all duration-300 ${
-        scrolled
-          ? "bg-background/80 border-b border-border/40 shadow-md"
-          : "bg-white/12 border-b border-white/20"
-      }`}
-      style={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
-    >
-      <div className="container-page flex h-20 items-center justify-between gap-6 pl-2 md:pl-4">
-        <Link to="/" className="flex items-center gap-3 group transition-transform hover:scale-[1.02] mr-4">
-          <img src={kssLogo} alt="Keshava Seva Samiti Logo" className="h-9 md:h-11 w-auto object-contain block" style={{ background: "transparent" }} />
-          <div className="leading-tight">
-            <div className="font-serif text-lg font-semibold">Keshava Seva Samiti</div>
-            <div className="text-[11px] text-muted-foreground tracking-wider uppercase">Since 1999</div>
-          </div>
+    <header className={`kss-glass-nav ${scrolled ? "is-scrolled" : ""}`} data-theme={theme}>
+      <div className="kss-glass-nav-inner">
+        <Link to="/" className="kss-glass-logo" aria-label="KSS Home">
+          <img src={kssLogo} alt="Keshava Seva Samiti" />
+          <span className="kss-glass-logo-text">
+            <span className="kss-glass-logo-title">Keshava Seva Samiti</span>
+            <span className="kss-glass-logo-sub">Since 1999</span>
+          </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+        <nav className="kss-glass-links" aria-label="Primary">
           {NAV.map((n) => (
-            <Link key={n.to} to={n.to}
-              className="px-4 py-2.5 text-[15px] font-medium text-foreground/80 rounded-md hover:bg-accent hover:text-foreground transition-all duration-200"
-              activeProps={{ className: "text-primary" }} activeOptions={{ exact: n.to === "/" }}>
+            <Link key={n.to} to={n.to} className={`kss-glass-link ${isActive(n.to) ? "is-active" : ""}`}>
               {n.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle theme" className="transition-transform hover:scale-110">
+        <div className="kss-glass-actions">
+          <button type="button" onClick={toggle} aria-label="Toggle theme" className="kss-glass-icon-btn">
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </Button>
-
+          </button>
           {user && isStaff ? (
             <>
-              <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
-                <Link to="/admin"><LayoutDashboard className="mr-2 h-4 w-4" />Dashboard</Link>
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => signOut()} className="hidden md:inline-flex">
-                <LogOut className="mr-2 h-4 w-4" />Logout
-              </Button>
+              <Link to="/admin" className="kss-glass-ghost-btn hidden md:inline-flex">
+                <LayoutDashboard className="mr-1.5 h-4 w-4" />Dashboard
+              </Link>
+              <button onClick={() => signOut()} className="kss-glass-ghost-btn hidden md:inline-flex">
+                <LogOut className="mr-1.5 h-4 w-4" />Logout
+              </button>
             </>
           ) : (
-            <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
-              <Link to="/admin/login"><LogIn className="mr-2 h-4 w-4" />Admin Login</Link>
-            </Button>
+            <Link to="/admin/login" className="kss-glass-ghost-btn hidden md:inline-flex">
+              <LogIn className="mr-1.5 h-4 w-4" />Admin
+            </Link>
           )}
-
-          <Button asChild className="hidden sm:inline-flex transition-transform hover:scale-[1.04]">
-            <Link to="/donate"><Heart className="mr-2 h-4 w-4" /> Donate</Link>
-          </Button>
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Menu">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72">
-              <div className="mt-8 flex flex-col gap-1">
-                {NAV.map((n) => (
-                  <Link key={n.to} to={n.to} onClick={() => setOpen(false)}
-                    className="px-3 py-3 text-base rounded-md hover:bg-accent transition-colors">{n.label}</Link>
-                ))}
-                {user && isStaff ? (
-                  <>
-                    <Link to="/admin" onClick={() => setOpen(false)} className="mt-3 px-3 py-3 rounded-md border text-center font-medium">Dashboard</Link>
-                    <button onClick={() => { signOut(); setOpen(false); }} className="px-3 py-3 rounded-md text-left hover:bg-accent">Logout</button>
-                  </>
-                ) : (
-                  <Link to="/admin/login" onClick={() => setOpen(false)} className="mt-3 px-3 py-3 rounded-md border text-center font-medium">Admin Login</Link>
-                )}
-                <Link to="/donate" onClick={() => setOpen(false)} className="mt-3 px-3 py-3 rounded-md bg-primary text-primary-foreground text-center font-medium">Donate</Link>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <Link to="/donate" className="kss-glass-donate">
+            <Heart className="h-4 w-4" /> Donate
+          </Link>
+          <button
+            type="button"
+            className="kss-glass-burger lg:hidden"
+            aria-label="Menu"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className={open ? "is-open" : ""} />
+            <span className={open ? "is-open" : ""} />
+            <span className={open ? "is-open" : ""} />
+          </button>
         </div>
       </div>
+
+      {open && (
+        <div className="kss-glass-mobile-menu">
+          {NAV.map((n, i) => (
+            <Link key={n.to} to={n.to} className="kss-glass-mobile-link" style={{ animationDelay: `${i * 50}ms` }}>
+              {n.label}
+            </Link>
+          ))}
+          {user && isStaff ? (
+            <Link to="/admin" className="kss-glass-mobile-link">Dashboard</Link>
+          ) : (
+            <Link to="/admin/login" className="kss-glass-mobile-link">Admin Login</Link>
+          )}
+          <Link to="/donate" className="kss-glass-mobile-donate">Donate</Link>
+        </div>
+      )}
     </header>
   );
 }
