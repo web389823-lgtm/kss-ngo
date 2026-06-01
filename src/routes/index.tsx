@@ -315,7 +315,7 @@ function HomePage() {
         <div className="container-page">
           <div className="text-center mb-12">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Impact</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Numbers that tell our story</h2>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Numbers that tell our story</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {(stats ?? []).filter((s: any) => {
@@ -345,7 +345,7 @@ function HomePage() {
         <div className="container-page">
           <div className="mb-10">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">What We Do</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Program highlights</h2>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Program highlights</h2>
           </div>
           <ProgramHighlightsGrid />
           <div className="text-center mt-10">
@@ -359,7 +359,7 @@ function HomePage() {
         <section data-reveal className="container-page py-16 max-w-[1600px]">
           <div className="mb-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Programs</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Active initiatives</h2>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Active initiatives</h2>
             <p className="mt-2 text-sm text-muted-foreground max-w-xl">Programs running across communities right now.</p>
           </div>
           <ProgramPhotoGrid
@@ -375,7 +375,7 @@ function HomePage() {
         <div className="container-page grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Why Donate</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">Every contribution creates ripples</h2>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Every contribution creates ripples</h2>
             <p className="mt-5 text-muted-foreground">Your support directly funds the work that transforms lives across Bengaluru and beyond.</p>
             <ul className="mt-6 space-y-3">
               {[
@@ -411,7 +411,7 @@ function HomePage() {
             <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Latest</p>
-                <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold">News & updates</h2>
+                <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">News & updates</h2>
               </div>
               <Button asChild variant="ghost"><Link to="/blog">All news <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
             </div>
