@@ -20,8 +20,8 @@ export default function MobileBottomNav() {
         return (
           <Link
             key={i}
-            to={t.to}
-            hash={(t as any).hash}
+            to={t.to as any}
+            hash={t.hash}
             className={`kss-mb-tab ${active ? "is-active" : ""}`}
           >
             <span className="kss-mb-dot" aria-hidden />
