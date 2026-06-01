@@ -122,11 +122,11 @@ function HeroSlideshow() {
         <div className={`absolute inset-0 z-[5] flex px-8 md:px-16 ${align(cur.text_position || "center")}`}>
           <div className="max-w-3xl text-white" style={{ fontFamily: "'Assistant', sans-serif" }}>
             {cur.headline && (
-              <h1 className="font-bold drop-shadow-lg" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: 1.15 }}>{cur.headline}</h1>
+              <h1 className="font-bold drop-shadow-lg gradient-heading" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: 1.15 }}>{cur.headline}</h1>
             )}
-            {cur.subtext && (
-              <p className="mt-4 opacity-95 drop-shadow" style={{ fontSize: "clamp(1rem, 1.6vw, 1.4rem)", lineHeight: 1.5 }}>{cur.subtext}</p>
-            )}
+            <p className="mt-4 opacity-95 drop-shadow" style={{ fontSize: "clamp(1rem, 1.6vw, 1.4rem)", lineHeight: 1.5, minHeight: "1.8em" }}>
+              <TypewriterText />
+            </p>
             {cur.cta_text && cur.cta_link && (
               <a href={cur.cta_link} className="inline-block mt-7 px-7 py-3 rounded-full font-semibold transition-all hover:-translate-y-0.5" style={{ background: "#E8540A", color: "#fff", fontSize: "15px" }}>
                 {cur.cta_text}
