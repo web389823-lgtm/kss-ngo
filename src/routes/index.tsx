@@ -15,6 +15,7 @@ import ProgramPhotoGrid from "@/components/site/ProgramPhotoGrid";
 import ProgramHighlightsGrid from "@/components/site/ProgramHighlightsGrid";
 import VoicesOfAppreciation from "@/components/site/VoicesOfAppreciation";
 import TestimonialsSection from "@/components/site/TestimonialsSection";
+import TypewriterText from "@/components/site/TypewriterText";
 
 
 type HeroSlide = {
