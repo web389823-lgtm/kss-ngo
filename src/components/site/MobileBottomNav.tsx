@@ -1,12 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 
-const TABS = [
+type Tab = { to: string; icon: string; label: string; exact?: boolean; hash?: string };
+const TABS: Tab[] = [
   { to: "/", icon: "🏠", label: "Home", exact: true },
   { to: "/programs", icon: "📋", label: "Programs" },
   { to: "/donate", icon: "❤️", label: "Donate" },
   { to: "/get-involved", icon: "🤝", label: "Involve" },
   { to: "/", icon: "📞", label: "Contact", hash: "get-in-touch" },
-] as const;
+];
 
 export default function MobileBottomNav() {
   const path = useRouterState({ select: (s) => s.location.pathname });
