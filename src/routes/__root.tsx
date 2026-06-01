@@ -121,6 +121,13 @@ function RootComponent() {
           <ScrollProgressBar />
           <SiteEnhancements />
           <FloatingContactButton />
+          <StickyDonateBar />
+          <MobileBottomNav />
+          <ImageLightbox />
+          <CursorTrail />
+          <SocialProofPopup />
+          <ExitIntentPopup />
+          <ShareButton />
           <Toaster />
         </AuthProvider>
 
