@@ -55,7 +55,7 @@ function ProjectDetail() {
               {video.kind === "iframe" ? (
                 <iframe src={video.src} title={p.title} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen className="w-full h-full" />
               ) : (
-                <video src={video.src} controls className="w-full h-full object-cover" />
+                <video src={video.src} controls preload="metadata" playsInline className="w-full h-full object-cover" />
               )}
             </div>
           </div>

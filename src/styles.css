@@ -767,17 +767,6 @@ img.kss-loaded { opacity: 1; }
   color: white; font-style: italic; font-size: 14px; padding: 0 24px;
 }
 
-/* ============================================================
-   CURSOR TRAIL
-   ============================================================ */
-.kss-trail-container { position: fixed; inset: 0; pointer-events: none; z-index: 999990; }
-.kss-trail-dot {
-  position: fixed; top: 0; left: 0; width: 6px; height: 6px; border-radius: 50%;
-  background: #E8540A; pointer-events: none; will-change: transform, opacity;
-}
-@media (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .kss-trail-container { display: none !important; }
-}
 
 /* ============================================================
    SOCIAL PROOF
