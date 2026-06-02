@@ -651,9 +651,9 @@ img.kss-loaded { opacity: 1; }
   background: transparent; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 16px;
 }
 .kss-sticky-donate-close:hover { color: white; }
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .kss-sticky-donate-text { font-size: 12px; }
-  .kss-sticky-donate-bar { padding: 8px 12px; }
+  .kss-sticky-donate-bar { padding: 8px 12px; bottom: 70px; }
 }
 
 /* ============================================================
