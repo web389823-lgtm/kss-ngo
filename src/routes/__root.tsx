@@ -15,7 +15,7 @@ import SiteEnhancements from "@/components/site/SiteEnhancements";
 import StickyDonateBar from "@/components/site/StickyDonateBar";
 import MobileBottomNav from "@/components/site/MobileBottomNav";
 import ImageLightbox from "@/components/site/ImageLightbox";
-import CursorTrail from "@/components/site/CursorTrail";
+
 import SocialProofPopup from "@/components/site/SocialProofPopup";
 import ExitIntentPopup from "@/components/site/ExitIntentPopup";
 import ShareButton from "@/components/site/ShareButton";
@@ -124,7 +124,7 @@ function RootComponent() {
           <StickyDonateBar />
           <MobileBottomNav />
           <ImageLightbox />
-          <CursorTrail />
+          
           <SocialProofPopup />
           <ExitIntentPopup />
           <ShareButton />
