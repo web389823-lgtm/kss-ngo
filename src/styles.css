@@ -630,7 +630,7 @@ img.kss-loaded { opacity: 1; }
    STICKY DONATE BAR
    ============================================================ */
 .kss-sticky-donate-bar {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9990;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9998; isolation: isolate;
   background: linear-gradient(135deg, #E8540A, #FF6B2B);
   padding: 10px 24px;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
