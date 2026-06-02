@@ -405,72 +405,21 @@ html { scroll-behavior: smooth; }
   transition: width 80ms linear;
 }
 
-/* Effect 2: custom cursor */
-@media (hover: hover) and (pointer: fine) {
-  body.kss-cursor-on { cursor: none; }
-  body.kss-cursor-on a, body.kss-cursor-on button,
-  body.kss-cursor-on input, body.kss-cursor-on textarea,
-  body.kss-cursor-on select { cursor: none; }
-}
-.kss-cursor-dot, .kss-cursor-ring {
-  position: fixed; top: 0; left: 0; pointer-events: none;
-  border-radius: 9999px; will-change: transform;
-}
-.kss-cursor-dot {
-  width: 8px; height: 8px; background: #E8540A; z-index: 999999;
-  transition: transform 100ms ease, width 200ms ease, height 200ms ease, opacity 200ms ease;
-}
-.kss-cursor-ring {
-  width: 36px; height: 36px; border: 2px solid #E8540A;
-  z-index: 999998; opacity: 0.6;
-  transition: width 200ms ease, height 200ms ease, opacity 200ms ease, background 200ms ease;
-}
-body.kss-cursor-hover .kss-cursor-dot { transform: scale(0) !important; }
-body.kss-cursor-hover .kss-cursor-ring {
-  width: 56px; height: 56px; background: rgba(232,84,10,0.1);
-  margin-left: -10px; margin-top: -10px;
-}
+/* Cursor: clean default everywhere (custom cursor removed) */
+* { cursor: auto; }
+a, button, [role="button"], summary, label[for], select { cursor: pointer; }
+input[type="text"], input[type="email"], input[type="password"],
+input[type="search"], input[type="number"], input[type="tel"],
+input[type="url"], textarea { cursor: text; }
 
-/* Effect 3: page transitions */
-.kss-page-overlay {
-  position: fixed; left: 0; bottom: 0; width: 100%; height: 0;
-  background: #E8540A; z-index: 99998; pointer-events: none;
-  transition: height 350ms ease-in;
-}
-.kss-page-overlay.is-out { height: 100%; }
-.kss-page-overlay.is-clearing { top: 0; bottom: auto; height: 100%; transition: height 400ms ease-out; }
-.kss-page-overlay.is-clearing.is-done { height: 0; }
-main { animation: kssPageIn 400ms var(--transition-smooth) both; }
-@keyframes kssPageIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Effect 4: hero orbs + grain */
-.kss-orb { position: absolute; border-radius: 50%; pointer-events: none; }
-.kss-orb-1 { width: 400px; height: 400px; background: rgba(232,84,10,0.07); filter: blur(80px); top: -10%; left: 10%; animation: kssFloat1 14s infinite ease-in-out; }
-.kss-orb-2 { width: 300px; height: 300px; background: rgba(232,84,10,0.05); filter: blur(60px); top: 30%; right: 5%; animation: kssFloat2 10s infinite ease-in-out; }
-.kss-orb-3 { width: 200px; height: 200px; background: rgba(232,84,10,0.06); filter: blur(40px); bottom: 10%; left: 40%; animation: kssFloat3 18s infinite ease-in-out; }
-@keyframes kssFloat1 { 0%,100%{transform:translate(0,0)} 33%{transform:translate(30px,-40px)} 66%{transform:translate(-20px,20px)} }
-@keyframes kssFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,30px)} }
-@keyframes kssFloat3 { 0%,100%{transform:translate(0,0)} 25%{transform:translate(20px,-20px)} 75%{transform:translate(-25px,15px)} }
-
-/* Effect 5: scroll reveal */
+/* Scroll reveal */
 .reveal-section, [data-reveal] {
   opacity: 0; transform: translateY(40px);
   transition: opacity 600ms var(--transition-smooth), transform 600ms var(--transition-smooth);
 }
 .reveal-section.is-visible, [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
 
-/* Effect 6: 3D tilt (applied via JS toggling class) */
-@media (hover: hover) and (pointer: fine) {
-  .kss-tilt { transform-style: preserve-3d; perspective: 800px; transition: transform 200ms ease-out; will-change: transform; }
-  .kss-tilt.is-leaving { transition: transform 500ms ease-out; }
-}
-
-/* Effect 7: magnetic - JS handles transform */
-
-/* Effect 9: staggered grid entrance */
+/* Staggered grid entrance */
 .kss-stagger > * {
   opacity: 0; transform: translateY(50px) scale(0.95);
   transition: opacity 500ms var(--transition-smooth), transform 500ms var(--transition-smooth);
@@ -480,27 +429,14 @@ main { animation: kssPageIn 400ms var(--transition-smooth) both; }
 .kss-stagger.is-visible > *:nth-child(3n+2) { transition-delay: 80ms; }
 .kss-stagger.is-visible > *:nth-child(3n+3) { transition-delay: 160ms; }
 
-/* Effect 10: donate pulse */
+/* Donate subtle pulse (kept — small hover/attention effect) */
 @keyframes kssDonatePulse {
   0%,100% { box-shadow: 0 0 0 0 rgba(232,84,10,0.4); }
   50% { box-shadow: 0 0 0 8px rgba(232,84,10,0); }
 }
 a[href="/donate"], a[href*="/donate"] { animation: kssDonatePulse 6s infinite; }
 
-/* Effect 17: particles */
-.kss-particle {
-  position: absolute; border-radius: 50%; background: #E8540A;
-  pointer-events: none; opacity: 0;
-  animation: kssParticleDrift var(--dur,10s) ease-in-out infinite;
-  animation-delay: var(--delay,0s);
-}
-@keyframes kssParticleDrift {
-  0% { transform: translate(0,0) rotate(0); opacity: 0; }
-  10%,90% { opacity: var(--op,0.2); }
-  100% { transform: translate(var(--dx,40px), var(--dy,-120px)) rotate(360deg); opacity: 0; }
-}
-
-/* Effect 18: smooth image loading */
+/* Smooth image loading */
 img { transition: opacity 400ms ease; }
 img[data-kss-loading="1"] { opacity: 0; }
 img.kss-loaded { opacity: 1; }
@@ -513,13 +449,6 @@ img.kss-loaded { opacity: 1; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .kss-cursor-dot, .kss-cursor-ring, .kss-orb, .kss-particle, .kss-page-overlay { display: none !important; }
-}
-
-/* Mobile: disable heavy effects */
-@media (max-width: 767px) {
-  .kss-cursor-dot, .kss-cursor-ring { display: none !important; }
-  .kss-orb-1, .kss-orb-2 { display: none; }
 }
 
 /* ============================================================
@@ -838,17 +767,6 @@ img.kss-loaded { opacity: 1; }
   color: white; font-style: italic; font-size: 14px; padding: 0 24px;
 }
 
-/* ============================================================
-   CURSOR TRAIL
-   ============================================================ */
-.kss-trail-container { position: fixed; inset: 0; pointer-events: none; z-index: 999990; }
-.kss-trail-dot {
-  position: fixed; top: 0; left: 0; width: 6px; height: 6px; border-radius: 50%;
-  background: #E8540A; pointer-events: none; will-change: transform, opacity;
-}
-@media (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .kss-trail-container { display: none !important; }
-}
 
 /* ============================================================
    SOCIAL PROOF
