@@ -630,13 +630,14 @@ img.kss-loaded { opacity: 1; }
    STICKY DONATE BAR
    ============================================================ */
 .kss-sticky-donate-bar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 9990;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9990;
   background: linear-gradient(135deg, #E8540A, #FF6B2B);
   padding: 10px 24px;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  transform: translateY(-100%);
+  transform: translateY(100%);
   transition: transform 400ms ease-out;
   font-family: 'Assistant', sans-serif;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.12);
 }
 .kss-sticky-donate-bar.is-visible { transform: translateY(0); }
 .kss-sticky-donate-text { color: white; font-weight: 500; font-size: 14px; }
