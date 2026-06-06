@@ -200,7 +200,7 @@ function HomePage() {
   });
   const { data: posts } = useQuery({
     queryKey: ["blog", "home"],
-    queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(3)).data ?? [],
+    queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(4)).data ?? [],
   });
   // Advisory/Trustee sections removed from home page — they live on /about
 
