@@ -200,7 +200,7 @@ function HomePage() {
   });
   const { data: posts } = useQuery({
     queryKey: ["blog", "home"],
-    queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(3)).data ?? [],
+    queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(4)).data ?? [],
   });
   // Advisory/Trustee sections removed from home page — they live on /about
 
@@ -415,14 +415,23 @@ function HomePage() {
               </div>
               <Button asChild variant="ghost"><Link to="/blog">All news <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
             </div>
-            <div className="grid md:grid-cols-3 gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {(posts ?? []).map((p: any) => (
-                <Card key={p.id} className="p-6 shadow-soft hover:shadow-elevated transition-shadow">
-                  <p className="text-xs uppercase tracking-wider text-primary">{p.category}</p>
-                  <h3 className="mt-2 font-serif text-xl font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{p.excerpt}</p>
-                  <p className="mt-4 text-xs text-muted-foreground">{p.published_at && new Date(p.published_at).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
-                </Card>
+                <Link key={p.id} to="/blog/$slug" params={{ slug: p.slug }} className="group">
+                  <Card className="overflow-hidden p-0 shadow-soft hover:shadow-elevated hover:-translate-y-1 transition-all duration-300 h-full">
+                    <div className="aspect-video w-full overflow-hidden bg-secondary">
+                      {p.featured_image
+                        ? <img src={p.featured_image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                        : <div className="w-full h-full gradient-saffron" />}
+                    </div>
+                    <div className="p-5">
+                      {p.category && <p className="text-xs uppercase tracking-wider text-primary font-semibold">{p.category}</p>}
+                      <h3 className="mt-2 font-serif text-lg font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">{p.title}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>
+                      <p className="mt-3 text-xs text-muted-foreground">{p.published_at && new Date(p.published_at).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
+                    </div>
+                  </Card>
+                </Link>
               ))}
             </div>
           </div>
