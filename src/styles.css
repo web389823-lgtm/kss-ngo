@@ -421,7 +421,7 @@ html { scroll-behavior: smooth; }
 /* Effect 1: scroll progress shimmer (bar driven by ScrollProgressBar component) */
 @keyframes kssShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 .kss-progress-bar {
-  position: fixed; top: 0; left: 0; height: 3px; z-index: 99999;
+  position: fixed; top: 0; left: 0; height: 3px; z-index: var(--z-progress-bar);
   background: linear-gradient(to right, #E8540A, #FF8C42, #E8540A);
   background-size: 200% 100%;
   animation: kssShimmer 2s linear infinite;
@@ -485,7 +485,7 @@ img.kss-loaded { opacity: 1; }
   transform: translateX(-50%);
   width: calc(100% - 48px);
   max-width: 1300px;
-  z-index: 9999;
+  z-index: var(--z-navbar-floating);
   border-radius: 20px;
   padding: 10px 24px;
   background: rgba(255,255,255,0.12);
@@ -654,7 +654,7 @@ img.kss-loaded { opacity: 1; }
    STICKY DONATE BAR
    ============================================================ */
 .kss-sticky-donate-bar {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9998; isolation: isolate;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: var(--z-donate-bar); isolation: isolate;
   background: linear-gradient(135deg, #E8540A, #FF6B2B);
   padding: 10px 24px;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -685,7 +685,7 @@ img.kss-loaded { opacity: 1; }
    ============================================================ */
 .kss-mobile-bottom-nav {
   display: none;
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9997;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: var(--z-bottom-nav);
   background: rgba(255,255,255,0.92);
   -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
   border-top: 1px solid rgba(232,84,10,0.15);
@@ -757,7 +757,7 @@ img.kss-loaded { opacity: 1; }
    IMAGE LIGHTBOX
    ============================================================ */
 .kss-lightbox {
-  position: fixed; inset: 0; z-index: 99999;
+  position: fixed; inset: 0; z-index: var(--z-progress-bar);
   background: rgba(0,0,0,0.92);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   display: flex; align-items: center; justify-content: center;
@@ -797,7 +797,7 @@ img.kss-loaded { opacity: 1; }
    SOCIAL PROOF
    ============================================================ */
 .kss-social-proof {
-  position: fixed; bottom: 24px; left: 24px; z-index: 9990;
+  position: fixed; bottom: 24px; left: 24px; z-index: var(--z-social-popup);
   background: white; border-radius: 14px; padding: 14px 16px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.12);
   border-left: 3px solid #E8540A;
@@ -827,7 +827,7 @@ img.kss-loaded { opacity: 1; }
    EXIT INTENT
    ============================================================ */
 .kss-exit-overlay {
-  position: fixed; inset: 0; z-index: 99990;
+  position: fixed; inset: 0; z-index: var(--z-overlay);
   background: rgba(0,0,0,0.6);
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   display: flex; align-items: center; justify-content: center;
@@ -861,7 +861,7 @@ img.kss-loaded { opacity: 1; }
 /* ============================================================
    SHARE BUTTON
    ============================================================ */
-.kss-share-root { position: fixed; right: 24px; bottom: 100px; z-index: 9988; font-family: 'Assistant', sans-serif; }
+.kss-share-root { position: fixed; right: 24px; bottom: 100px; z-index: var(--z-share-dock); font-family: 'Assistant', sans-serif; }
 @media (max-width: 767px) { .kss-share-root { bottom: 150px; right: 12px; } }
 .kss-share-btn {
   display: inline-flex; align-items: center; gap: 6px;
