@@ -28,6 +28,7 @@ import { Route as GetInvolvedVolunteerRouteImport } from './routes/get-involved.
 import { Route as GetInvolvedCsrInfoRouteImport } from './routes/get-involved.csr-info'
 import { Route as GetInvolvedCsrRouteImport } from './routes/get-involved.csr'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AdminWeeklyHighlightsRouteImport } from './routes/admin.weekly-highlights'
 import { Route as AdminVolunteersRouteImport } from './routes/admin.volunteers'
 import { Route as AdminVolunteerPageRouteImport } from './routes/admin.volunteer-page'
 import { Route as AdminVoicesRouteImport } from './routes/admin.voices'
@@ -149,6 +150,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWeeklyHighlightsRoute = AdminWeeklyHighlightsRouteImport.update({
+  id: '/weekly-highlights',
+  path: '/weekly-highlights',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminVolunteersRoute = AdminVolunteersRouteImport.update({
   id: '/volunteers',
@@ -307,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/admin/voices': typeof AdminVoicesRoute
   '/admin/volunteer-page': typeof AdminVolunteerPageRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/admin/weekly-highlights': typeof AdminWeeklyHighlightsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
   '/get-involved/csr-info': typeof GetInvolvedCsrInfoRoute
@@ -352,6 +359,7 @@ export interface FileRoutesByTo {
   '/admin/voices': typeof AdminVoicesRoute
   '/admin/volunteer-page': typeof AdminVolunteerPageRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/admin/weekly-highlights': typeof AdminWeeklyHighlightsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
   '/get-involved/csr-info': typeof GetInvolvedCsrInfoRoute
@@ -399,6 +407,7 @@ export interface FileRoutesById {
   '/admin/voices': typeof AdminVoicesRoute
   '/admin/volunteer-page': typeof AdminVolunteerPageRoute
   '/admin/volunteers': typeof AdminVolunteersRoute
+  '/admin/weekly-highlights': typeof AdminWeeklyHighlightsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/get-involved/csr': typeof GetInvolvedCsrRoute
   '/get-involved/csr-info': typeof GetInvolvedCsrInfoRoute
@@ -447,6 +456,7 @@ export interface FileRouteTypes {
     | '/admin/voices'
     | '/admin/volunteer-page'
     | '/admin/volunteers'
+    | '/admin/weekly-highlights'
     | '/blog/$slug'
     | '/get-involved/csr'
     | '/get-involved/csr-info'
@@ -492,6 +502,7 @@ export interface FileRouteTypes {
     | '/admin/voices'
     | '/admin/volunteer-page'
     | '/admin/volunteers'
+    | '/admin/weekly-highlights'
     | '/blog/$slug'
     | '/get-involved/csr'
     | '/get-involved/csr-info'
@@ -538,6 +549,7 @@ export interface FileRouteTypes {
     | '/admin/voices'
     | '/admin/volunteer-page'
     | '/admin/volunteers'
+    | '/admin/weekly-highlights'
     | '/blog/$slug'
     | '/get-involved/csr'
     | '/get-involved/csr-info'
@@ -710,6 +722,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/weekly-highlights': {
+      id: '/admin/weekly-highlights'
+      path: '/weekly-highlights'
+      fullPath: '/admin/weekly-highlights'
+      preLoaderRoute: typeof AdminWeeklyHighlightsRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/volunteers': {
       id: '/admin/volunteers'
@@ -924,6 +943,7 @@ interface AdminRouteChildren {
   AdminVoicesRoute: typeof AdminVoicesRoute
   AdminVolunteerPageRoute: typeof AdminVolunteerPageRoute
   AdminVolunteersRoute: typeof AdminVolunteersRoute
+  AdminWeeklyHighlightsRoute: typeof AdminWeeklyHighlightsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -950,6 +970,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminVoicesRoute: AdminVoicesRoute,
   AdminVolunteerPageRoute: AdminVolunteerPageRoute,
   AdminVolunteersRoute: AdminVolunteersRoute,
+  AdminWeeklyHighlightsRoute: AdminWeeklyHighlightsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
