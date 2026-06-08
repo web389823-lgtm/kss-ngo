@@ -89,11 +89,38 @@ export default function SiteEnhancements() {
     };
     tagVideos();
 
+    // -------- Pointer-based 3D tilt for [data-tilt] elements --------
+    const tiltCleanups: Array<() => void> = [];
+    const initTilt = () => {
+      if (reduced) return;
+      document.querySelectorAll<HTMLElement>("[data-tilt]:not([data-tilt-init])").forEach((el) => {
+        el.dataset.tiltInit = "1";
+        el.style.transformStyle = "preserve-3d";
+        el.style.transition = "transform 300ms cubic-bezier(.2,.8,.2,1)";
+        const max = parseFloat(el.dataset.tiltMax || "10");
+        const onMove = (e: PointerEvent) => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          el.style.transform = `perspective(1000px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateZ(8px)`;
+        };
+        const onLeave = () => { el.style.transform = ""; };
+        el.addEventListener("pointermove", onMove);
+        el.addEventListener("pointerleave", onLeave);
+        tiltCleanups.push(() => {
+          el.removeEventListener("pointermove", onMove);
+          el.removeEventListener("pointerleave", onLeave);
+        });
+      });
+    };
+    initTilt();
+
     // -------- MutationObserver for new DOM --------
     const mo = new MutationObserver(() => {
       if (!reduced) scanReveal();
       tagImages();
       tagVideos();
+      initTilt();
       document.querySelectorAll<HTMLElement>("[data-counter]:not([data-counter-init])").forEach((el) => {
         el.dataset.counterInit = "1"; counterIO.observe(el);
       });
@@ -104,8 +131,10 @@ export default function SiteEnhancements() {
       revealIO.disconnect();
       counterIO.disconnect();
       mo.disconnect();
+      tiltCleanups.forEach((fn) => fn());
     };
   }, []);
 
   return null;
 }
+
