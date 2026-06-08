@@ -887,12 +887,125 @@ img.kss-loaded { opacity: 1; }
 .kss-share-row:hover { background: rgba(232,84,10,0.08); color: #E8540A; }
 
 /* ============================================================
+   EXTRA ANIMATIONS & 3D EFFECTS
+   ============================================================ */
+@keyframes kssFloat3d {
+  0%, 100% { transform: translateY(0) rotateX(0) rotateY(0); }
+  50%      { transform: translateY(-10px) rotateX(2deg) rotateY(-2deg); }
+}
+@keyframes kssGlowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(232,84,10,0.35), 0 10px 30px -10px rgba(232,84,10,0.4); }
+  50%      { box-shadow: 0 0 0 14px rgba(232,84,10,0), 0 18px 40px -10px rgba(232,84,10,0.55); }
+}
+@keyframes kssGradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@keyframes kssShimmer {
+  0%   { transform: translateX(-150%) skewX(-20deg); }
+  100% { transform: translateX(250%) skewX(-20deg); }
+}
+@keyframes kssRotateIn {
+  from { opacity: 0; transform: perspective(800px) rotateX(-20deg) translateY(30px); }
+  to   { opacity: 1; transform: perspective(800px) rotateX(0) translateY(0); }
+}
+@keyframes kssBlob {
+  0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0,0) rotate(0deg); }
+  33%      { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(20px,-15px) rotate(40deg); }
+  66%      { border-radius: 30% 70% 60% 40% / 30% 70% 40% 60%; transform: translate(-15px,10px) rotate(-30deg); }
+}
+
+/* Apply scene perspective at body so 3D children render with depth */
+body { perspective: 1400px; }
+
+/* 3D tilt card — hover lifts and tilts in space */
+.tilt-3d {
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(.2,.8,.2,1), box-shadow 600ms ease;
+  will-change: transform;
+}
+.tilt-3d:hover {
+  transform: perspective(1000px) rotateX(6deg) rotateY(-6deg) translateY(-6px) scale(1.02);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.35), 0 18px 36px -18px rgba(232,84,10,0.35);
+}
+
+/* Make existing KSS cards feel 3D on hover (non-touch) */
+@media (hover: hover) {
+  .kss-card {
+    transform-style: preserve-3d;
+    transition: transform 500ms cubic-bezier(.2,.8,.2,1), box-shadow 500ms ease;
+  }
+  .kss-card:hover {
+    transform: perspective(1100px) rotateX(5deg) rotateY(-5deg) translateY(-8px) scale(1.015);
+    box-shadow: 0 28px 60px -22px rgba(0,0,0,0.4), 0 20px 40px -20px rgba(232,84,10,0.3);
+  }
+  .kss-card:hover .kss-card-photo img { transform: scale(1.08) translateZ(30px); }
+  .kss-card-photo img { transition: transform 700ms ease; }
+}
+
+/* Floating gentle animation utility */
+.float-3d { animation: kssFloat3d 6s ease-in-out infinite; transform-style: preserve-3d; }
+
+/* Glow pulse for CTAs */
+.glow-pulse { animation: kssGlowPulse 2.6s ease-in-out infinite; }
+
+/* Animated gradient text/background */
+.gradient-animate {
+  background: linear-gradient(120deg, #E8540A, #3949AB, #2E7D32, #E8540A);
+  background-size: 300% 300%;
+  animation: kssGradientShift 9s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Shimmer overlay (add to a relatively-positioned parent that has overflow-hidden) */
+.shimmer { position: relative; overflow: hidden; }
+.shimmer::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+  transform: translateX(-150%) skewX(-20deg);
+  animation: kssShimmer 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* 3D rotate-in on reveal */
+.reveal-3d { opacity: 0; }
+.reveal-3d.is-visible { animation: kssRotateIn 800ms cubic-bezier(.2,.8,.2,1) forwards; }
+
+/* Morphing animated blob background helper */
+.kss-blob {
+  position: absolute; width: 400px; height: 400px;
+  background: radial-gradient(circle at 30% 30%, rgba(232,84,10,0.35), rgba(57,73,171,0.25) 60%, transparent 70%);
+  filter: blur(40px);
+  animation: kssBlob 18s ease-in-out infinite;
+  pointer-events: none; z-index: 0;
+}
+
+/* Buttons: subtle 3D press */
+.btn-3d {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  transform-style: preserve-3d;
+}
+.btn-3d:hover { transform: translateY(-2px) translateZ(6px); box-shadow: 0 12px 24px -10px rgba(0,0,0,0.35); }
+.btn-3d:active { transform: translateY(1px) translateZ(0); }
+
+/* Image hover zoom + lift */
+.img-3d { overflow: hidden; transform-style: preserve-3d; }
+.img-3d img { transition: transform 700ms cubic-bezier(.2,.8,.2,1); }
+.img-3d:hover img { transform: scale(1.08) translateZ(20px); }
+
+/* ============================================================
    REDUCED MOTION
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .kss-glass-nav, .kss-glass-donate, .gradient-heading, .glass-card,
   .kss-typewriter-cursor, .kss-social-proof, .kss-lightbox, .kss-exit-box, .kss-share-panel,
-  .kss-mb-icon, .kss-mb-dot {
+  .kss-mb-icon, .kss-mb-dot,
+  .float-3d, .glow-pulse, .gradient-animate, .shimmer::after, .kss-blob, .reveal-3d {
     animation: none !important; transition: none !important;
   }
+  .tilt-3d:hover, .kss-card:hover, .btn-3d:hover, .img-3d:hover img { transform: none !important; }
 }
+
