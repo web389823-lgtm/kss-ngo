@@ -176,6 +176,18 @@ export const Route = createFileRoute("/")({
 
 const ICONS: Record<string, any> = { GraduationCap, Home: HomeIcon, Stethoscope, Sparkles, Users, Award };
 
+function resolveHighlightHref(h: any): string | null {
+  const t = h?.link_target?.trim();
+  if (!t) return null;
+  switch (h?.link_type) {
+    case "program": return `/programs/${t}`;
+    case "project": return `/projects/${t}`;
+    case "blog": return `/blog/${t}`;
+    case "custom": return t;
+    default: return null;
+  }
+}
+
 const PROGRAM_HIGHLIGHTS = [
   { icon: GraduationCap, title: "Education", body: "Education forms the core of KSS's work — academic support, access to essentials, guidance and encouragement for children to continue their learning journey with confidence. Equal emphasis on cultural grounding, discipline and character building." },
   { icon: Flower2, title: "Women Empowerment", body: "KSS supports women through skill development, livelihood opportunities and community-based initiatives. Programs also promote health awareness, hygiene, environmental responsibility and civic participation." },
@@ -201,6 +213,10 @@ function HomePage() {
   const { data: posts } = useQuery({
     queryKey: ["blog", "home"],
     queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(4)).data ?? [],
+  });
+  const { data: highlights } = useQuery({
+    queryKey: ["weekly_highlights", "home"],
+    queryFn: async () => (await supabase.from("weekly_highlights" as any).select("*").eq("status", "published").order("sort_order", { ascending: true }).order("created_at", { ascending: false }).limit(6)).data ?? [],
   });
   // Advisory/Trustee sections removed from home page — they live on /about
 
@@ -403,6 +419,46 @@ function HomePage() {
       </section>
 
       {/* GET INVOLVED section removed from homepage */}
+
+      {/* WEEKLY HIGHLIGHTS */}
+      {(highlights ?? []).length > 0 && (
+        <section data-reveal className="py-20">
+          <div className="container-page">
+            <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">This week</p>
+                <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Weekly Highlights</h2>
+                <p className="mt-2 text-muted-foreground max-w-2xl">A quick look at our most recent stories, programs and projects.</p>
+              </div>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(highlights ?? []).map((h: any) => {
+                const href = resolveHighlightHref(h);
+                const Inner = (
+                  <Card className="overflow-hidden p-0 shadow-soft hover:shadow-elevated hover:-translate-y-1 transition-all duration-300 h-full group">
+                    <div className="aspect-video w-full overflow-hidden bg-secondary">
+                      {h.image_url
+                        ? <img src={h.image_url} alt={h.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                        : <div className="w-full h-full gradient-saffron" />}
+                    </div>
+                    <div className="p-5">
+                      {h.week_label && <p className="text-xs uppercase tracking-wider text-primary font-semibold">{h.week_label}</p>}
+                      <h3 className="mt-2 font-serif text-lg font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">{h.title}</h3>
+                      {h.description && <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{h.description}</p>}
+                      {href && <p className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary">Read more <ArrowRight className="h-3.5 w-3.5" /></p>}
+                    </div>
+                  </Card>
+                );
+                return href ? (
+                  <a key={h.id} href={href} className="block">{Inner}</a>
+                ) : (
+                  <div key={h.id}>{Inner}</div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* NEWS */}
       {(posts ?? []).length > 0 && (

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog, ImagePlus, Mail, MessageSquareQuote, MessageCircle, FileEdit, Megaphone, GalleryHorizontal, CalendarDays } from "lucide-react";
+import { LayoutDashboard, Heart, HandHeart, Building2, BookOpen, FolderKanban, Image, Newspaper, Quote, BarChart3, Users, UsersRound, Activity, Settings, LogOut, ShieldAlert, ShieldCheck, UserCog, ImagePlus, Mail, MessageSquareQuote, MessageCircle, FileEdit, Megaphone, GalleryHorizontal, CalendarDays, Sparkles } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 
@@ -23,6 +23,7 @@ const NAV: NavItem[] = [
   { to: "/admin/images", label: "Card Images", icon: ImagePlus },
   { to: "/admin/blog", label: "Blog", icon: Newspaper },
   { to: "/admin/news-banner", label: "News Banner", icon: Megaphone },
+  { to: "/admin/weekly-highlights", label: "Weekly Highlights", icon: Sparkles },
   { to: "/admin/voices", label: "Voices of Appreciation", icon: MessageSquareQuote },
   { to: "/admin/milestones", label: "Milestones", icon: CalendarDays },
   { to: "/admin/testimonials-manager", label: "Reviews / Testimonials", icon: MessageCircle, adminOnly: true },

@@ -1004,6 +1004,48 @@ export type Database = {
         }
         Relationships: []
       }
+      weekly_highlights: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          link_target: string | null
+          link_type: string
+          sort_order: number
+          status: string
+          title: string
+          updated_at: string
+          week_label: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          link_target?: string | null
+          link_type?: string
+          sort_order?: number
+          status?: string
+          title: string
+          updated_at?: string
+          week_label?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          link_target?: string | null
+          link_type?: string
+          sort_order?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          week_label?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
