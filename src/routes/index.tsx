@@ -202,6 +202,10 @@ function HomePage() {
     queryKey: ["blog", "home"],
     queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(4)).data ?? [],
   });
+  const { data: highlights } = useQuery({
+    queryKey: ["weekly_highlights", "home"],
+    queryFn: async () => (await supabase.from("weekly_highlights" as any).select("*").eq("status", "published").order("sort_order", { ascending: true }).order("created_at", { ascending: false }).limit(6)).data ?? [],
+  });
   // Advisory/Trustee sections removed from home page — they live on /about
 
   const { data: settings } = useQuery({
