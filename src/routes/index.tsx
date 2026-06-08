@@ -176,6 +176,18 @@ export const Route = createFileRoute("/")({
 
 const ICONS: Record<string, any> = { GraduationCap, Home: HomeIcon, Stethoscope, Sparkles, Users, Award };
 
+function resolveHighlightHref(h: any): string | null {
+  const t = h?.link_target?.trim();
+  if (!t) return null;
+  switch (h?.link_type) {
+    case "program": return `/programs/${t}`;
+    case "project": return `/projects/${t}`;
+    case "blog": return `/blog/${t}`;
+    case "custom": return t;
+    default: return null;
+  }
+}
+
 const PROGRAM_HIGHLIGHTS = [
   { icon: GraduationCap, title: "Education", body: "Education forms the core of KSS's work — academic support, access to essentials, guidance and encouragement for children to continue their learning journey with confidence. Equal emphasis on cultural grounding, discipline and character building." },
   { icon: Flower2, title: "Women Empowerment", body: "KSS supports women through skill development, livelihood opportunities and community-based initiatives. Programs also promote health awareness, hygiene, environmental responsibility and civic participation." },
