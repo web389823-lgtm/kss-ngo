@@ -102,7 +102,7 @@ function HeroSlideshow() {
     "items-center justify-center text-center";
 
   return (
-    <section className="relative w-screen left-1/2 -translate-x-1/2 h-[60vh] md:h-screen overflow-hidden bg-black">
+    <section className="relative overflow-hidden bg-black mx-3 mt-3 rounded-2xl h-[58vh] md:mx-0 md:mt-0 md:rounded-none md:w-screen md:left-1/2 md:-translate-x-1/2 md:h-screen">
       <div className="absolute inset-0 will-change-transform" style={{ transform: `translate3d(0, ${pY}px, 0)` }}>
         {slides.map((s, idx) => (
           <img
