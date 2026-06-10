@@ -102,7 +102,7 @@ function HeroSlideshow() {
     "items-center justify-center text-center";
 
   return (
-    <section className="relative overflow-hidden bg-black mx-4 mt-4 rounded-3xl h-[52vh] sm:mx-5 sm:h-[55vh] md:mx-0 md:mt-0 md:rounded-none md:w-screen md:left-1/2 md:-translate-x-1/2 md:h-screen">
+    <section className="relative overflow-hidden bg-black mx-4 mt-4 rounded-3xl aspect-[4/5] [@media(min-aspect-ratio:3/4)]:aspect-[3/4] [@media(min-aspect-ratio:1/1)]:aspect-[16/10] md:aspect-auto md:mx-0 md:mt-0 md:rounded-none md:w-screen md:left-1/2 md:-translate-x-1/2 md:h-screen">
       <div className="absolute inset-0 will-change-transform" style={{ transform: `translate3d(0, ${pY}px, 0)` }}>
         {slides.map((s, idx) => (
           <img
