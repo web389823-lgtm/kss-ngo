@@ -104,7 +104,7 @@ function RootComponent() {
     if (document.getElementById("jotform-agent-embed")) return;
     const s = document.createElement("script");
     s.id = "jotform-agent-embed";
-    s.src = "https://cdn.jotfor.ms/agent/embedjs/019e65ac2e497ed98d7c0ae0793f5def2a9d/embed.js?autoOpenChatIn=150";
+    s.src = "https://cdn.jotfor.ms/agent/embedjs/019e65ac2e497ed98d7c0ae0793f5def2a9d/embed.js";
     s.async = true;
     document.body.appendChild(s);
   }, []);
