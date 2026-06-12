@@ -386,37 +386,8 @@ function HomePage() {
       )}
 
 
-      {/* WHY DONATE */}
-      <section data-reveal className="bg-muted/30 py-20">
-        <div className="container-page grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Why Donate</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Every contribution creates ripples</h2>
-            <p className="mt-5 text-muted-foreground">Your support directly funds the work that transforms lives across Bengaluru and beyond.</p>
-            <ul className="mt-6 space-y-3">
-              {[
-                { icon: GraduationCap, label: "Education for children" },
-                { icon: Stethoscope, label: "Healthcare for communities" },
-                { icon: HomeIcon, label: "Food and essential supplies" },
-                { icon: Flower2, label: "Women empowerment programs" },
-              ].map((i) => (
-                <li key={i.label} className="flex items-center gap-3">
-                  <div className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary">
-                    <i.icon className="h-4 w-4" />
-                  </div>
-                  <span className="font-medium">{i.label}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6 text-sm text-muted-foreground">Your support helps build a stronger, self-reliant society.</p>
-            <Button asChild size="lg" className="mt-6"><Link to="/donate"><Heart className="mr-2 h-4 w-4" />Donate Now</Link></Button>
-          </div>
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-3xl gradient-saffron opacity-20 blur-2xl" />
-            <img src={groceryDrive} alt="Ration kit distribution" className="relative rounded-2xl shadow-elevated object-cover aspect-[4/3] w-full" loading="lazy" />
-          </div>
-        </div>
-      </section>
+      {/* WHY DONATE removed per request */}
+
 
       {/* GET INVOLVED section removed from homepage */}
 
