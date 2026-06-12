@@ -1,17 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
-import React, { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import React from "react";
 import {
   Target, Eye, Heart, Users, Home, Calendar, UserCheck,
-  CheckCircle2, Mail, Phone, MapPin, X, ChevronLeft, ChevronRight,
+  CheckCircle2, Mail, Phone, MapPin, Clock, Image as ImageIcon, UsersRound, ArrowRight,
 } from "lucide-react";
 import FadeUp from "@/components/FadeUp";
 import AnimatedNumber from "@/components/AnimatedNumber";
 import FadeImage from "@/components/FadeImage";
-import { supabase } from "@/integrations/supabase/client";
 import aboutSeva from "@/assets/about-seva.jpg";
-import { slugify } from "@/lib/slug";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -27,7 +24,6 @@ const PARTNERS = [
   "Q Hospitals", "ALE India Pvt. Ltd.", "Fidelity Services", "Bhima Jewellers",
   "Ultra Green Pvt. Ltd.", "Globe Eye Foundation", "Mouna Guru Swami Mutt", "Good Measure Foundation",
 ];
-const GALLERY_CATEGORIES = ["All", "Education", "Healthcare", "Women Empowerment", "Events", "Cultural Programs", "Community"];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -37,19 +33,58 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
+function ExploreCards() {
+  const navigate = useNavigate();
+  const cards = [
+    { icon: Clock, title: "Milestones", desc: "Our journey since 1999 — key moments that shaped KSS.", to: "/milestones" },
+    { icon: ImageIcon, title: "Gallery", desc: "Photos and moments of seva from our programs and events.", to: "/gallery" },
+    { icon: UsersRound, title: "Our Members", desc: "Advisors, trustees and volunteers behind KSS.", to: "/team" },
+  ];
+  return (
+    <section className="container-page py-20">
+      <FadeUp>
+        <div className="text-center mb-10">
+          <SectionLabel>Explore More</SectionLabel>
+          <h2 className="mt-4 font-serif text-3xl md:text-4xl font-bold">Dive Deeper Into Our Story</h2>
+        </div>
+      </FadeUp>
+      <div className="grid md:grid-cols-3 gap-6">
+        {cards.map((c, i) => (
+          <FadeUp key={c.title} delay={i * 0.1}>
+            <motion.button
+              type="button"
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              onClick={() => navigate({ to: c.to })}
+              className="w-full text-left bg-card rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all group cursor-pointer border border-transparent hover:border-orange-200"
+            >
+              <div className="h-12 w-12 rounded-full grid place-items-center mb-5 transition-transform group-hover:scale-110" style={{ background: "#FFF3EC" }}>
+                <c.icon className="h-6 w-6" style={{ color: ORANGE }} />
+              </div>
+              <h3 className="font-serif text-xl font-bold">{c.title}</h3>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
+              <p className="mt-5 inline-flex items-center gap-1 text-sm font-semibold transition-transform group-hover:translate-x-1" style={{ color: ORANGE }}>
+                View <ArrowRight className="h-4 w-4" />
+              </p>
+            </motion.button>
+          </FadeUp>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function AboutPage() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
       <Hero />
       <Intro />
-      <Milestones />
       <MVV />
       <Impact />
       <Story />
       <Certifications />
       <Partners />
-      <GallerySection />
-      <TeamSection />
+      <ExploreCards />
       <ContactStrip />
     </motion.div>
   );

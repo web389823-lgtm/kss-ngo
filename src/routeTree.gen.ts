@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as MilestonesRouteImport } from './routes/milestones'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as DonateRouteImport } from './routes/donate'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -63,6 +64,11 @@ const TestimonialsRoute = TestimonialsRouteImport.update({
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MilestonesRoute = MilestonesRouteImport.update({
+  id: '/milestones',
+  path: '/milestones',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GalleryRoute = GalleryRouteImport.update({
@@ -289,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
+  '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
@@ -335,6 +342,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRouteWithChildren
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
+  '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
@@ -383,6 +391,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
+  '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
   '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
@@ -432,6 +441,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/donate'
     | '/gallery'
+    | '/milestones'
     | '/team'
     | '/testimonials'
     | '/admin/activity'
@@ -478,6 +488,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/donate'
     | '/gallery'
+    | '/milestones'
     | '/team'
     | '/testimonials'
     | '/admin/activity'
@@ -525,6 +536,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/donate'
     | '/gallery'
+    | '/milestones'
     | '/team'
     | '/testimonials'
     | '/admin/activity'
@@ -573,6 +585,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   DonateRoute: typeof DonateRoute
   GalleryRoute: typeof GalleryRoute
+  MilestonesRoute: typeof MilestonesRoute
   TeamRoute: typeof TeamRouteWithChildren
   TestimonialsRoute: typeof TestimonialsRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -602,6 +615,13 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/team'
       preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/milestones': {
+      id: '/milestones'
+      path: '/milestones'
+      fullPath: '/milestones'
+      preLoaderRoute: typeof MilestonesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gallery': {
@@ -992,6 +1012,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   DonateRoute: DonateRoute,
   GalleryRoute: GalleryRoute,
+  MilestonesRoute: MilestonesRoute,
   TeamRoute: TeamRouteWithChildren,
   TestimonialsRoute: TestimonialsRoute,
   BlogSlugRoute: BlogSlugRoute,
