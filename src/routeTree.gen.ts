@@ -13,6 +13,7 @@ import { Route as TeamRouteImport } from './routes/team'
 import { Route as MilestonesRouteImport } from './routes/milestones'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as DonateRouteImport } from './routes/donate'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -73,6 +74,11 @@ const GalleryRoute = GalleryRouteImport.update({
 const DonateRoute = DonateRouteImport.update({
   id: '/donate',
   path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -287,6 +293,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
@@ -333,6 +340,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
+  '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
@@ -381,6 +389,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
@@ -430,6 +439,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/contact'
     | '/donate'
     | '/gallery'
     | '/milestones'
@@ -476,6 +486,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/contact'
     | '/donate'
     | '/gallery'
     | '/milestones'
@@ -523,6 +534,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/contact'
     | '/donate'
     | '/gallery'
     | '/milestones'
@@ -571,6 +583,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
+  ContactRoute: typeof ContactRoute
   DonateRoute: typeof DonateRoute
   GalleryRoute: typeof GalleryRoute
   MilestonesRoute: typeof MilestonesRoute
@@ -616,6 +629,13 @@ declare module '@tanstack/react-router' {
       path: '/donate'
       fullPath: '/donate'
       preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -990,6 +1010,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
+  ContactRoute: ContactRoute,
   DonateRoute: DonateRoute,
   GalleryRoute: GalleryRoute,
   MilestonesRoute: MilestonesRoute,
@@ -1009,13 +1030,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
