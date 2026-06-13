@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as MilestonesRouteImport } from './routes/milestones'
 import { Route as GalleryRouteImport } from './routes/gallery'
@@ -56,11 +55,6 @@ import { Route as TeamTypeIdRouteImport } from './routes/team.$type.$id'
 import { Route as AboutTrusteeSlugRouteImport } from './routes/about.trustee.$slug'
 import { Route as AboutAdvisorySlugRouteImport } from './routes/about.advisory.$slug'
 
-const TestimonialsRoute = TestimonialsRouteImport.update({
-  id: '/testimonials',
-  path: '/testimonials',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
@@ -297,7 +291,6 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
-  '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
@@ -344,7 +337,6 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
-  '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
@@ -393,7 +385,6 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
-  '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
@@ -443,7 +434,6 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/milestones'
     | '/team'
-    | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
     | '/admin/contacts'
@@ -490,7 +480,6 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/milestones'
     | '/team'
-    | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
     | '/admin/contacts'
@@ -538,7 +527,6 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/milestones'
     | '/team'
-    | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
     | '/admin/contacts'
@@ -587,7 +575,6 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   MilestonesRoute: typeof MilestonesRoute
   TeamRoute: typeof TeamRouteWithChildren
-  TestimonialsRoute: typeof TestimonialsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   GetInvolvedCsrRoute: typeof GetInvolvedCsrRoute
   GetInvolvedCsrInfoRoute: typeof GetInvolvedCsrInfoRoute
@@ -603,13 +590,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/testimonials': {
-      id: '/testimonials'
-      path: '/testimonials'
-      fullPath: '/testimonials'
-      preLoaderRoute: typeof TestimonialsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/team': {
       id: '/team'
       path: '/team'
@@ -1014,7 +994,6 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   MilestonesRoute: MilestonesRoute,
   TeamRoute: TeamRouteWithChildren,
-  TestimonialsRoute: TestimonialsRoute,
   BlogSlugRoute: BlogSlugRoute,
   GetInvolvedCsrRoute: GetInvolvedCsrRoute,
   GetInvolvedCsrInfoRoute: GetInvolvedCsrInfoRoute,
