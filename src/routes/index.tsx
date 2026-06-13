@@ -14,7 +14,6 @@ import MissionTagline from "@/components/site/MissionTagline";
 import ProgramPhotoGrid from "@/components/site/ProgramPhotoGrid";
 import ProgramHighlightsGrid from "@/components/site/ProgramHighlightsGrid";
 import VoicesOfAppreciation from "@/components/site/VoicesOfAppreciation";
-import TestimonialsSection from "@/components/site/TestimonialsSection";
 import TypewriterText from "@/components/site/TypewriterText";
 
 
@@ -467,9 +466,6 @@ function HomePage() {
 
       {/* SEVA MOMENTS — YouTube videos */}
       <SevaMoments />
-
-      {/* TESTIMONIALS — approved from DB + Leave a Review */}
-      <TestimonialsSection />
 
       {/* VOICES OF APPRECIATION carousel */}
       <VoicesOfAppreciation />

@@ -120,6 +120,15 @@ function DonatePage() {
           </Card>
         </div>
         <aside className="space-y-4">
+          <Card className="p-6 shadow-soft border-primary/30">
+            <h3 className="font-serif text-lg font-semibold">Direct Bank Transfer</h3>
+            <ul className="mt-3 text-sm space-y-1.5">
+              <li><span className="text-muted-foreground">Account Name:</span> <span className="font-medium">Keshava Seva Samiti</span></li>
+              <li><span className="text-muted-foreground">Bank:</span> <span className="font-medium">Union Bank of India</span></li>
+              <li><span className="text-muted-foreground">A/C No:</span> <span className="font-medium">520101226076152</span></li>
+              <li><span className="text-muted-foreground">IFSC:</span> <span className="font-medium">UBIN0533114</span></li>
+            </ul>
+          </Card>
           <Card className="p-6 shadow-soft"><h3 className="font-serif text-lg font-semibold">Where your money goes</h3>
             <ul className="mt-3 text-sm text-muted-foreground space-y-2">
               <li>₹500 — A month of study materials for one child</li>
@@ -130,7 +139,7 @@ function DonatePage() {
           </Card>
           <Card className="p-6 shadow-soft bg-accent/40">
             <h3 className="font-serif text-lg font-semibold">Tax benefits</h3>
-            <p className="mt-2 text-sm text-muted-foreground">All donations are eligible for tax exemption under Section 80G. You'll receive a receipt within 7 days.</p>
+            <p className="mt-2 text-sm text-muted-foreground">All donations are eligible for tax exemption under Section 80G. 12A Registered · 10A Approved. You'll receive a receipt within 7 days.</p>
           </Card>
         </aside>
       </section>

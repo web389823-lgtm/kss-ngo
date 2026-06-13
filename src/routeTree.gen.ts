@@ -9,11 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as MilestonesRouteImport } from './routes/milestones'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as DonateRouteImport } from './routes/donate'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -56,11 +56,6 @@ import { Route as TeamTypeIdRouteImport } from './routes/team.$type.$id'
 import { Route as AboutTrusteeSlugRouteImport } from './routes/about.trustee.$slug'
 import { Route as AboutAdvisorySlugRouteImport } from './routes/about.advisory.$slug'
 
-const TestimonialsRoute = TestimonialsRouteImport.update({
-  id: '/testimonials',
-  path: '/testimonials',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
@@ -79,6 +74,11 @@ const GalleryRoute = GalleryRouteImport.update({
 const DonateRoute = DonateRouteImport.update({
   id: '/donate',
   path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -293,11 +293,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
-  '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
@@ -340,11 +340,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
+  '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
-  '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
@@ -389,11 +389,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
+  '/contact': typeof ContactRoute
   '/donate': typeof DonateRoute
   '/gallery': typeof GalleryRoute
   '/milestones': typeof MilestonesRoute
   '/team': typeof TeamRouteWithChildren
-  '/testimonials': typeof TestimonialsRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/contacts': typeof AdminContactsRoute
@@ -439,11 +439,11 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/contact'
     | '/donate'
     | '/gallery'
     | '/milestones'
     | '/team'
-    | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
     | '/admin/contacts'
@@ -486,11 +486,11 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/contact'
     | '/donate'
     | '/gallery'
     | '/milestones'
     | '/team'
-    | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
     | '/admin/contacts'
@@ -534,11 +534,11 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/contact'
     | '/donate'
     | '/gallery'
     | '/milestones'
     | '/team'
-    | '/testimonials'
     | '/admin/activity'
     | '/admin/blog'
     | '/admin/contacts'
@@ -583,11 +583,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
+  ContactRoute: typeof ContactRoute
   DonateRoute: typeof DonateRoute
   GalleryRoute: typeof GalleryRoute
   MilestonesRoute: typeof MilestonesRoute
   TeamRoute: typeof TeamRouteWithChildren
-  TestimonialsRoute: typeof TestimonialsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   GetInvolvedCsrRoute: typeof GetInvolvedCsrRoute
   GetInvolvedCsrInfoRoute: typeof GetInvolvedCsrInfoRoute
@@ -603,13 +603,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/testimonials': {
-      id: '/testimonials'
-      path: '/testimonials'
-      fullPath: '/testimonials'
-      preLoaderRoute: typeof TestimonialsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/team': {
       id: '/team'
       path: '/team'
@@ -636,6 +629,13 @@ declare module '@tanstack/react-router' {
       path: '/donate'
       fullPath: '/donate'
       preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -1010,11 +1010,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
+  ContactRoute: ContactRoute,
   DonateRoute: DonateRoute,
   GalleryRoute: GalleryRoute,
   MilestonesRoute: MilestonesRoute,
   TeamRoute: TeamRouteWithChildren,
-  TestimonialsRoute: TestimonialsRoute,
   BlogSlugRoute: BlogSlugRoute,
   GetInvolvedCsrRoute: GetInvolvedCsrRoute,
   GetInvolvedCsrInfoRoute: GetInvolvedCsrInfoRoute,
@@ -1030,13 +1030,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
