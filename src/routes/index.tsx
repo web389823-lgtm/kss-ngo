@@ -1,487 +1,303 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import {
-  ArrowRight, Heart, Sparkles, GraduationCap, Home as HomeIcon,
-  Stethoscope, Users, Award, Quote, BookOpen, Drama, Baby, Flower2,
-  ChevronLeft, ChevronRight,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Counter } from "@/components/site/Counter";
-import MissionTagline from "@/components/site/MissionTagline";
-import ProgramPhotoGrid from "@/components/site/ProgramPhotoGrid";
-import ProgramHighlightsGrid from "@/components/site/ProgramHighlightsGrid";
-import VoicesOfAppreciation from "@/components/site/VoicesOfAppreciation";
-import TypewriterText from "@/components/site/TypewriterText";
-
-
-type HeroSlide = {
-  id: string;
-  image_url: string;
-  headline: string | null;
-  subtext: string | null;
-  cta_text: string | null;
-  cta_link: string | null;
-  text_position: "center" | "left" | "right";
-  overlay_opacity: number;
-  status: string;
-  display_order: number;
-};
-
-const FALLBACK_SLIDE: HeroSlide = {
-  id: "fallback",
-  image_url: "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1600",
-  headline: "Reach the Unreached",
-  subtext: "Keshava Seva Samiti has been transforming lives since 1999.",
-  cta_text: "Join Now",
-  cta_link: "/get-involved",
-  text_position: "center",
-  overlay_opacity: 40,
-  status: "active",
-  display_order: 0,
-};
-
-function HeroSlideshow() {
-  const [slides, setSlides] = useState<HeroSlide[]>([]);
-  const [i, setI] = useState(0);
-  const [pY, setPY] = useState(0);
-
-  const fetchSlides = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("hero_carousel_slides" as any)
-        .select("*")
-        .eq("status", "active")
-        .order("display_order", { ascending: true });
-      if (error) throw error;
-      const list = ((data as any[]) || []) as HeroSlide[];
-      setSlides(list.length > 0 ? list : [FALLBACK_SLIDE]);
-    } catch (e) {
-      console.error("Hero fetch error:", e);
-      setSlides([FALLBACK_SLIDE]);
-    }
-  };
-
-  useEffect(() => {
-    fetchSlides();
-    const channel = supabase
-      .channel("carousel-changes")
-      .on("postgres_changes" as any, { event: "*", schema: "public", table: "hero_carousel_slides" }, () => fetchSlides())
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
-  }, []);
-
-  const n = slides.length;
-  useEffect(() => {
-    if (n <= 1) return;
-    const t = setInterval(() => setI((x) => (x + 1) % n), 5000);
-    return () => clearInterval(t);
-  }, [n]);
-  useEffect(() => { if (i >= n && n > 0) setI(0); }, [n, i]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => setPY(window.scrollY * 0.4));
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
-  }, []);
-
-  if (n === 0) return null;
-  const cur = slides[i];
-  const align = (p: string) =>
-    p === "left" ? "items-center justify-start text-left" :
-    p === "right" ? "items-center justify-end text-right" :
-    "items-center justify-center text-center";
-
-  return (
-    <section className="relative overflow-hidden bg-black mx-4 mt-4 rounded-3xl aspect-[4/5] [@media(min-aspect-ratio:3/4)]:aspect-[3/4] [@media(min-aspect-ratio:1/1)]:aspect-[16/10] md:aspect-auto md:mx-0 md:mt-0 md:rounded-none md:w-screen md:left-1/2 md:-translate-x-1/2 md:h-screen">
-      <div className="absolute inset-0 will-change-transform" style={{ transform: `translate3d(0, ${pY}px, 0)` }}>
-        {slides.map((s, idx) => (
-          <img
-            key={s.id}
-            src={s.image_url}
-            alt={s.headline ?? ""}
-            aria-hidden={idx !== i}
-            loading={idx === 0 ? "eager" : "lazy"}
-            className={`absolute inset-0 h-[120%] w-full object-cover transition-opacity duration-1000 ease-out ${idx === i ? "opacity-100" : "opacity-0"}`}
-          />
-        ))}
-      </div>
-      {cur && (
-        <div aria-hidden className="absolute inset-0" style={{ background: `rgba(0,0,0,${(cur.overlay_opacity ?? 40) / 100})` }} />
-      )}
-      {cur && (cur.headline || cur.subtext || cur.cta_text) && (
-        <div className={`absolute inset-0 z-[5] flex px-8 md:px-16 ${align(cur.text_position || "center")}`}>
-          <div className="max-w-3xl text-white" style={{ fontFamily: "'Assistant', sans-serif" }}>
-            {cur.headline && (
-              <h1 className="font-bold drop-shadow-lg gradient-heading" style={{ fontSize: "clamp(2rem, 5vw, 4rem)", lineHeight: 1.15 }}>{cur.headline}</h1>
-            )}
-            <p className="mt-4 opacity-95 drop-shadow" style={{ fontSize: "clamp(1rem, 1.6vw, 1.4rem)", lineHeight: 1.5, minHeight: "1.8em" }}>
-              <TypewriterText />
-            </p>
-            {cur.cta_text && cur.cta_link && (
-              <a href={cur.cta_link} className="inline-block mt-7 px-7 py-3 rounded-full font-semibold transition-all hover:-translate-y-0.5" style={{ background: "#E8540A", color: "#fff", fontSize: "15px" }}>
-                {cur.cta_text}
-              </a>
-            )}
-          </div>
-        </div>
-      )}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <span className="absolute h-72 w-72 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_8s_ease-in-out_infinite]" style={{ top: "12%", left: "8%" }} />
-        <span className="absolute h-96 w-96 rounded-full bg-[#E8540A] opacity-[0.06] blur-2xl animate-[kssFloat_12s_ease-in-out_infinite]" style={{ top: "55%", right: "10%" }} />
-      </div>
-      {n > 1 && (
-        <>
-          <button type="button" aria-label="Previous slide" onClick={() => setI((x) => (x - 1 + n) % n)} className="absolute left-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition">
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          <button type="button" aria-label="Next slide" onClick={() => setI((x) => (x + 1) % n)} className="absolute right-4 top-1/2 -translate-y-1/2 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur transition">
-            <ChevronRight className="h-6 w-6" />
-          </button>
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-            {slides.map((_, idx) => (
-              <button key={idx} type="button" aria-label={`Go to slide ${idx + 1}`} onClick={() => setI(idx)} className={`h-2.5 rounded-full transition-all ${idx === i ? "w-8 bg-white" : "w-2.5 bg-white/50 hover:bg-white/80"}`} />
-            ))}
-          </div>
-        </>
-      )}
-    </section>
-  );
-}
-
-import healthCamp from "@/assets/health-camp.jpg";
-import womenWorkshop from "@/assets/women-workshop.jpg";
-import groceryDrive from "@/assets/grocery-drive.jpg";
-import communityGroup from "@/assets/kss-community-group.jpg";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { Camera } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import MissionTagline from "@/components/site/MissionTagline";
+import VoicesOfAppreciation from "@/components/site/VoicesOfAppreciation";
+import heroChildren from "@/assets/hero-children.jpg";
+import communityGroup from "@/assets/kss-community-group.jpg";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
   head: () => ({
     meta: [
-      { title: "Keshava Seva Samiti — Transforming lives since 1999" },
-      { name: "description", content: "Bengaluru-based NGO serving marginalized communities through education, healthcare, women empowerment, culture and welfare. Donate or volunteer with KSS today." },
+      { title: "Keshava Seva Samiti — Reach the Unreached" },
+      { name: "description", content: "Bengaluru-based NGO transforming lives since 1999 through education, healthcare, women empowerment, culture and welfare." },
     ],
   }),
 });
 
-const ICONS: Record<string, any> = { GraduationCap, Home: HomeIcon, Stethoscope, Sparkles, Users, Award };
-
-function resolveHighlightHref(h: any): string | null {
-  const t = h?.link_target?.trim();
-  if (!t) return null;
-  switch (h?.link_type) {
-    case "program": return `/programs/${t}`;
-    case "project": return `/projects/${t}`;
-    case "blog": return `/blog/${t}`;
-    case "custom": return t;
-    default: return null;
-  }
-}
-
-const PROGRAM_HIGHLIGHTS = [
-  { icon: GraduationCap, title: "Education", body: "Education forms the core of KSS's work — academic support, access to essentials, guidance and encouragement for children to continue their learning journey with confidence. Equal emphasis on cultural grounding, discipline and character building." },
-  { icon: Flower2, title: "Women Empowerment", body: "KSS supports women through skill development, livelihood opportunities and community-based initiatives. Programs also promote health awareness, hygiene, environmental responsibility and civic participation." },
-  { icon: Drama, title: "Culture & Values", body: "KSS integrates Bharatiya values into its initiatives through camps, activities and events that promote teamwork, leadership and social harmony." },
-  { icon: Baby, title: "BalaSangam", body: "Our flagship annual children's event, bringing together thousands of children to celebrate sports, creativity and learning while building confidence and discipline." },
-  { icon: Sparkles, title: "Yoga Day", body: "KSS celebrates International Yoga Day through large-scale community participation — promoting physical health, mental well-being and awareness of yoga as a way of life." },
-  { icon: BookOpen, title: "Seva Bastis", body: "Nearly 100 community centres across 65+ locations and 12 constituencies bring education, healthcare and care to where it is needed most." },
-];
-
-function HomePage() {
-  const { data: stats } = useQuery({
-    queryKey: ["impact_stats"],
-    queryFn: async () => (await supabase.from("impact_stats").select("*").order("sort_order")).data ?? [],
-  });
-  const { data: programs } = useQuery({
-    queryKey: ["programs", "home"],
-    queryFn: async () => (await supabase.from("programs").select("*").eq("status", "active").order("sort_order").limit(6)).data ?? [],
-  });
-  const { data: testimonials } = useQuery({
-    queryKey: ["testimonials", "featured"],
-    queryFn: async () => (await supabase.from("testimonials").select("*").eq("is_featured", true).limit(3)).data ?? [],
-  });
-  const { data: posts } = useQuery({
-    queryKey: ["blog", "home"],
-    queryFn: async () => (await supabase.from("blog_posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(4)).data ?? [],
-  });
-  const { data: highlights } = useQuery({
-    queryKey: ["weekly_highlights", "home"],
-    queryFn: async () => (await supabase.from("weekly_highlights" as any).select("*").eq("status", "published").order("sort_order", { ascending: true }).order("created_at", { ascending: false }).limit(6)).data ?? [],
-  });
-  // Advisory/Trustee sections removed from home page — they live on /about
-
-  const { data: settings } = useQuery({
-    queryKey: ["site_settings_home"],
-    queryFn: async () => {
-      const { data } = await supabase.from("site_settings").select("*").in("key", ["home_hero", "home_about", "home_mission_vision", "home_contact"]);
-      const map: Record<string, any> = {};
-      (data ?? []).forEach((r: any) => (map[r.key] = r.value));
-      return map;
-    },
-  });
-
-  const heroCfg = settings?.home_hero ?? {};
-  const about = settings?.home_about ?? {};
-  const mv = settings?.home_mission_vision ?? {};
-  const contact = settings?.home_contact ?? {};
-
+// ─────────────────────────────────────────────────────────────
+// SECTION 2 — HERO (split layout)
+// ─────────────────────────────────────────────────────────────
+function HeroSplit() {
   return (
-    <div>
-      {/* HERO — fullscreen image slideshow */}
-      <HeroSlideshow />
-
-
-      {/* MISSION TAGLINE */}
-      <MissionTagline />
-
-      {/* COMMUNITY PHOTO — strict 16:9 with side margins */}
-      <section
-        style={{
-          marginTop: "clamp(24px, 4vw, 48px)",
-          marginBottom: 0,
-        }}
-      >
-        <div
-          className="mx-auto"
-          style={{
-            maxWidth: "1200px",
-            width: "calc(100% - 80px)",
-            padding: "0 40px",
-          }}
+    <section style={{ background: "#fff", padding: "clamp(32px, 5vw, 64px) 0" }}>
+      <div className="container-page grid gap-8 md:gap-12 md:grid-cols-2 items-center">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="order-1"
         >
-          <div
-            className="relative overflow-hidden"
+          <div className="overflow-hidden rounded-2xl shadow-xl" style={{ aspectRatio: "4/3" }}>
+            <img src={heroChildren} alt="KSS children and community" loading="eager"
+              className="w-full h-full object-cover" />
+          </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+          className="order-2"
+        >
+          <h1
             style={{
-              width: "100%",
-              aspectRatio: "16 / 9",
-              borderRadius: "16px",
-              boxShadow: "0 8px 40px rgba(0,0,0,0.15)",
+              fontFamily: '"Playfair Display", serif',
+              fontWeight: 800,
+              color: "#E8540A",
+              fontSize: "clamp(2.2rem, 5vw, 4rem)",
+              lineHeight: 1.05,
+              letterSpacing: "-0.01em",
             }}
           >
-            <motion.img
-              src={communityGroup}
-              alt="KSS community — teachers and children gathered together"
-              loading="lazy"
-              initial={{ scale: 1.03 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                objectPosition: "center top",
-                display: "block",
-              }}
-            />
-            <div
-              aria-hidden
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: "30%",
-                background: "linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)",
-              }}
-            />
-          </div>
-        </div>
-        <p
-          className="mx-auto"
-          style={{
-            fontFamily: "Inter, sans-serif",
-            fontStyle: "italic",
-            fontSize: "13px",
-            color: "#888",
-            textAlign: "center",
-            padding: "12px 0 24px 0",
-            maxWidth: "1200px",
-            margin: "0 auto",
-          }}
-        >
-          KSS community — transforming lives across Bengaluru since 1999
-        </p>
-        <style>{`
-          @media (max-width: 1024px) {
-            section > div.mx-auto[style*="1200px"] { width: calc(100% - 48px) !important; padding: 0 24px !important; }
-          }
-          @media (max-width: 640px) {
-            section > div.mx-auto[style*="1200px"] { width: calc(100% - 32px) !important; padding: 0 16px !important; }
-          }
-        `}</style>
-      </section>
-
-
-
-      <section data-reveal className="bg-muted/30 py-20">
-        <div className="container-page">
-          <div className="text-center mb-12">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Impact</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Numbers that tell our story</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {(stats ?? []).filter((s: any) => {
-              const l = String(s.label ?? "").toLowerCase();
-              return !l.includes("active program") && !l.includes("major project");
-            }).map((s: any) => {
-              const Icon = ICONS[s.icon] ?? Sparkles;
-              return (
-                <Card key={s.id} className="p-6 text-center shadow-soft hover:shadow-elevated hover:-translate-y-0.5 transition-all">
-                  <Icon className="h-6 w-6 text-primary mx-auto mb-3" />
-                  <div className="font-serif text-xl md:text-2xl lg:text-[1.6rem] font-semibold tracking-tight tabular-nums break-words">
-                    <Counter to={s.value} suffix={s.suffix ?? ""} />
-                  </div>
-                  <div className="mt-1 text-xs text-muted-foreground">{s.label}</div>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* MISSION & VISION removed from homepage — see /about */}
-
-
-      {/* PROGRAM HIGHLIGHTS — photo cards with hover reveal */}
-      <section data-reveal className="bg-muted/30 py-20">
-        <div className="container-page">
-          <div className="mb-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">What We Do</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Program highlights</h2>
-          </div>
-          <ProgramHighlightsGrid />
-          <div className="text-center mt-10">
-            <Button asChild variant="outline"><Link to="/programs">View all programs <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-          </div>
-        </div>
-      </section>
-
-      {/* PROGRAMS FROM DB — photo-first interactive grid */}
-      {(programs ?? []).length > 0 && (
-        <section data-reveal className="container-page py-16 max-w-[1600px]">
-          <div className="mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Our Programs</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Active initiatives</h2>
-            <p className="mt-2 text-sm text-muted-foreground max-w-xl">Programs running across communities right now.</p>
-          </div>
-          <ProgramPhotoGrid
-            programs={programs as any}
-            fallbacks={[healthCamp, womenWorkshop, groceryDrive]}
-          />
-        </section>
-      )}
-
-
-      {/* WHY DONATE removed per request */}
-
-
-      {/* GET INVOLVED section removed from homepage */}
-
-      {/* WEEKLY HIGHLIGHTS */}
-      {(highlights ?? []).length > 0 && (
-        <section data-reveal className="py-20">
-          <div className="container-page">
-            <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">This week</p>
-                <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">Weekly Highlights</h2>
-                <p className="mt-2 text-muted-foreground max-w-2xl">A quick look at our most recent stories, programs and projects.</p>
-              </div>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(highlights ?? []).map((h: any) => {
-                const href = resolveHighlightHref(h);
-                const Inner = (
-                  <Card className="overflow-hidden p-0 shadow-soft hover:shadow-elevated hover:-translate-y-1 transition-all duration-300 h-full group">
-                    <div className="aspect-video w-full overflow-hidden bg-secondary">
-                      {h.image_url
-                        ? <img src={h.image_url} alt={h.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                        : <div className="w-full h-full gradient-saffron" />}
-                    </div>
-                    <div className="p-5">
-                      {h.week_label && <p className="text-xs uppercase tracking-wider text-primary font-semibold">{h.week_label}</p>}
-                      <h3 className="mt-2 font-serif text-lg font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">{h.title}</h3>
-                      {h.description && <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{h.description}</p>}
-                      {href && <p className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary">Read more <ArrowRight className="h-3.5 w-3.5" /></p>}
-                    </div>
-                  </Card>
-                );
-                return href ? (
-                  <a key={h.id} href={href} className="block">{Inner}</a>
-                ) : (
-                  <div key={h.id}>{Inner}</div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* NEWS */}
-      {(posts ?? []).length > 0 && (
-        <section data-reveal className="bg-muted/30 py-20">
-          <div className="container-page">
-            <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Latest</p>
-                <h2 className="mt-3 font-serif text-3xl md:text-4xl font-semibold gradient-heading">News & updates</h2>
-              </div>
-              <Button asChild variant="ghost"><Link to="/blog">All news <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {(posts ?? []).map((p: any) => (
-                <Link key={p.id} to="/blog/$slug" params={{ slug: p.slug }} className="group">
-                  <Card className="overflow-hidden p-0 shadow-soft hover:shadow-elevated hover:-translate-y-1 transition-all duration-300 h-full">
-                    <div className="aspect-video w-full overflow-hidden bg-secondary">
-                      {p.featured_image
-                        ? <img src={p.featured_image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                        : <div className="w-full h-full gradient-saffron" />}
-                    </div>
-                    <div className="p-5">
-                      {p.category && <p className="text-xs uppercase tracking-wider text-primary font-semibold">{p.category}</p>}
-                      <h3 className="mt-2 font-serif text-lg font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">{p.title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{p.excerpt}</p>
-                      <p className="mt-3 text-xs text-muted-foreground">{p.published_at && new Date(p.published_at).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
-                    </div>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* SEVA MOMENTS — YouTube videos */}
-      <SevaMoments />
-
-      {/* VOICES OF APPRECIATION carousel */}
-      <VoicesOfAppreciation />
-
-      {/* GET IN TOUCH form */}
-      <div id="get-in-touch">
-        <GetInTouchForm />
+            REACH THE<br />UNREACHED
+          </h1>
+          <p
+            className="mt-6"
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: "clamp(1rem, 1.4vw, 1.15rem)",
+              color: "#333",
+              lineHeight: 1.7,
+              maxWidth: "520px",
+            }}
+          >
+            Keshava Seva Samiti has been transforming lives since 1999 — bringing
+            education, healthcare and empowerment to the underprivileged in
+            Bengaluru and beyond. Join us in building a compassionate, inclusive society.
+          </p>
+          <Link
+            to="/get-involved"
+            className="inline-block mt-8 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+            style={{
+              background: "#E8540A",
+              color: "#fff",
+              fontFamily: "Inter, sans-serif",
+              fontWeight: 600,
+              fontSize: "15px",
+              padding: "14px 36px",
+              borderRadius: "999px",
+              letterSpacing: "0.05em",
+            }}
+          >
+            JOIN NOW
+          </Link>
+        </motion.div>
       </div>
-
-    </div>
+    </section>
   );
 }
 
+// ─────────────────────────────────────────────────────────────
+// SECTION 4 — Full-width community photo
+// ─────────────────────────────────────────────────────────────
+function CommunityPhoto() {
+  return (
+    <section style={{ background: "#fff", padding: 0 }}>
+      <motion.img
+        src={communityGroup}
+        alt="KSS community — volunteers and children"
+        loading="lazy"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        style={{
+          width: "100%",
+          height: "auto",
+          maxHeight: "560px",
+          objectFit: "cover",
+          display: "block",
+        }}
+      />
+    </section>
+  );
+}
 
 // ─────────────────────────────────────────────────────────────
-// SEVA MOMENTS — 4 YouTube videos
+// SECTION 5 — Outreach Programs
+// ─────────────────────────────────────────────────────────────
+const OUTREACH_SLUGS = ["vidya-vahini", "arogya-bhagya", "balagokula", "padavi-uttejan", "nari-uttejan", "vishala-parivar"];
+
+const OUTREACH_LABELS: Record<string, string> = {
+  "vidya-vahini": "Vidya Vahini",
+  "arogya-bhagya": "Arogya Bhagya",
+  "balagokula": "Bala Gokula",
+  "padavi-uttejan": "Padavi Uttejan",
+  "nari-uttejan": "Nari Uttejan",
+  "vishala-parivar": "Vishala Parivar",
+};
+
+function OutreachPrograms() {
+  const { data } = useQuery({
+    queryKey: ["outreach-programs"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("programs")
+        .select("slug,title,thumbnail_url")
+        .in("slug", OUTREACH_SLUGS);
+      return data ?? [];
+    },
+  });
+  const map = new Map((data ?? []).map((p: any) => [p.slug, p]));
+
+  return (
+    <section style={{ background: "#FAF7F2", padding: "clamp(56px, 7vw, 96px) 0" }}>
+      <div className="container-page">
+        <h2
+          className="text-center"
+          style={{
+            fontFamily: '"Playfair Display", serif',
+            fontWeight: 800,
+            color: "#8B1A1A",
+            fontSize: "clamp(1.8rem, 3.2vw, 2.6rem)",
+            letterSpacing: "0.08em",
+          }}
+        >
+          ✦ OUTREACH PROGRAMS ✦
+        </h2>
+        <div
+          className="mt-12 grid gap-6"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", maxWidth: "1200px", margin: "48px auto 0" }}
+        >
+          {OUTREACH_SLUGS.map((slug, i) => {
+            const p: any = map.get(slug);
+            const label = OUTREACH_LABELS[slug];
+            const img = p?.thumbnail_url || communityGroup;
+            return (
+              <motion.div
+                key={slug}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: i * 0.06 }}
+              >
+                <Link
+                  to="/programs/$slug"
+                  params={{ slug }}
+                  className="block relative overflow-hidden rounded-xl group shadow-md hover:shadow-2xl transition-all"
+                  style={{ aspectRatio: "4/5", background: "#000" }}
+                >
+                  <img
+                    src={img}
+                    alt={label}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      background: "linear-gradient(180deg, #B8761F 0%, #8B5A14 100%)",
+                      color: "#fff",
+                      textAlign: "center",
+                      padding: "14px 12px",
+                      fontFamily: '"Playfair Display", serif',
+                      fontWeight: 700,
+                      fontSize: "clamp(1rem, 1.5vw, 1.25rem)",
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    {label}
+                  </div>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 6 — Our Impact at a Glance
+// ─────────────────────────────────────────────────────────────
+const IMPACT_STATS = [
+  { value: "14,88,000", label: "BENEFICIARIES" },
+  { value: "150", label: "SEVA BASATHIS" },
+  { value: "35,600+", label: "STUDENTS" },
+  { value: "58,000+", label: "HEALTH CAMPS" },
+  { value: "7,200", label: "VOCATIONAL TRAINING" },
+  { value: "120", label: "RATION KITS" },
+];
+
+function ImpactGlance() {
+  return (
+    <section style={{ background: "#8B3A0E", padding: "clamp(56px, 7vw, 96px) 0", color: "#fff" }}>
+      <div className="container-page">
+        <h2
+          className="text-center"
+          style={{
+            fontFamily: '"Playfair Display", serif',
+            fontWeight: 800,
+            color: "#fff",
+            fontSize: "clamp(1.8rem, 3.2vw, 2.6rem)",
+            letterSpacing: "0.06em",
+          }}
+        >
+          OUR IMPACT AT A GLANCE
+        </h2>
+        <div style={{ width: 60, height: 3, background: "#E8B86E", margin: "16px auto 0" }} />
+        <div
+          className="mt-14 grid gap-5"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", maxWidth: "1100px", margin: "56px auto 0" }}
+        >
+          {IMPACT_STATS.map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              style={{
+                background: "linear-gradient(135deg, #D4A24C 0%, #B8761F 100%)",
+                borderRadius: "12px",
+                padding: "28px 16px",
+                textAlign: "center",
+                boxShadow: "0 6px 20px rgba(0,0,0,0.25)",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: '"Playfair Display", serif',
+                  fontWeight: 800,
+                  fontSize: "clamp(1.6rem, 2.6vw, 2.1rem)",
+                  color: "#fff",
+                  lineHeight: 1.1,
+                }}
+              >
+                {s.value}
+              </div>
+              <div
+                className="mt-2"
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontWeight: 600,
+                  fontSize: "11px",
+                  color: "#fff",
+                  letterSpacing: "0.12em",
+                }}
+              >
+                {s.label}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// SECTION 7 — Seva Moments (2x2 grid)
 // ─────────────────────────────────────────────────────────────
 const SEVA_VIDEOS = [
   { id: "1CLR2c_k4Yk", title: "KSS Video 1" },
@@ -498,7 +314,7 @@ function SevaVideoTile({ v }: { v: { id: string; title: string } }) {
     if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
     const io = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) { setPlay(true); io.disconnect(); } }),
-      { threshold: 0.5 }
+      { threshold: 0.4 },
     );
     io.observe(ref.current);
     return () => io.disconnect();
@@ -507,35 +323,30 @@ function SevaVideoTile({ v }: { v: { id: string; title: string } }) {
     ? `https://www.youtube.com/embed/${v.id}?autoplay=1&mute=1&playsinline=1&rel=0`
     : `https://www.youtube.com/embed/${v.id}?rel=0`;
   return (
-    <div
-      ref={ref}
-      className="transition-all duration-300 hover:scale-[1.02]"
-      style={{ position: "relative", width: "100%", aspectRatio: "16 / 9", overflow: "hidden", borderRadius: "12px", background: "#000", boxShadow: "0 4px 20px rgba(0,0,0,0.10)" }}
-    >
-      <iframe
-        src={src}
-        title={v.title}
-        frameBorder={0}
+    <div ref={ref} className="transition-all duration-300 hover:scale-[1.02]"
+      style={{ position: "relative", width: "100%", aspectRatio: "16/9", overflow: "hidden", borderRadius: "12px", background: "#000", boxShadow: "0 4px 20px rgba(0,0,0,0.10)" }}>
+      <iframe src={src} title={v.title} frameBorder={0}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-        allowFullScreen
-        loading="lazy"
-        style={{ width: "100%", height: "100%", borderRadius: "12px", display: "block", border: 0 }}
-      />
+        allowFullScreen loading="lazy"
+        style={{ width: "100%", height: "100%", border: 0 }} />
     </div>
   );
 }
 
 function SevaMoments() {
   return (
-    <section data-reveal style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
-      <div className="mx-auto px-4" style={{ maxWidth: "1100px" }}>
-        <div className="text-center mb-10">
-          <p style={{ fontFamily: "Inter, sans-serif", fontWeight: 500, fontSize: "12px", letterSpacing: "2px", color: "#E8540A", textTransform: "uppercase" }}>Seva Moments</p>
-          <h2 className="mt-3" style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "#1a1a1a" }}>
-            Stories from the ground
+    <section style={{ background: "#FFFFFF", padding: "clamp(56px, 7vw, 96px) 0" }}>
+      <div className="container-page" style={{ maxWidth: 1100 }}>
+        <div className="flex items-center justify-center gap-3 mb-10">
+          <Camera className="h-7 w-7" style={{ color: "#E8540A" }} />
+          <h2 style={{
+            fontFamily: '"Playfair Display", serif', fontWeight: 800,
+            color: "#1a1a1a", fontSize: "clamp(1.8rem, 3vw, 2.4rem)", letterSpacing: "0.06em",
+          }}>
+            SEVA MOMENTS
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: "16px" }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {SEVA_VIDEOS.map((v) => <SevaVideoTile key={v.id} v={v} />)}
         </div>
       </div>
@@ -543,17 +354,13 @@ function SevaMoments() {
   );
 }
 
-// Old inline VoicesOfAppreciation removed — now uses @/components/site/VoicesOfAppreciation
-
-
 // ─────────────────────────────────────────────────────────────
-// GET IN TOUCH — form
+// SECTION 9 — Get In Touch form
 // ─────────────────────────────────────────────────────────────
 function GetInTouchForm() {
   const [form, setForm] = useState({ first_name: "", last_name: "", email: "", phone: "", address: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
-
   const update = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
   async function onSubmit(e: React.FormEvent) {
@@ -567,7 +374,6 @@ function GetInTouchForm() {
     if (!form.message.trim()) errs.message = "Required";
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
-
     setSubmitting(true);
     const { error } = await supabase.from("contact_submissions" as any).insert({
       first_name: form.first_name.trim(),
@@ -578,131 +384,88 @@ function GetInTouchForm() {
       message: form.message.trim(),
     });
     setSubmitting(false);
-    if (error) {
-      const { toast } = await import("sonner");
-      toast.error(error.message);
-      return;
-    }
     const { toast } = await import("sonner");
-    toast.success("Thank you! We'll be in touch soon.", { duration: 4000 });
+    if (error) { toast.error(error.message); return; }
+    toast.success("Thank you! We'll be in touch soon.");
     setForm({ first_name: "", last_name: "", email: "", phone: "", address: "", message: "" });
     setErrors({});
   }
 
   const inputStyle: React.CSSProperties = {
-    background: "#fff",
-    borderRadius: "8px",
-    padding: "12px 16px",
-    border: "1.5px solid #e0e0e0",
-    fontFamily: "Inter, sans-serif",
-    fontSize: "14px",
-    color: "#333",
-    width: "100%",
-    outline: "none",
+    background: "#fff", borderRadius: "8px", padding: "12px 16px",
+    border: "1.5px solid #e0e0e0", fontFamily: "Inter, sans-serif",
+    fontSize: "14px", color: "#333", width: "100%", outline: "none",
     transition: "border-color 200ms, box-shadow 200ms",
   };
   const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.currentTarget.style.borderColor = "#E8540A";
-    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(232,84,10,0.1)";
+    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(232,84,10,0.12)";
   };
   const onBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.currentTarget.style.borderColor = "#e0e0e0";
     e.currentTarget.style.boxShadow = "none";
   };
-  const labelStyle: React.CSSProperties = {
-    color: "#333333",
-    fontFamily: "Inter, sans-serif",
-    fontSize: "13px",
-    fontWeight: 500,
-    display: "block",
-    marginBottom: "6px",
-  };
-  const reqStyle: React.CSSProperties = { color: "#E8540A", marginLeft: 2 };
-  const errStyle: React.CSSProperties = { color: "#d32f2f", fontSize: "12px", marginTop: "4px", fontFamily: "Inter, sans-serif" };
+  const labelStyle: React.CSSProperties = { color: "#333", fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 500, display: "block", marginBottom: "6px" };
+  const errStyle: React.CSSProperties = { color: "#d32f2f", fontSize: "12px", marginTop: "4px" };
 
   return (
-    <section data-reveal style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
+    <section id="get-in-touch" style={{ background: "#FFFFFF", padding: "clamp(56px, 7vw, 96px) 0" }}>
       <div className="mx-auto px-4" style={{ maxWidth: "760px" }}>
         <div className="text-center">
-          <h2 style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "#1a1a1a", letterSpacing: "0.04em" }}>
+          <h2 style={{ fontFamily: '"Playfair Display", serif', fontWeight: 800, fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: "#1a1a1a", letterSpacing: "0.06em" }}>
             GET IN TOUCH
           </h2>
-          <div style={{ width: 60, height: 3, background: "#E8540A", margin: "8px auto 32px" }} />
+          <div style={{ width: 60, height: 3, background: "#E8540A", margin: "12px auto 36px" }} />
         </div>
         <form onSubmit={onSubmit} noValidate className="grid gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label style={labelStyle}>First name<span style={reqStyle}>*</span></label>
-              <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.first_name} onChange={(e) => update("first_name", e.target.value)} autoComplete="given-name" />
+              <label style={labelStyle}>First name<span style={{ color: "#E8540A" }}>*</span></label>
+              <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.first_name} onChange={(e) => update("first_name", e.target.value)} />
               {errors.first_name && <p style={errStyle}>{errors.first_name}</p>}
             </div>
             <div>
               <label style={labelStyle}>Last name</label>
-              <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.last_name} onChange={(e) => update("last_name", e.target.value)} autoComplete="family-name" />
+              <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.last_name} onChange={(e) => update("last_name", e.target.value)} />
             </div>
           </div>
           <div>
-            <label style={labelStyle}>Email<span style={reqStyle}>*</span></label>
-            <input type="email" style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.email} onChange={(e) => update("email", e.target.value)} autoComplete="email" />
+            <label style={labelStyle}>Email<span style={{ color: "#E8540A" }}>*</span></label>
+            <input type="email" style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.email} onChange={(e) => update("email", e.target.value)} />
             {errors.email && <p style={errStyle}>{errors.email}</p>}
           </div>
           <div>
-            <label style={labelStyle}>Phone<span style={reqStyle}>*</span></label>
-            <div style={{ display: "flex", gap: "8px", alignItems: "stretch" }}>
-              <span style={{ ...inputStyle, width: "auto", display: "inline-flex", alignItems: "center", gap: "6px", flex: "0 0 auto" }}>
-                🇮🇳 +91
-              </span>
-              <input
-                type="tel"
-                style={{ ...inputStyle, flex: 1 }}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                value={form.phone}
-                onChange={(e) => update("phone", e.target.value)}
-                autoComplete="tel"
-                inputMode="tel"
-              />
+            <label style={labelStyle}>Phone<span style={{ color: "#E8540A" }}>*</span></label>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <span style={{ ...inputStyle, width: "auto", display: "inline-flex", alignItems: "center", gap: "6px" }}>🇮🇳 +91</span>
+              <input type="tel" style={{ ...inputStyle, flex: 1 }} onFocus={onFocus} onBlur={onBlur} value={form.phone} onChange={(e) => update("phone", e.target.value)} />
             </div>
             {errors.phone && <p style={errStyle}>{errors.phone}</p>}
           </div>
           <div>
-            <label style={labelStyle}>Address<span style={reqStyle}>*</span></label>
-            <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.address} onChange={(e) => update("address", e.target.value)} autoComplete="street-address" />
+            <label style={labelStyle}>Address<span style={{ color: "#E8540A" }}>*</span></label>
+            <input style={inputStyle} onFocus={onFocus} onBlur={onBlur} value={form.address} onChange={(e) => update("address", e.target.value)} />
             {errors.address && <p style={errStyle}>{errors.address}</p>}
           </div>
           <div>
-            <label style={labelStyle}>We're here to listen and collaborate!<span style={reqStyle}>*</span></label>
-            <textarea
-              style={{ ...inputStyle, height: "120px", resize: "vertical" }}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              placeholder="Share your inquiries or ways to support our initiatives and create meaningful impact."
-              value={form.message}
-              onChange={(e) => update("message", e.target.value)}
-            />
+            <label style={labelStyle}>Message<span style={{ color: "#E8540A" }}>*</span></label>
+            <textarea style={{ ...inputStyle, height: "120px", resize: "vertical" }} onFocus={onFocus} onBlur={onBlur}
+              placeholder="Share your inquiries or ways to support our initiatives."
+              value={form.message} onChange={(e) => update("message", e.target.value)} />
             {errors.message && <p style={errStyle}>{errors.message}</p>}
           </div>
           <div className="text-center mt-2">
-            <button
-              type="submit"
-              disabled={submitting}
-              className="transition-all duration-200 hover:scale-[1.02] w-full md:w-auto"
+            <button type="submit" disabled={submitting}
+              className="transition-all hover:scale-[1.02] w-full md:w-auto"
               style={{
-                background: "#E8540A",
-                color: "#fff",
-                fontFamily: "Inter, sans-serif",
-                fontWeight: 600,
-                fontSize: "15px",
-                borderRadius: "8px",
-                padding: "14px 48px",
-                border: "none",
-                cursor: submitting ? "not-allowed" : "pointer",
-                opacity: submitting ? 0.7 : 1,
-              }}
-              onMouseEnter={(e) => { if (!submitting) e.currentTarget.style.background = "#c4470a"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#E8540A"; }}
-            >
-              {submitting ? "Submitting…" : "Submit"}
+                background: "linear-gradient(135deg, #D4A24C 0%, #B8761F 100%)",
+                color: "#fff", fontFamily: "Inter, sans-serif", fontWeight: 700,
+                fontSize: "15px", borderRadius: "8px", padding: "14px 52px",
+                border: "none", cursor: submitting ? "not-allowed" : "pointer",
+                opacity: submitting ? 0.7 : 1, letterSpacing: "0.05em",
+                boxShadow: "0 4px 14px rgba(184,118,31,0.35)",
+              }}>
+              {submitting ? "SUBMITTING…" : "SUBMIT"}
             </button>
           </div>
         </form>
@@ -711,4 +474,43 @@ function GetInTouchForm() {
   );
 }
 
+// ─────────────────────────────────────────────────────────────
+// SECTION 10 — Map
+// ─────────────────────────────────────────────────────────────
+function OfficeMap() {
+  return (
+    <section style={{ background: "#FAF7F2", padding: 0 }}>
+      <div style={{ width: "100%", height: "clamp(320px, 45vw, 480px)" }}>
+        <iframe
+          title="KSS Office Location"
+          src="https://www.google.com/maps?q=No.237,+2nd+Cross+Road,+Pai+Layout,+Mahadevapura,+Bengaluru&output=embed"
+          width="100%"
+          height="100%"
+          style={{ border: 0, display: "block" }}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        />
+      </div>
+    </section>
+  );
+}
 
+// ─────────────────────────────────────────────────────────────
+// HOMEPAGE
+// ─────────────────────────────────────────────────────────────
+function HomePage() {
+  return (
+    <div>
+      <HeroSplit />
+      <MissionTagline />
+      <CommunityPhoto />
+      <OutreachPrograms />
+      <ImpactGlance />
+      <SevaMoments />
+      <VoicesOfAppreciation />
+      <GetInTouchForm />
+      <OfficeMap />
+    </div>
+  );
+}

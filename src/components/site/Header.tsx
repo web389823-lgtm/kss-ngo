@@ -87,8 +87,8 @@ export function Header() {
             )}
           </div>
 
-          <Link to="/gallery" className={`kss-glass-link ${isActive("/gallery") ? "is-active" : ""}`}>Gallery</Link>
-          <Link to="/contact" className={`kss-glass-link ${isActive("/contact") ? "is-active" : ""}`}>Contact Us</Link>
+          <Link to="/get-involved" className={`kss-glass-link ${isActive("/get-involved") ? "is-active" : ""}`}>Get Involved</Link>
+          <Link to="/donate" className={`kss-glass-link ${isActive("/donate") ? "is-active" : ""}`}>Donate</Link>
         </nav>
 
         <div className="kss-glass-actions">
@@ -109,7 +109,6 @@ export function Header() {
               <LogIn className="mr-1.5 h-4 w-4" />Admin
             </Link>
           )}
-          <Link to="/get-involved" className="kss-glass-ghost-btn hidden md:inline-flex">Get Involved</Link>
           <Link to="/donate" className="kss-glass-donate">
             <Heart className="h-4 w-4" /> Donate
           </Link>
@@ -147,8 +146,6 @@ export function Header() {
               ))}
             </div>
           )}
-          <Link to="/gallery" className="kss-glass-mobile-link">Gallery</Link>
-          <Link to="/contact" className="kss-glass-mobile-link">Contact Us</Link>
           <Link to="/get-involved" className="kss-glass-mobile-link">Get Involved</Link>
           {user && isStaff ? (
             <Link to="/admin" className="kss-glass-mobile-link">Dashboard</Link>
