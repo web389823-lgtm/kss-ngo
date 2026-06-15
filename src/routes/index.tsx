@@ -508,7 +508,8 @@ function HomePage() {
       <MissionTagline />
       <CommunityPhoto />
       <OutreachPrograms />
-      <ImpactGlance />
+      <ActiveInitiatives />
+      <ImpactNumbers />
       <SevaMoments />
       <VoicesOfAppreciation />
       <GetInTouchForm />
