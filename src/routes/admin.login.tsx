@@ -54,7 +54,15 @@ function AuthPage() {
     }
 
     await refreshRole();
+    // Verify role landed; otherwise this account has no admin/staff access.
+    const uid = (await supabase.auth.getUser()).data.user?.id;
+    const { data: rows } = await supabase.from("user_roles").select("role").eq("user_id", uid!);
+    const hasAccess = (rows ?? []).some((r: any) => r.role === "admin" || r.role === "staff");
     setBusy(false);
+    if (!hasAccess) {
+      toast.error("Signed in, but this account has no admin/staff role. Use 'Create account' with an access code, or ask an admin to grant access.");
+      return;
+    }
     toast.success("Welcome back");
     nav({ to: "/admin" });
   }
