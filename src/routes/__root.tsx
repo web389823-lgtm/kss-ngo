@@ -19,7 +19,7 @@ import ImageLightbox from "@/components/site/ImageLightbox";
 import SocialProofPopup from "@/components/site/SocialProofPopup";
 import ExitIntentPopup from "@/components/site/ExitIntentPopup";
 import ShareButton from "@/components/site/ShareButton";
-import WhatsAppButton from "@/components/site/WhatsAppButton";
+
 
 
 function NotFoundComponent() {
@@ -147,7 +147,7 @@ function RootComponent() {
           <StickyDonateBar />
           <MobileBottomNav />
           <ImageLightbox />
-          <WhatsAppButton />
+          
           <SocialProofPopup />
           <ExitIntentPopup />
           <ShareButton />
