@@ -19,18 +19,41 @@ import ImageLightbox from "@/components/site/ImageLightbox";
 import SocialProofPopup from "@/components/site/SocialProofPopup";
 import ExitIntentPopup from "@/components/site/ExitIntentPopup";
 import ShareButton from "@/components/site/ShareButton";
+import WhatsAppButton from "@/components/site/WhatsAppButton";
 
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <p className="text-xs uppercase tracking-[0.2em] text-primary">404</p>
-        <h1 className="mt-3 font-serif text-4xl font-semibold">Page not found</h1>
-        <p className="mt-3 text-sm text-muted-foreground">The page you're looking for doesn't exist or has moved.</p>
-        <Link to="/" className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
-          Back home
-        </Link>
+    <div className="flex min-h-screen items-center justify-center px-4" style={{ background: "#FAF7F2" }}>
+      <div className="max-w-lg text-center">
+        <div
+          style={{
+            fontFamily: '"Playfair Display", serif',
+            fontWeight: 800,
+            fontSize: "clamp(5rem, 14vw, 9rem)",
+            lineHeight: 1,
+            background: "linear-gradient(135deg, #E8540A, #FF8C42, #E8540A)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            color: "transparent",
+          }}
+        >
+          404
+        </div>
+        <h1 style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, fontSize: "clamp(1.5rem,3vw,2rem)", color: "#1a1a1a", marginTop: 8 }}>
+          Oops! Page Not Found
+        </h1>
+        <p style={{ marginTop: 12, color: "#666", fontFamily: "Inter, sans-serif" }}>
+          This page wandered off. But our seva continues.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Link to="/" style={{ background: "#E8540A", color: "#fff", padding: "12px 26px", borderRadius: 999, fontWeight: 600, fontFamily: "Inter, sans-serif", fontSize: 14 }}>
+            🏠 Back to Home
+          </Link>
+          <Link to="/programs" style={{ background: "#fff", color: "#E8540A", padding: "12px 26px", borderRadius: 999, fontWeight: 600, fontFamily: "Inter, sans-serif", fontSize: 14, border: "1.5px solid #E8540A" }}>
+            📋 View Programs
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -124,7 +147,7 @@ function RootComponent() {
           <StickyDonateBar />
           <MobileBottomNav />
           <ImageLightbox />
-          
+          <WhatsAppButton />
           <SocialProofPopup />
           <ExitIntentPopup />
           <ShareButton />

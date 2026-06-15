@@ -6,6 +6,8 @@ import { Camera } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import MissionTagline from "@/components/site/MissionTagline";
 import VoicesOfAppreciation from "@/components/site/VoicesOfAppreciation";
+import ImpactNumbers from "@/components/site/ImpactNumbers";
+import ActiveInitiatives from "@/components/site/ActiveInitiatives";
 import heroChildren from "@/assets/hero-children.jpg";
 import communityGroup from "@/assets/kss-community-group.jpg";
 

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 
 type Voice = {
@@ -16,179 +15,146 @@ type Voice = {
 function highlight(text: string, words: string | null) {
   if (!words) return text;
   const tokens = words.split(",").map((s) => s.trim()).filter(Boolean);
-  if (tokens.length === 0) return text;
-  // build a regex matching any token, case-insensitive
+  if (!tokens.length) return text;
   const escaped = tokens.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   const re = new RegExp(`(${escaped.join("|")})`, "gi");
-  const parts = text.split(re);
-  return parts.map((p, i) =>
+  return text.split(re).map((p, i) =>
     tokens.some((t) => t.toLowerCase() === p.toLowerCase()) ? (
-      <em key={i} style={{ color: "#4CAF50", fontWeight: 700, fontStyle: "italic" }}>{p}</em>
+      <span key={i} style={{ color: "#9BE85A", fontWeight: 700 }}>{p}</span>
     ) : (
       <span key={i}>{p}</span>
     ),
   );
 }
 
-const HeartCurl = ({ flip = false }: { flip?: boolean }) => (
-  <svg width="50" height="20" viewBox="0 0 60 24" fill="none" style={{ transform: flip ? "scaleX(-1)" : undefined, opacity: 0.55 }} aria-hidden>
-    <path d="M2 12 C 10 4, 20 4, 28 12 C 32 8, 40 8, 44 14" stroke="#E8540A" strokeWidth="2" strokeLinecap="round" fill="none" />
-    <path d="M44 14 c -1 -3, 3 -5, 4 -2 c 1 -3, 5 -1, 4 2 c -1 2, -4 4, -4 4 s -3 -2, -4 -4 z" fill="#E8540A" />
+const Curl = ({ flip = false }: { flip?: boolean }) => (
+  <svg width="56" height="22" viewBox="0 0 60 24" fill="none" aria-hidden style={{ transform: flip ? "scaleX(-1)" : undefined, opacity: 0.9 }}>
+    <path d="M2 12 C 10 4, 20 4, 28 12 C 32 8, 40 8, 44 14" stroke="#FFB870" strokeWidth="2" strokeLinecap="round" fill="none" />
+    <path d="M44 14 c -1 -3, 3 -5, 4 -2 c 1 -3, 5 -1, 4 2 c -1 2, -4 4, -4 4 s -3 -2, -4 -4 z" fill="#FFB870" />
   </svg>
 );
 
 export default function VoicesOfAppreciation() {
   const { data } = useQuery({
     queryKey: ["voa"],
-    queryFn: async () => (await supabase.from("voices_of_appreciation" as any).select("*").order("display_order")).data as Voice[] | null,
+    queryFn: async () =>
+      (await supabase.from("voices_of_appreciation" as any).select("*").order("display_order")).data as Voice[] | null,
   });
   const voices = data ?? [];
-  const [idx, setIdx] = useState(0);
   const n = voices.length;
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const tref = useRef<number | null>(null);
 
   useEffect(() => {
-    if (n <= 1) return;
+    if (n <= 1 || paused) return;
     if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setIdx((x) => (x + 1) % n), 6000);
-    return () => clearInterval(t);
-  }, [n]);
+    tref.current = window.setInterval(() => setIdx((x) => (x + 1) % n), 4000);
+    return () => { if (tref.current) window.clearInterval(tref.current); };
+  }, [n, paused]);
 
   if (n === 0) return null;
   const v = voices[Math.min(idx, n - 1)];
 
   return (
-    <section style={{ background: "#FFFFFF", borderTop: "4px solid #E8540A", borderBottom: "4px solid #E8540A", padding: "clamp(48px, 6vw, 80px) 0" }}>
+    <section
+      style={{
+        background: "linear-gradient(180deg, #7A2008 0%, #8B2500 50%, #6F1C06 100%)",
+        padding: "clamp(56px, 7vw, 96px) 0",
+        color: "#fff",
+        position: "relative",
+        overflow: "hidden",
+      }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className="mx-auto px-4" style={{ maxWidth: 1000 }}>
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <HeartCurl />
-          <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: 700, letterSpacing: "3px", color: "#1a1a1a", fontSize: "clamp(1rem, 2.2vw, 1.4rem)" }}>
-            VOICES OF APPRECIATION
+        <div className="flex items-center justify-center gap-4 mb-10">
+          <Curl />
+          <h2 style={{ fontFamily: '"Playfair Display", serif', fontWeight: 800, letterSpacing: "3px", color: "#fff", fontSize: "clamp(1.1rem, 2.4vw, 1.6rem)", margin: 0 }}>
+            ♡ VOICES OF APPRECIATION ♡
           </h2>
-          <HeartCurl flip />
+          <Curl flip />
         </div>
 
-        <div className="relative">
-          <div className="voa-stage mx-auto" style={{ maxWidth: 900, position: "relative" }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={v.id}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="voa-card"
+        <div style={{ minHeight: 360, position: "relative" }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={v.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              style={{ textAlign: "center", padding: "0 clamp(8px, 4vw, 40px)" }}
+            >
+              {v.photo_url && (
+                <img
+                  src={v.photo_url}
+                  alt={v.name}
+                  loading="lazy"
+                  style={{
+                    width: 140,
+                    height: 140,
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                    border: "4px solid #fff",
+                    boxShadow: "0 8px 28px rgba(0,0,0,0.4)",
+                    margin: "0 auto 24px",
+                    display: "block",
+                  }}
+                />
+              )}
+              <p
                 style={{
-                  background: "#FFF8F5",
-                  border: "1px solid rgba(232,84,10,0.15)",
-                  borderRadius: 20,
-                  boxShadow: "0 8px 40px rgba(0,0,0,0.08)",
-                  padding: "48px 64px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 48,
-                  aspectRatio: "16 / 9",
+                  fontFamily: "Inter, sans-serif",
+                  fontStyle: "italic",
+                  fontSize: "clamp(1rem, 1.6vw, 1.25rem)",
+                  lineHeight: 1.7,
+                  color: "#FFF6EC",
+                  maxWidth: 780,
+                  margin: "0 auto",
                 }}
               >
-                <div style={{ flex: "0 0 35%", textAlign: "center" }}>
-                  {v.photo_url && (
-                    <img
-                      src={v.photo_url}
-                      alt={v.name}
-                      loading="lazy"
-                      style={{
-                        width: 160,
-                        height: 160,
-                        objectFit: "cover",
-                        border: "4px solid #E8540A",
-                        borderRadius: "50%",
-                        boxShadow: "0 4px 20px rgba(232,84,10,0.2)",
-                        margin: "0 auto 16px",
-                      }}
-                    />
-                  )}
-                  <div style={{ fontFamily: '"Playfair Display", serif', fontWeight: 700, color: "#1a1a1a", fontSize: 16 }}>{v.name}</div>
-                  {v.title && <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 400, color: "#888", fontSize: 13, marginTop: 4 }}>{v.title}</div>}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 60, color: "#E8540A", opacity: 0.3, lineHeight: 1, fontFamily: "serif" }}>❝</div>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontStyle: "italic", fontSize: 18, color: "#2a2a2a", lineHeight: 1.8, margin: 0 }}>
-                    {highlight(v.quote, v.highlight_words)}
-                  </p>
-                  <div style={{ width: 40, height: 3, background: "#E8540A", margin: "16px 0" }} />
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {n > 1 && (
-            <>
-              <button
-                type="button"
-                aria-label="Previous"
-                onClick={() => setIdx((x) => (x - 1 + n) % n)}
-                className="voa-arrow"
-                style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)" }}
+                "{highlight(v.quote, v.highlight_words)}"
+              </p>
+              <div
+                style={{
+                  marginTop: 22,
+                  fontFamily: '"Playfair Display", serif',
+                  fontWeight: 700,
+                  color: "#FFB870",
+                  fontSize: "clamp(0.95rem, 1.3vw, 1.05rem)",
+                  letterSpacing: "0.02em",
+                }}
               >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                type="button"
-                aria-label="Next"
-                onClick={() => setIdx((x) => (x + 1) % n)}
-                className="voa-arrow"
-                style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}
-              >
-                <ChevronRight size={20} />
-              </button>
-            </>
-          )}
+                — {v.name}{v.title ? `, ${v.title}` : ""}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {n > 1 && (
-          <div className="flex justify-center gap-2 mt-8">
+          <div className="flex justify-center gap-2 mt-10">
             {voices.map((_, i) => (
               <button
                 key={i}
                 aria-label={`Slide ${i + 1}`}
                 onClick={() => setIdx(i)}
                 style={{
-                  width: i === idx ? 10 : 8,
-                  height: i === idx ? 10 : 8,
-                  borderRadius: "50%",
-                  background: i === idx ? "#E8540A" : "#ccc",
+                  width: i === idx ? 28 : 10,
+                  height: 10,
+                  borderRadius: 999,
+                  background: i === idx ? "#FFB870" : "rgba(255,255,255,0.45)",
                   border: "none",
                   cursor: "pointer",
-                  transition: "all 250ms",
+                  transition: "all 300ms ease",
+                  padding: 0,
                 }}
               />
             ))}
           </div>
         )}
       </div>
-
-      <style>{`
-        .voa-arrow {
-          width: 40px; height: 40px; border-radius: 50%;
-          background: #fff; border: none; cursor: pointer;
-          display: grid; place-items: center; color: #E8540A;
-          box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-          transition: all 200ms ease;
-        }
-        .voa-arrow:hover { background: #E8540A; color: #fff; transform: translateY(-50%) scale(1.1); }
-        @media (max-width: 768px) {
-          .voa-card {
-            flex-direction: column !important;
-            padding: 24px !important;
-            gap: 16px !important;
-            aspect-ratio: auto !important;
-            text-align: center;
-          }
-          .voa-card > div:first-child img { width: 100px !important; height: 100px !important; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .voa-card, .voa-arrow { transition: none !important; }
-        }
-      `}</style>
     </section>
   );
 }
